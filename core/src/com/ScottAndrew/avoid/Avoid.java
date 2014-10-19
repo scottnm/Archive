@@ -7,6 +7,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -29,9 +30,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.controllers.*;
 
 
-public class Avoid extends ApplicationAdapter {
+public class Avoid extends ApplicationAdapter implements InputProcessor, ControllerListener {
 	public final int WIN_WIDTH = 1920;
 	public final int WIN_HEIGHT= 1080;
 
@@ -57,6 +59,9 @@ public class Avoid extends ApplicationAdapter {
 	@Override
 	public void create () {
 		//Creates the Texture
+		
+		Controllers.addListener(this);
+		//Gdx.input.setInputProcessor(this);
 		thumbImage = new Texture(Gdx.files.internal("Square.png"));
 		thumbImage2 = new Texture(Gdx.files.internal("Square.png"));
 
@@ -118,6 +123,8 @@ public class Avoid extends ApplicationAdapter {
 		if(Gdx.input.isKeyPressed(Keys.D)) leftThumb.x += 600 * Gdx.graphics.getDeltaTime();
 		if(Gdx.input.isKeyPressed(Keys.S)) leftThumb.y -= 600 * Gdx.graphics.getDeltaTime();
 		if(Gdx.input.isKeyPressed(Keys.W)) leftThumb.y += 600 * Gdx.graphics.getDeltaTime();
+		
+		
 
 		//Touch Controls
 		if(Gdx.app.getType() == Application.ApplicationType.Android){
@@ -260,6 +267,8 @@ public class Avoid extends ApplicationAdapter {
 	public void hide() {
 		dispose();
 	}
+	
+
 
 	@Override
 	public void dispose() {
@@ -270,6 +279,166 @@ public class Avoid extends ApplicationAdapter {
 		batch.dispose();
 		stage.dispose();
 		skin.dispose();
+	}
+
+
+
+	@Override
+	public void connected(Controller controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void disconnected(Controller controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public boolean buttonDown(Controller controller, int buttonCode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean buttonUp(Controller controller, int buttonCode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean axisMoved(Controller controller, int axisCode, float value) {
+		System.out.println(axisCode+" "+value);
+		
+		if(value > -.2 && value < .2)
+			return false;
+		
+		System.out.println(Gdx.graphics.getDeltaTime());
+		
+		if(axisCode == 3){
+			leftThumb.x -= value * 20;
+		} //left y
+		if(axisCode == 2){
+			leftThumb.y += value * 20;
+		} //left x
+		if(axisCode == 5){
+			rightThumb.x -= value * 20;
+		} //right y
+		if(axisCode == 4){
+			rightThumb.y += value * 20;
+		} //left x
+			
+			
+		return true;
+	}
+
+
+
+	@Override
+	public boolean povMoved(Controller controller, int povCode,
+			PovDirection value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean xSliderMoved(Controller controller, int sliderCode,
+			boolean value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean ySliderMoved(Controller controller, int sliderCode,
+			boolean value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean accelerometerMoved(Controller controller,
+			int accelerometerCode, Vector3 value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean keyDown(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean keyUp(int keycode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
