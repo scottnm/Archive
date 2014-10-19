@@ -1,4 +1,4 @@
-package com.ScottAndrew.avoid;
+package com.ScottAndrew.Our;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -32,7 +32,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Avoid extends ApplicationAdapter {
 	public final int WIN_WIDTH = 1920;
-	public final int WIN_HEIGHT= 1080; 
+	public final int WIN_HEIGHT= 1080;
 
 
 	private OrthographicCamera camera;
@@ -41,12 +41,12 @@ public class Avoid extends ApplicationAdapter {
 	private long lastDropTime;
 	private Array<Rectangle> shapes;
 	private Sound dying;
-//	private Music backMusic;
+	private Music backMusic;
 	private Rectangle leftThumb;
 	private Rectangle rightThumb;
 	private Texture thumbImage;
 	private Texture thumbImage2;
-	
+
 	//Popup Box When Lost
 	private Stage stage;
 	private Skin skin;
@@ -74,7 +74,7 @@ public class Avoid extends ApplicationAdapter {
 		rightThumb.height = 100;
 		rightThumb.width = 100;
 		rightThumb.x = (WIN_WIDTH/4)*3 - 50;
-		rightThumb.y = WIN_HEIGHT/2 - 50;		
+		rightThumb.y = WIN_HEIGHT/2 - 50;
 
 
 		//Divider
@@ -82,10 +82,10 @@ public class Avoid extends ApplicationAdapter {
 		shapes = new Array<Rectangle>();
 
 		//Sounds
-//		dying = Gdx.audio.newSound(Gdx.files.internal("Boop.wav"));
-//		backMusic = Gdx.audio.newMusic(Gdx.files.internal("Epicstep.mp3"));
-//		backMusic.setLooping(true);
-//		backMusic.play();
+		dying = Gdx.audio.newSound(Gdx.files.internal("Boop.wav"));
+		backMusic = Gdx.audio.newMusic(Gdx.files.internal("Epicstep.mp3"));
+		backMusic.setLooping(true);
+		backMusic.play();
 
 	}
 
@@ -106,17 +106,17 @@ public class Avoid extends ApplicationAdapter {
 
 
 		//Controlling right thumb
-		if(Gdx.input.isKeyPressed(Keys.LEFT)) rightThumb.x -= 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.RIGHT)) rightThumb.x += 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.DOWN)) rightThumb.y -= 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.UP)) rightThumb.y += 400 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) rightThumb.x -= 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)) rightThumb.x += 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.DOWN)) rightThumb.y -= 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.UP)) rightThumb.y += 600 * Gdx.graphics.getDeltaTime();
 
 
 		//conrolling left thumb
-		if(Gdx.input.isKeyPressed(Keys.A)) leftThumb.x -= 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.D)) leftThumb.x += 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.S)) leftThumb.y -= 400 * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Keys.W)) leftThumb.y += 400 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.A)) leftThumb.x -= 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.D)) leftThumb.x += 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.S)) leftThumb.y -= 600 * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Keys.W)) leftThumb.y += 600 * Gdx.graphics.getDeltaTime();
 
 		//Touch Controls
 		if(Gdx.app.getType() == Application.ApplicationType.Android){
@@ -139,7 +139,7 @@ public class Avoid extends ApplicationAdapter {
 				}
 			}
 		}
-		
+
 
 
 		//Bounds the right Circle from escaping the window
@@ -162,7 +162,7 @@ public class Avoid extends ApplicationAdapter {
 			Rectangle p = it.next();
 			p.y -=400 * Gdx.graphics.getDeltaTime();
 			if(p.overlaps(leftThumb) || p.overlaps(rightThumb)) {
-//				dying.play();
+				dying.play();
 				it.remove();
 				//tryAgain();
 			}
@@ -217,12 +217,12 @@ public class Avoid extends ApplicationAdapter {
 
 	public void spawnHitbox(){
 		shapes.add(new Rectangle((float)MathUtils.random(WIN_WIDTH/2), (float)WIN_HEIGHT,
-				(float)(MathUtils.random(WIN_WIDTH/2)*.66), (float)MathUtils.random(WIN_HEIGHT/2)));
+				(float)(MathUtils.random(WIN_WIDTH/4)*.66), (float)MathUtils.random(WIN_HEIGHT/3)));
 		shapes.add(new Rectangle((float)MathUtils.random(WIN_WIDTH/2) + WIN_WIDTH/2, (float)WIN_HEIGHT,
-				(float)(MathUtils.random(WIN_WIDTH/2)*.66), (float)MathUtils.random(WIN_HEIGHT/2)));
+				(float)(MathUtils.random(WIN_WIDTH/4)*.66), (float)MathUtils.random(WIN_HEIGHT/3)));
 		lastDropTime = TimeUtils.nanoTime();
 	}
-	
+
 	public void tryAgain() {
 		Gdx.input.setInputProcessor(stage = new Stage());
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -249,9 +249,9 @@ public class Avoid extends ApplicationAdapter {
 
 		}.show(stage);
 	}
-	
 
-	
+
+
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
@@ -266,12 +266,11 @@ public class Avoid extends ApplicationAdapter {
 	public void dispose() {
 		thumbImage.dispose();
 		thumbImage2.dispose();
-//		backMusic.dispose();
+		backMusic.dispose();
 		dying.dispose();
 		batch.dispose();
 		stage.dispose();
 		skin.dispose();
 	}
-	
-}
 
+}
