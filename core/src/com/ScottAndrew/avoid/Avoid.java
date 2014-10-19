@@ -1,4 +1,4 @@
-package com.ScottAndrew.Our;
+package com.ScottAndrew.avoid;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -41,7 +42,7 @@ public class Avoid extends ApplicationAdapter {
 	private long lastDropTime;
 	private Array<Rectangle> shapes;
 	private Sound dying;
-	private Music backMusic;
+//	private Music backMusic;
 	private Rectangle leftThumb;
 	private Rectangle rightThumb;
 	private Texture thumbImage;
@@ -83,9 +84,9 @@ public class Avoid extends ApplicationAdapter {
 
 		//Sounds
 		dying = Gdx.audio.newSound(Gdx.files.internal("Boop.wav"));
-		backMusic = Gdx.audio.newMusic(Gdx.files.internal("Epicstep.mp3"));
-		backMusic.setLooping(true);
-		backMusic.play();
+//		backMusic = Gdx.audio.newMusic(Gdx.files.internal("Epicstep.mp3"));
+//		backMusic.setLooping(true);
+//		backMusic.play();
 
 	}
 
@@ -173,6 +174,9 @@ public class Avoid extends ApplicationAdapter {
 		sr.begin(ShapeType.Filled);
 		sr.setProjectionMatrix(camera.combined);
 		for(Rectangle p: shapes){
+			//TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("Square.png")), (int)p.width, (int)p.height);
+//			Texture region = new Texture(Gdx.files.internal("Square.png"));
+//			batch.draw(region, p.x, p.y);
 			sr.setColor(1, 0, 0, 1);
 			sr.rect(p.x, p.y, p.width, p.height);
 		}
@@ -200,26 +204,21 @@ public class Avoid extends ApplicationAdapter {
 
 	}
 
-	public float[] randomVertices(){
-
-		final int maxShapeWidth = 640;
-		final int minShapeWidth = 200;
-		final int minVertices = 3;
-		final int maxVertices = 8;
-
-		int numberVertices = MathUtils.random(minVertices, maxVertices);
-		float vertices[] = new float[numberVertices*2];
-		for(int i = 0; i < 2*numberVertices; i++)
-			vertices[i] = (float)MathUtils.random(minShapeWidth, maxShapeWidth);
-
-		return vertices;
-	}
-
 	public void spawnHitbox(){
-		shapes.add(new Rectangle((float)MathUtils.random(WIN_WIDTH/2), (float)WIN_HEIGHT,
-				(float)(MathUtils.random(WIN_WIDTH/4)*.66), (float)MathUtils.random(WIN_HEIGHT/3)));
-		shapes.add(new Rectangle((float)MathUtils.random(WIN_WIDTH/2) + WIN_WIDTH/2, (float)WIN_HEIGHT,
-				(float)(MathUtils.random(WIN_WIDTH/4)*.66), (float)MathUtils.random(WIN_HEIGHT/3)));
+		float x = (float)MathUtils.random(WIN_WIDTH/2);
+		float y = (float)WIN_HEIGHT;
+		float width = (float)(MathUtils.random(WIN_WIDTH/4)*.66); width = width<100?100:width;
+		float height = (float)MathUtils.random(WIN_HEIGHT/3); height = height<100?100:height;
+
+		
+		shapes.add(new Rectangle(x, y, width, height));
+		
+		x = (float)MathUtils.random(WIN_WIDTH/2)+WIN_WIDTH/2;
+		y = (float)WIN_HEIGHT;
+		width = (float)(MathUtils.random(WIN_WIDTH/4)*.66); width = width<100?100:width;
+		height = (float)MathUtils.random(WIN_HEIGHT/3); height = height<100?100:height;
+		
+		shapes.add(new Rectangle(x, y, width, height));
 		lastDropTime = TimeUtils.nanoTime();
 	}
 
@@ -266,7 +265,7 @@ public class Avoid extends ApplicationAdapter {
 	public void dispose() {
 		thumbImage.dispose();
 		thumbImage2.dispose();
-		backMusic.dispose();
+//		backMusic.dispose();
 		dying.dispose();
 		batch.dispose();
 		stage.dispose();
