@@ -5,7 +5,7 @@ from player import *
 #CONSTANTS
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-CLOCKFPS = 30
+CLOCKFPS = 60
 
 #game initialization
 pygame.init()
@@ -28,38 +28,23 @@ def game():
             elif event.type == pygame.KEYDOWN:
                 #movement
                 if event.key == pygame.K_w:
-                    player1.move(True, -1)
-                elif event.key == pygame.K_a:
-                    player1.move(False, -1)
+                    player1.move(1)
                 elif event.key == pygame.K_s:
-                    player1.move(True,  1)
-                elif event.key == pygame.K_d:
-                    player1.move(False, 1)
+                    player1.move(-1)
 
-                #rotation
-                elif event.key == pygame.K_j:
-                    player1.rotate(-1)
-                elif event.key == pygame.K_l:
-                    player1.rotate(1)
 
                 #firing i == fire
-                elif event.key == pygame.K_i:
+                elif event.type == MOUSEBUTTONDOWN and event.button == 1:
                     player1.shoot()
 
                 #reloading == SPACE KEY
                 elif event.key == pygame.K_SPACE:
-                    player1.shoot()
+                    player1.reload()
 
             elif event.type == pygame.KEYUP:
                 #movement
                 if event.key == pygame.K_w or event.key == pygame.K_s:
-                    player1.move(True, 0)
-                elif event.key == pygame.K_a or event.key == pygame.K_d:
-                    player1.move(False, 0)
-
-                #rotation
-                elif event.key == pygame.K_j or event.key == pygame.K_l:
-                    player1.rotate(0)
+                    player1.move(0)
 
         #update all sprites
         player1.update()
