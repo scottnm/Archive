@@ -1,10 +1,8 @@
-import pygame, Weapon, math
-
+import pygame, Weapon, math, game_constants
 
 class Player( object ):
 
     #players will move in all directions at a CONSTANT velocity of ____
-    VELOCITY = 3
 
     def equipNone(self):
         self.weapon = None
@@ -26,12 +24,12 @@ class Player( object ):
     direction = > 0 if forward; < 0 if backwards; == 0 if still
     '''
     def move(self, direction):
-        self.move_velocity = direction*Player.VELOCITY
+        self.velocity = direction*game_constants.PLAYER_VELOCITY
 
     def update(self):
         mousepos = pygame.mouse.get_pos()
-        delY =  mousepos[1] - self.y_pos
-        delX = mousepos[0] - self.x_pos
+        delY =  mousepos[1] - self.y
+        delX = mousepos[0] - self.x
 
         #handles division by zero
         if delX == 0:
@@ -40,28 +38,28 @@ class Player( object ):
             else:
                 self.rotation = math.pi
         else:
-            self.rotation = math.atan(delY/delX)
+            self.rotation = math.atan( delY / delX )
             if delX < 0:
                 self.rotation += math.pi
 
-        self.x_pos += self.move_velocity * math.cos(self.rotation)
-        self.y_pos += self.move_velocity * math.sin(self.rotation)
+        self.x += self.velocity * math.cos( self.rotation )
+        self.y += self.velocity * math.sin( self.rotation )
 
     def __init__(self, x, y, width, height, weapon, sprite):
         #define position
-        self.x_pos = x
-        self.y_pos = y
+        self.x = x
+        self.y = y
 
         #rotation in degrees
         #90 faces top of screen 0 faces right of screen
         self.rotation = math.pi/2
 
         #movement
-        self.move_velocity = 0
+        self.velocity = 0
 
         #define the hitbox of the player
         self.sprite = pygame.Surface((width,height))
-        self.sprite.fill((255,0,0)) #fill sprite with red
+        self.sprite.fill(game_constants.RED) #fill sprite with red
         self.hitbox = self.sprite.get_rect()
 
 
