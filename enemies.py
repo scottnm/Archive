@@ -33,7 +33,6 @@ class BasicEnemy( Enemy ):
     def update( self ):
         self.x += self.x_vel
         self.y += self.y_vel
-        
 
     def __init__( self ):
         self.x = random.randint(0, game_constants.WINDOW_WIDTH - game_constants.BASIC_ENEMY_WIDTH)
