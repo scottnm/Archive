@@ -10,7 +10,7 @@ MAINDISPLAY = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 #base elements
 BACKGROUND = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-player1 = Player(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 20, 20, None, None)
+player1 = Player(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, None, None)
 
 def game():
 
@@ -47,7 +47,7 @@ def game():
 
         #draw all sprites
         MAINDISPLAY.blit(BACKGROUND, (0,0))
-        MAINDISPLAY.blit(player1.sprite, (player1.x_pos, player1.y_pos))
+        MAINDISPLAY.blit(player1.sprite, (player1.x, player1.y))
 
         pygame.display.update()
 
