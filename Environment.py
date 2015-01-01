@@ -1,11 +1,7 @@
-import pygame, sys, player
+import pygame, sys, player, game_constants
 from pygame.locals import *
 from player import *
-
-#CONSTANTS
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
-CLOCKFPS = 60
+from game_constants import *
 
 #game initialization
 pygame.init()
