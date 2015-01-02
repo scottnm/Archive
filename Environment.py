@@ -1,4 +1,4 @@
-import pygame, sys, random, player, enemies, game_constants
+import pygame, random, player, InputProcessor, enemies, game_constants
 from pygame.locals import *
 from player import *
 from game_constants import *
@@ -13,7 +13,9 @@ clock = pygame.time.Clock()
 #base elements
 BACKGROUND = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 player1 = Player(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, None, None)
+playerInputProcessor = InputProcessor.keyboardInputProcessor( player1 )
 enemies_list = [None, None, None, None, None]
+
 def game():
     framecounter = 0
     enemycounter = 0
@@ -23,35 +25,11 @@ def game():
         #generate enemies
         if framecounter % (CLOCKFPS*ENEMY_PERIOD) == 0 and random.random() > .5:
             framecounter = 0
-            enemies_list[enemycounter%len(enemies_list)] = enemies.BasicEnemy()
+            enemies_list[enemycounter % len(enemies_list)] = enemies.BasicEnemy()
             enemycounter += 1
 
         for event in pygame.event.get():
-            #closing the window
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            elif event.type == pygame.KEYDOWN:
-                #movement
-                if event.key == pygame.K_w:
-                    player1.move(1)
-                elif event.key == pygame.K_s:
-                    player1.move(-1)
-
-
-                #firing i == fire
-                elif event.type == MOUSEBUTTONDOWN and event.button == 1:
-                    player1.shoot()
-
-                #reloading == SPACE KEY
-                elif event.key == pygame.K_SPACE:
-                    player1.reload()
-
-            elif event.type == pygame.KEYUP:
-                #movement
-                if event.key == pygame.K_w or event.key == pygame.K_s:
-                    player1.move(0)
+            playerInputProcessor.handleEvent( event )
 
         #update all sprites
         player1.update()
