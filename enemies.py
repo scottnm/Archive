@@ -10,7 +10,7 @@ import random
 import game_constants
 
 
-class Enemy(object):
+class Enemy(pygame.sprite.Sprite):
     # movement skeleton needed for each enemy
     def move(self):
         raise Exception("All enemies must implement 'move()'")
@@ -20,36 +20,38 @@ class Enemy(object):
         raise Exception("All enemies must implement 'update()'")
 
     def __init__(self):
-        raise Exception("All enemies must implement '__init__()'")
+        pygame.sprite.Sprite.__init__(self)
 
 
 class BasicEnemy(Enemy):
     def move(self, target_x, target_y):
-        if self.x > target_x:
+        if self.rect.x > target_x+10:
             self.x_vel = -1 * game_constants.BASIC_ENEMY_VELOCITY
-        elif self.x < target_x:
+        elif self.rect.x < target_x-10:
             self.x_vel = game_constants.BASIC_ENEMY_VELOCITY
         else:
             self.x_vel = 0
 
-        if self.y > target_y:
+        if self.rect.y > target_y+10:
             self.y_vel = -1 * game_constants.BASIC_ENEMY_VELOCITY
-        elif self.y < target_y:
+        elif self.rect.y < target_y-10:
             self.y_vel = game_constants.BASIC_ENEMY_VELOCITY
         else:
-            self.x_vel = 0
+            self.y_vel = 0
 
     def update(self):
-        self.x += self.x_vel
-        self.y += self.y_vel
+        self.rect.x += self.x_vel
+        self.rect.y += self.y_vel
 
     def __init__(self):
-        self.x = random.randint(0, game_constants.WINDOW_WIDTH - game_constants.BASIC_ENEMY_WIDTH)
-        self.y = random.randint(0, game_constants.WINDOW_HEIGHT - game_constants.BASIC_ENEMY_HEIGHT)
+        Enemy.__init__(self)
+
+        self.image = pygame.Surface((game_constants.BASIC_ENEMY_WIDTH, game_constants.BASIC_ENEMY_HEIGHT))
+        self.image.fill(game_constants.GREEN)
+        self.rect = self.image.get_rect()
+        
+        self.rect.x = random.randint(0, game_constants.WINDOW_WIDTH - game_constants.BASIC_ENEMY_WIDTH)
+        self.rect.y = random.randint(0, game_constants.WINDOW_HEIGHT - game_constants.BASIC_ENEMY_HEIGHT)
 
         self.x_vel = 0
         self.y_vel = 0
-
-        self.sprite = pygame.Surface((game_constants.BASIC_ENEMY_WIDTH, game_constants.BASIC_ENEMY_HEIGHT))
-        self.sprite.fill(game_constants.GREEN)
-        self.hitbox = self.sprite.get_rect()

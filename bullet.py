@@ -9,29 +9,35 @@ import math
 import game_constants
 import pygame
 
-class BaseBullet(object):
+class BaseBullet(pygame.sprite.Sprite):
     def __init__(self):
-        raise Exception("Bullets must be initialized")
+        pygame.sprite.Sprite.__init__(self)
+
 
     def update(self):
-        raise Exception("Bullets must implement an 'update' method")
-
+        raise Exception("Bullets must implement an 'update")
 
 class PistolBullet(BaseBullet):
     def __init__(self, x, y, rotation):
-        self.x = x
-        self.y = y
+
+        BaseBullet.__init__(self)
+
+        
         self.velocity = game_constants.PISTOL_VELOCITY
         self.rotation = rotation
-        self.sprite = pygame.Surface((game_constants.PISTOL_BULLET_WIDTH, game_constants.PISTOL_BULLET_HEIGHT))
-        self.sprite.fill(game_constants.BLUE)
-        self.hitbox = self.sprite.get_rect()
+        self.image = pygame.Surface((game_constants.PISTOL_BULLET_WIDTH, game_constants.PISTOL_BULLET_HEIGHT))
+        self.image.fill(game_constants.BLUE)
+        self.rect = self.image.get_rect()
+        
+        self.rect.x = x
+        self.rect.y = y
 
     def update(self):
-        self.x += self.velocity * math.cos(self.rotation)
-        self.y += self.velocity * math.sin(self.rotation)
-        #bullet out of bounds
-        if self.x < 0 or self.x > game_constants.WINDOW_WIDTH or self.y < 0 or self.y > game_constants.WINDOW_HEIGHT:
+        self.rect.x += self.velocity * math.cos(self.rotation)
+        self.rect.y += self.velocity * math.sin(self.rotation)
+
+        # bullet out of bounds
+        if self.rect.x < 0 or self.rect.x > game_constants.WINDOW_WIDTH or self.rect.y < 0 or self.rect.y > game_constants.WINDOW_HEIGHT:
             return 0
         # elif bullet collides return 0
         else:

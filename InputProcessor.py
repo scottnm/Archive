@@ -36,9 +36,9 @@ class KeyboardInputProcessor(InputProcessor):
         elif event.type == pygame.KEYDOWN:
             # movement
             if event.key == pygame.K_w:
-                self.player.move(1)
+                self.player.accelerate(1)
             elif event.key == pygame.K_s:
-                self.player.move(-1)
+                self.player.accelerate(-1)
 
             # reloading == SPACE KEY
             elif event.key == pygame.K_SPACE:
@@ -47,7 +47,7 @@ class KeyboardInputProcessor(InputProcessor):
         elif event.type == pygame.KEYUP:
             # movement
             if event.key == pygame.K_w or event.key == pygame.K_s:
-                self.player.move(0)
+                self.player.accelerate(0)
 
         # firing i == fire
         elif event.type == pygame.MOUSEBUTTONDOWN:
