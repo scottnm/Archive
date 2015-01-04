@@ -5,7 +5,7 @@ import game_constants
 
 
 class Player(object):
-    def __init__(self, x, y, width, height, weapon, sprite):
+    def __init__(self, x, y, width, height, weapon, bullet_list, sprite):
         # define position
         self.x = x
         self.y = y
@@ -23,8 +23,10 @@ class Player(object):
 
         # spawn weapon
         self.weapon = None
-        if weapon is "Pistol":
+        if weapon is game_constants.PISTOL_KEY:
             self.equip_pistol()
+
+        self.bullet_list = bullet_list
 
         self.extra_ammo = 0
 
@@ -38,7 +40,9 @@ class Player(object):
 
     def shoot(self):
         if self.weapon is not None:
-            self.weapon.fire()
+            bullet = self.weapon.fire(self.x, self.y, self.rotation)
+            if bullet is not None:
+                self.bullet_list.append(bullet)
 
     def reload(self):
         if self.weapon is not None and self.extra_ammo > 0:

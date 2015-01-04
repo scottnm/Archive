@@ -15,9 +15,11 @@ clock = pygame.time.Clock()
 
 # base elements
 BACKGROUND = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, None, None)
-playerInputProcessor = InputProcessor.KeyboardInputProcessor(playerOne)
 enemiesList = [None, None, None, None, None]
+bullet_list = []
+playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, game_constants.PISTOL_KEY, bullet_list, None)
+playerInputProcessor = InputProcessor.KeyboardInputProcessor(playerOne)
+
 
 
 def game():
@@ -37,10 +39,15 @@ def game():
 
         # update all sprites
         playerOne.update()
+
         for enemy in enemiesList:
             if enemy is not None:
                 enemy.move(playerOne.x, playerOne.y)
                 enemy.update()
+
+        for bullet in bullet_list:
+            if not bullet.update():
+                bullet_list.remove(bullet)
 
         # draw all sprites
         MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
@@ -48,6 +55,9 @@ def game():
         for enemy in enemiesList:
             if enemy is not None:
                 MAIN_DISPLAY.blit(enemy.sprite, (enemy.x, enemy.y))
+
+        for bullet in bullet_list:
+            MAIN_DISPLAY.blit(bullet.sprite, (bullet.x, bullet.y))
 
         pygame.display.update()
         clock.tick(CLOCK_FPS)

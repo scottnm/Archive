@@ -1,3 +1,5 @@
+import bullet
+
 class Weapon(object):
     def fire(self):
         raise Exception("Must implement 'Fire' method")
@@ -11,10 +13,10 @@ class Pistol(Weapon):
         self.CLIP_CAPACITY = 6
         self.ammo_left = 6
 
-    def fire(self):
+    def fire(self, x, y, rotation):
         if self.ammo_left > 0:
-            # return a new bullet to display
             self.ammo_left -= 1
+            return bullet.PistolBullet(x, y, rotation)
 
         return None
 
