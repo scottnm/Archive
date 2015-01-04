@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""Weapon.py: Contains all weapon classes. Each class controls behavior for a specific weapon."""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 import bullet
 
 class Weapon(object):

@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""InputProcessor.py: Contains classes for different InputProcessing/Control schemes: Keyboard, gamepad, etc"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 import pygame
 import sys
 from pygame.locals import *

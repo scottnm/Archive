@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""player.py: The player character class. Controls all of the basic player behavior: firing, reloading, moving"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 import pygame
 import Weapon
 import math

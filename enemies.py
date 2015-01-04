@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""enemies.py: Contains all enemy classes which contain enemy behavior and updating"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 import pygame
 import random
 import game_constants

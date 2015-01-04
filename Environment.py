@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""Environment.py: The Environment that the game runs in. Contains the game loop and updating the display"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 import pygame
 import random
 import InputProcessor

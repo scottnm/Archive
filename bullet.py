@@ -1,4 +1,9 @@
-__author__ = 'Scott Munro'
+#!/usr/bin/env python
+
+"""bullet.py: Contains all bullet subclasses. Each subclass contains updating each bullet for the environment to call"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
 
 import math
 import game_constants

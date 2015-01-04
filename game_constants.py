@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""game_constants.py: contains all of the game_constants that need to be used globally"""
+
+__author__      = "Scott Munro"
+__copyright__   = "Copyright 2015"
+
 # ENVIRONMENT CONSTANTS
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
