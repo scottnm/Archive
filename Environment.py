@@ -58,8 +58,10 @@ def game():
 
         # update players
         for player in player_group:
+            # player removed so that no collision with self is detected
             collision_group.remove(player)
             player.update()
+
             # move and then check for collisions
             player.move_x()
             while pygame.sprite.spritecollideany(player, collision_group) is not None:
@@ -73,6 +75,7 @@ def game():
 
         # update enemies
         for enemy in enemy_group:
+            # enemy is remvoed so that no collision with self is detected
             collision_group.remove(enemy)
             enemy.update(playerOne.rect.x, playerOne.rect.y)
             enemy.move_x()
@@ -96,14 +99,11 @@ def game():
 
         # draw all sprites
         MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
-
-        # MAIN_DISPLAY.blit(playerOne.image, (playerOne.rect.x, playerOne.rect.y))
         player_group.draw(MAIN_DISPLAY)
-
         enemy_group.draw(MAIN_DISPLAY)
-
         bullet_group.draw(MAIN_DISPLAY)
 
+        #update Sprite groups
         collision_group.add(obstacle_group, player_group, enemy_group)
         all_sprites.add(obstacle_group, enemy_group, bullet_group, player_group)
 

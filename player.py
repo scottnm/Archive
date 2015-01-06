@@ -86,7 +86,6 @@ class Player(pygame.sprite.Sprite):
                 self.rotation += math.pi
 
     def update(self):
-        # self.calculate_rotation()
         self.x_vel = self.velocity * math.cos(self.rotation)
         self.y_vel = self.velocity * math.sin(self.rotation)
 
