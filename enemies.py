@@ -24,24 +24,39 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class BasicEnemy(Enemy):
-    def move(self, target_x, target_y):
-        if self.rect.x > target_x+10:
+
+    def update(self, target_x, target_y):
+        if self.rect.x > target_x+5:
             self.x_vel = -1 * game_constants.BASIC_ENEMY_VELOCITY
-        elif self.rect.x < target_x-10:
+        elif self.rect.x < target_x-5:
             self.x_vel = game_constants.BASIC_ENEMY_VELOCITY
         else:
             self.x_vel = 0
 
-        if self.rect.y > target_y+10:
+        if self.rect.y > target_y+5:
             self.y_vel = -1 * game_constants.BASIC_ENEMY_VELOCITY
-        elif self.rect.y < target_y-10:
+        elif self.rect.y < target_y-5:
             self.y_vel = game_constants.BASIC_ENEMY_VELOCITY
         else:
             self.y_vel = 0
 
-    def update(self):
+    def move_x(self):
         self.rect.x += self.x_vel
+
+    def revert_x(self):
+        if self.x_vel > 0:
+            self.rect.x -= 1
+        else:
+            self.rect.x += 1
+
+    def move_y(self):
         self.rect.y += self.y_vel
+
+    def revert_y(self):
+        if self.y_vel > 0:
+            self.rect.y -= 1
+        else:
+            self.rect.y += 1
 
     def __init__(self):
         Enemy.__init__(self)

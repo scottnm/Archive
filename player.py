@@ -20,6 +20,8 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.velocity = 0
+        self.x_vel = 0
+        self.y_vel = 0
 
         # define the hitbox of the player
         self.image = pygame.Surface((width, height))
@@ -48,6 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon = Weapon.Pistol()
 
     def shoot(self):
+        self.calculate_rotation()
         if self.weapon is not None:
             bullet = self.weapon.fire(self.rect.x, self.rect.y, self.rotation)
             if bullet is not None:
@@ -66,7 +69,7 @@ class Player(pygame.sprite.Sprite):
     def accelerate(self, direction):
         self.velocity = direction * game_constants.PLAYER_VELOCITY
 
-    def update(self):
+    def calculate_rotation(self):
         mouse_position = pygame.mouse.get_pos()
         delta_y = mouse_position[1] - self.rect.y
         delta_x = mouse_position[0] - self.rect.x
@@ -82,7 +85,29 @@ class Player(pygame.sprite.Sprite):
             if delta_x < 0:
                 self.rotation += math.pi
 
-        self.rect.x += self.velocity * math.cos(self.rotation)
-        self.rect.y += self.velocity * math.sin(self.rotation)
+    def update(self):
+        self.calculate_rotation()
+
+        self.x_vel = self.velocity * math.cos(self.rotation)
+        self.y_vel = self.velocity * math.sin(self.rotation)
+
+    def move_x(self):
+        self.rect.x += self.x_vel
+
+    def revert_x(self):
+        if self.x_vel > 0:
+            self.rect.x -= 1
+        else:
+            self.rect.x += 1
+
+    def move_y(self):
+        self.rect.y += self.y_vel
+
+    def revert_y(self):
+        if self.y_vel > 0:
+            self.rect.y -= 1
+        else:
+            self.rect.y += 1
+
 
 
