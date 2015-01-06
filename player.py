@@ -71,7 +71,7 @@ class Player(pygame.sprite.Sprite):
 
     def calculate_rotation(self):
         mouse_position = pygame.mouse.get_pos()
-        delta_y = mouse_position[1] - self.rect.y
+        delta_y = (mouse_position[1] - self.rect.y) * 1.0
         delta_x = mouse_position[0] - self.rect.x
 
         # handles division by zero
@@ -86,8 +86,7 @@ class Player(pygame.sprite.Sprite):
                 self.rotation += math.pi
 
     def update(self):
-        self.calculate_rotation()
-
+        # self.calculate_rotation()
         self.x_vel = self.velocity * math.cos(self.rotation)
         self.y_vel = self.velocity * math.sin(self.rotation)
 

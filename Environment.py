@@ -45,7 +45,6 @@ def game():
     enemy_counter = 0
 
     while True:
-        print playerOne.rotation
         # generate enemies
         if enemy_counter < 5 and frame_counter % (CLOCK_FPS * ENEMY_PERIOD) == 0 and random.random() > .5:
             enemy_group.add(enemies.BasicEnemy())
@@ -95,28 +94,14 @@ def game():
                 if type(collided_obj) is not Obstacle:
                     collided_obj.kill()
 
-            """
-            if not bullet.update():
-                bullet_group.remove(bullet)
-            """
-
         # draw all sprites
         MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
 
         # MAIN_DISPLAY.blit(playerOne.image, (playerOne.rect.x, playerOne.rect.y))
         player_group.draw(MAIN_DISPLAY)
 
-        '''
-        for enemy in enemy_group:
-            if enemy is not None:
-                MAIN_DISPLAY.blit(enemy.image, (enemy.rect.x, enemy.rect.y))
-        '''
         enemy_group.draw(MAIN_DISPLAY)
 
-        '''
-        for bullet in bullet_group:
-            MAIN_DISPLAY.blit(bullet.image, (bullet.rect.x, bullet.rect.y))
-        '''
         bullet_group.draw(MAIN_DISPLAY)
 
         collision_group.add(obstacle_group, player_group, enemy_group)
@@ -126,6 +111,8 @@ def game():
         clock.tick(CLOCK_FPS)
 
         frame_counter += CLOCK_FPS
+
+        # pygame.time.delay(1000)
 
 
 if __name__ == '__main__':
