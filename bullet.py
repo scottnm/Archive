@@ -23,7 +23,7 @@ class PistolBullet(BaseBullet):
         BaseBullet.__init__(self)
 
         
-        self.velocity = game_constants.PISTOL_VELOCITY
+        self.velocity = game_constants.PISTOL_BULLET_VELOCITY
         self.rotation = rotation
         self.image = pygame.Surface((game_constants.PISTOL_BULLET_WIDTH, game_constants.PISTOL_BULLET_HEIGHT))
         self.image.fill(game_constants.BLUE)
