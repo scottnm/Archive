@@ -1,0 +1,5 @@
+AMMO IDEA
+	survival horror-esque semi-full clips
+
+ENVIRONMENT IDEA
+	destructible environments
