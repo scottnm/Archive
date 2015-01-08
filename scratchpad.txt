@@ -1,5 +1,11 @@
 AMMO IDEA
 	survival horror-esque semi-full clips
-
+	PARTIAL RELOAD OR NO PARTIAL RELOAD?!?! something to think about
 ENVIRONMENT IDEA
 	destructible environments
+AIMING IDEA
+	-shaky/random aiming. the longer you hold still the better your aim gets
+	-constantly turning results in low accuracy
+	-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
+
+WRITE A GAME DESIGN DOCUMENT
