@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""Items.py: The item classes and subclasses: currently includes PISTOLAMMO..."""
+
+__author__ = "Scott Munro"
+__copyright__ = "Copyright 2015"
+
 import pygame
 import random
 from game_constants import *

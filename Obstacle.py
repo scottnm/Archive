@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""Obstacle.py: The obstacle and obstacle subclasses"""
+
+__author__ = "Scott Munro"
+__copyright__ = "Copyright 2015"
+
 import pygame
 import game_constants
 

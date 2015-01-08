@@ -10,7 +10,11 @@ from Obstacle import *
 
 
 def generate_obstacle_group(group):
-    # left bounding wall for the screen
+
+    """
+    generates bounding walls for screen
+    adds them to obstacle group
+    """
     bounding_wall_left = Obstacle(-1*BOUNDING_WALL_THICKNESS, -1*BOUNDING_WALL_THICKNESS, BOUNDING_WALL_THICKNESS, BOUNDING_WALL_THICKNESS+WINDOW_HEIGHT)
     bounding_wall_right = Obstacle(WINDOW_WIDTH, 0, BOUNDING_WALL_THICKNESS, BOUNDING_WALL_THICKNESS+WINDOW_HEIGHT)
     bounding_wall_top = Obstacle(0, -1*BOUNDING_WALL_THICKNESS, BOUNDING_WALL_THICKNESS+WINDOW_WIDTH, BOUNDING_WALL_THICKNESS)
