@@ -6,6 +6,7 @@ __author__      = "Scott Munro"
 __copyright__   = "Copyright 2015"
 
 import bullet
+import game_constants
 
 class Weapon(object):
     def fire(self):
@@ -17,8 +18,8 @@ class Weapon(object):
 
 class Pistol(Weapon):
     def __init__(self):
-        self.CLIP_CAPACITY = 6
-        self.ammo_left = 6
+        self.ammo_left = game_constants.PISTOL_CLIP_CAPACITY  # full clip
+        self.key = game_constants.PISTOL_KEY
 
     def fire(self, x, y, rotation):
         if self.ammo_left > 0:

@@ -8,4 +8,12 @@ AIMING IDEA
 	-constantly turning results in low accuracy
 	-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
 
+WEAPON IDEA
+	bow and arrow with retrievable ammo (arrow used to kill zombie can be picked up occassionally and sometimes they break)
+
 WRITE A GAME DESIGN DOCUMENT
+
+
+QUICK NOTES
+- generate more than 5 enemies
+- limit / control ammo generation in some way

@@ -9,6 +9,7 @@ import pygame
 import Weapon
 import math
 import game_constants
+import collections
 
 
 class Player(pygame.sprite.Sprite):
@@ -39,7 +40,11 @@ class Player(pygame.sprite.Sprite):
 
         self.bullet_group = bullet_group
 
-        self.extra_ammo = 0
+        """
+        simple infrastructure for ammo reloading
+        perhaps in the future have random drops with random ammount of ammo in them?
+        """
+        self.ammo_inventory = collections.defaultdict(int)
 
     # players will move in all directions at a CONSTANT velocity of ____
 
@@ -57,9 +62,9 @@ class Player(pygame.sprite.Sprite):
                 self.bullet_group.add(bullet)
 
     def reload(self):
-        if self.weapon is not None and self.extra_ammo > 0:
+        if self.ammo_inventory[self.weapon.key] > 0:
             self.weapon.reload()
-            self.extra_ammo -= 1
+            self.ammo_inventory[self.weapon.key] -= 1
 
     '''
     walk = True if walking, False if strafing

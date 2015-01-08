@@ -11,6 +11,7 @@ import InputProcessor
 import enemies
 import Obstacle
 import ObstacleGenerator
+import Items
 from pygame.locals import *
 from player import *
 from game_constants import *
@@ -26,6 +27,7 @@ clock = pygame.time.Clock()
 BACKGROUND = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 enemy_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
+ammo_group = pygame.sprite.Group()
 obstacle_group = pygame.sprite.Group()
 ObstacleGenerator.generate_obstacle_group(obstacle_group)
 playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, game_constants.PISTOL_KEY,
@@ -33,12 +35,15 @@ playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEI
 playerInputProcessor = InputProcessor.KeyboardInputProcessor(playerOne)
 player_group = pygame.sprite.Group(playerOne)
 
-#groups don't update as references FIX FIX FIX
 collision_group = pygame.sprite.Group(obstacle_group, player_group, enemy_group)
-all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group)
+all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group, ammo_group)
 
 
 def game():
+
+    for i in range (1,10):
+        pygame.time.delay(1000)
+        print i
 
     # used to regulate the number of enemies for the time being
     frame_counter = 0
@@ -49,6 +54,10 @@ def game():
         if enemy_counter < 5 and frame_counter % (CLOCK_FPS * ENEMY_PERIOD) == 0 and random.random() > .5:
             enemy_group.add(enemies.BasicEnemy())
             enemy_counter += 1
+
+        # generate ammo drop
+        if frame_counter % (CLOCK_FPS * AMMO_PERIOD) == 0 and random.random() > .4:
+            ammo_group.add(Items.PistolAmmo(6))
 
         # handle events
         for event in pygame.event.get():
@@ -61,6 +70,12 @@ def game():
             # player removed so that no collision with self is detected
             collision_group.remove(player)
             player.update()
+
+            # check for ammo grabs
+            ammo_collision = pygame.sprite.spritecollideany(player, ammo_group)
+            if ammo_collision is not None:
+                ammo_collision.kill()
+                player.ammo_inventory[ammo_collision.key] += 1
 
             # move and then check for collisions
             player.move_x()
@@ -97,15 +112,14 @@ def game():
                 if type(collided_obj) is not Obstacle:
                     collided_obj.kill()
 
-        # draw all sprites
-        MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
-        player_group.draw(MAIN_DISPLAY)
-        enemy_group.draw(MAIN_DISPLAY)
-        bullet_group.draw(MAIN_DISPLAY)
-
-        #update Sprite groups
+        # update Sprite groups
         collision_group.add(obstacle_group, player_group, enemy_group)
-        all_sprites.add(obstacle_group, enemy_group, bullet_group, player_group)
+        all_sprites.add(obstacle_group, enemy_group, bullet_group, player_group, ammo_group)
+
+        # draw all sprites
+        # MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
+        all_sprites.clear(MAIN_DISPLAY, BACKGROUND)
+        all_sprites.draw(MAIN_DISPLAY)
 
         pygame.display.update()
         clock.tick(CLOCK_FPS)
