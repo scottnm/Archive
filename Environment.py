@@ -40,8 +40,7 @@ all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group, ammo_
 
 
 def game():
-
-    for i in range (1,10):
+    for i in range(1, 10):
         pygame.time.delay(1000)
         print i
 
@@ -51,7 +50,7 @@ def game():
 
     while True:
         # generate enemies
-        if enemy_counter < 5 and frame_counter % (CLOCK_FPS * ENEMY_PERIOD) == 0 and random.random() > .5:
+        if frame_counter % (CLOCK_FPS * ENEMY_PERIOD) == 0 and random.random() > .5:
             enemy_group.add(enemies.BasicEnemy())
             enemy_counter += 1
 

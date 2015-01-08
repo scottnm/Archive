@@ -11,6 +11,13 @@ AIMING IDEA
 WEAPON IDEA
 	bow and arrow with retrievable ammo (arrow used to kill zombie can be picked up occassionally and sometimes they break)
 
+ENEMY IDEA
+	implement zombie wobble
+	implement hit stun when player collides with zombo
+
+PLAYER IDEA
+	implement stamina
+
 WRITE A GAME DESIGN DOCUMENT
 
 
