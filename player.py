@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # rotation in radians
-        self.rotation = math.pi / 2
+        self.rotation = 0
 
         # movement
         self.velocity = 0
@@ -57,7 +57,8 @@ class Player(pygame.sprite.Sprite):
     def shoot(self):
         self.calculate_rotation()
         if self.weapon is not None:
-            bullet = self.weapon.fire(self.rect.x, self.rect.y, self.rotation)
+            center = self.get_center()
+            bullet = self.weapon.fire(center[0], center[1], self.rotation)
             if bullet is not None:
                 self.bullet_group.add(bullet)
 
@@ -76,8 +77,11 @@ class Player(pygame.sprite.Sprite):
 
     def calculate_rotation(self):
         mouse_position = pygame.mouse.get_pos()
-        delta_y = (mouse_position[1] - (self.rect.y + game_constants.PLAYER_HEIGHT/2) ) * 1.0
-        delta_x = mouse_position[0] - (self.rect.x + game_constants.PLAYER_WIDTH/2)
+        center = self.get_center()
+        delta_y = (mouse_position[1] - center[1]) * 1.0
+        delta_x = mouse_position[0] - center[0]
+        # delta_y = (mouse_position[1] - self.rect.y ) * 1.0
+        # delta_x = mouse_position[0] - self.rect.x
 
         # handles division by zero
         if delta_x == 0:
@@ -112,5 +116,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.rect.y += 1
 
+    def get_center(self):
+        center_coordinates = (self.rect.x + game_constants.PLAYER_WIDTH/2, self.rect.y + game_constants.PLAYER_HEIGHT/2)
+        return center_coordinates
 
 

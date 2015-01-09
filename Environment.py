@@ -71,6 +71,7 @@ def game():
         for player in player_group:
             # player removed so that no collision with self is detected
             collision_group.remove(player)
+            player.calculate_rotation()
             player.update()
 
             # check for ammo grabs
@@ -124,14 +125,14 @@ def game():
         all_sprites.draw(MAIN_DISPLAY)
 
         # draw accuracy lines
-        accuracy_handler.drawLines()
+        accuracy_handler.draw_lines()
 
         pygame.display.update()
         clock.tick(CLOCK_FPS)
 
         frame_counter += CLOCK_FPS
 
-        # pygame.time.delay(1000)
+        pygame.time.delay(1000)
 
 
 if __name__ == '__main__':

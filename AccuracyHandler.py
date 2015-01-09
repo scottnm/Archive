@@ -51,14 +51,16 @@ class AccuracyHandler(object):
         if xdiff < ydiff:
             xpos_
     """
-    def drawLines(self):
+    def draw_lines(self):
+
         rotation1 = self.player.rotation + self.growth
         rotation2 = self.player.rotation - self.growth
+        print str(rotation1)+'\t'+str(self.player.rotation)+'\t'+str(rotation2)
 
-        self.draw(rotation1 % (math.pi + math.pi))
-        self.draw(rotation2 % (math.pi + math.pi))
+        self.draw(rotation1, game_constants.WHITE)
+        self.draw(rotation2, game_constants.RED)
 
-    def draw(self, rotation):
+    def draw(self, rotation, color):
         # draw two lines
         x_pos = 0
         if 0 <= rotation < math.pi/2 or (math.pi/2 + math.pi) <= rotation < (math.pi + math.pi):
@@ -66,5 +68,5 @@ class AccuracyHandler(object):
 
         x_diff = x_pos - (self.player.rect.x+game_constants.PLAYER_WIDTH/2)
         y_pos = x_diff * math.tan(rotation)
-
-        pygame.draw.line(self.screen, game_constants.WHITE, (self.player.rect.x+game_constants.PLAYER_WIDTH/2, self.player.rect.y+game_constants.PLAYER_HEIGHT/2), (x_pos, y_pos), 1)
+        player_center = self.player.get_center()
+        pygame.draw.line(self.screen, color, (player_center[0], player_center[1]), (x_pos, y_pos), 1)
