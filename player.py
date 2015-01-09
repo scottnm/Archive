@@ -76,8 +76,8 @@ class Player(pygame.sprite.Sprite):
 
     def calculate_rotation(self):
         mouse_position = pygame.mouse.get_pos()
-        delta_y = (mouse_position[1] - self.rect.y) * 1.0
-        delta_x = mouse_position[0] - self.rect.x
+        delta_y = (mouse_position[1] - (self.rect.y + game_constants.PLAYER_HEIGHT/2) ) * 1.0
+        delta_x = mouse_position[0] - (self.rect.x + game_constants.PLAYER_WIDTH/2)
 
         # handles division by zero
         if delta_x == 0:

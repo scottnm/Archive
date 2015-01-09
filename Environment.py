@@ -12,6 +12,7 @@ import enemies
 import Obstacle
 import ObstacleGenerator
 import Items
+import AccuracyHandler
 from pygame.locals import *
 from player import *
 from game_constants import *
@@ -34,6 +35,8 @@ playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEI
                    bullet_group, None)
 playerInputProcessor = InputProcessor.KeyboardInputProcessor(playerOne)
 player_group = pygame.sprite.Group(playerOne)
+
+accuracy_handler = AccuracyHandler.AccuracyHandler(MAIN_DISPLAY, playerOne)
 
 collision_group = pygame.sprite.Group(obstacle_group, player_group, enemy_group)
 all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group, ammo_group)
@@ -116,9 +119,12 @@ def game():
         all_sprites.add(obstacle_group, enemy_group, bullet_group, player_group, ammo_group)
 
         # draw all sprites
-        # MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
-        all_sprites.clear(MAIN_DISPLAY, BACKGROUND)
+        MAIN_DISPLAY.blit(BACKGROUND, (0, 0))
+        # all_sprites.clear(MAIN_DISPLAY, BACKGROUND)
         all_sprites.draw(MAIN_DISPLAY)
+
+        # draw accuracy lines
+        accuracy_handler.drawLines()
 
         pygame.display.update()
         clock.tick(CLOCK_FPS)
