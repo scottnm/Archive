@@ -22,5 +22,7 @@ WRITE A GAME DESIGN DOCUMENT
 
 
 QUICK NOTES
-- generate more than 5 enemies
+DONE - generate more than 5 enemies
 - limit / control ammo generation in some way
+
+- the greater the bullet's velocity is, the smaller the loss in precision is therefore the bullet flies straighter. Perhaps increase bullet's velocity and implement someway of detecting collisions between bullets and enemies when bullets could skip over enemies with a large velocity
