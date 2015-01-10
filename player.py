@@ -8,6 +8,7 @@ __copyright__   = "Copyright 2015"
 import pygame
 import Weapon
 import math
+import random
 import game_constants
 import collections
 import AccuracyHandler
@@ -59,9 +60,10 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         self.calculate_rotation()
+        noise = random.uniform(-1*self.accuracy_handler.growth, self.accuracy_handler.growth)
         if self.weapon is not None:
             center = self.get_center()
-            bullet = self.weapon.fire(center[0], center[1], self.rotation)
+            bullet = self.weapon.fire(center[0], center[1], self.rotation+noise)
             if bullet is not None:
                 self.bullet_group.add(bullet)
 
