@@ -10,7 +10,8 @@ import game_constants
 
 class AccuracyHandler(object):
     RANGE = math.pi / 24
-    GROWTH_FACTOR = math.pi / 4320
+    GROWTH_FACTOR = math.pi / 2880
+    FREEDOM = math.pi / 1000
 
     def __init__(self, screen, player):
         self.screen = screen  # display to blit onto
@@ -19,38 +20,19 @@ class AccuracyHandler(object):
         self.growth = math.pi / 24
 
     def update(self):
-        if math.fabs(self.theta_last - self.player.rotation) < AccuracyHandler.RANGE:
+        if math.fabs(self.theta_last - self.player.rotation) < AccuracyHandler.FREEDOM:
             self.growth -= AccuracyHandler.GROWTH_FACTOR
+            if self.growth < 0:
+                self.growth = 0
         else:
             self.growth += AccuracyHandler.GROWTH_FACTOR
+            self.growth += AccuracyHandler.GROWTH_FACTOR
+            if self.growth > AccuracyHandler.RANGE:
+                self.growth = AccuracyHandler.RANGE
 
         self.theta_last = self.player.rotation
 
-    """
-    def draw(self):
-        # draw the two lines
-        rotation = self.player.rotation % (math.pi+math.pi)
-        x_bound = 0
-        y_bound = 0
 
-        if 0 <= rotation < math.pi/2:
-            x_bound = game_constants.WINDOW_WIDTH
-            y_bound = game_constants.WINDOW_HEIGHT
-
-        elif math.pi/2 <= rotation < math.pi:
-            y_bound = game_constants.WINDOW_HEIGHT
-
-        # elif math.pi <= rotation < (math.pi/2 + math.pi) do nothing
-
-        elif (math.pi/2 + math.pi) <= rotation < (math.pi + math.pi):
-            x_bound = game_constants.WINDOW_WIDTH
-
-        xdiff = math.fabs(self.player.rect.x - x_bound)
-        ydiff = math.fabs(self.player.rect.y - y_bound)
-
-        if xdiff < ydiff:
-            xpos_
-    """
     def draw_lines(self):
 
         rotation1 = self.player.rotation + self.growth

@@ -129,6 +129,7 @@ def game():
         all_sprites.draw(MAIN_DISPLAY)
 
         # draw accuracy lines
+        accuracy_handler.update()
         accuracy_handler.draw_lines()
 
         pygame.display.update()

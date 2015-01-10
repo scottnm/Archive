@@ -8,6 +8,7 @@ AIMING IDEA
 	-constantly turning results in low accuracy
 	-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
 
+	-implement 'aim down sights' effectively hold a key to prevent rotation so accuracy increases
 WEAPON IDEA
 	bow and arrow with retrievable ammo (arrow used to kill zombie can be picked up occassionally and sometimes they break)
 
