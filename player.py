@@ -86,9 +86,9 @@ class Player(pygame.sprite.Sprite):
         # handles division by zero
         if delta_x == 0:
             if delta_y < 0:
-                self.rotation = -1 * math.pi
+                self.rotation = -1 * math.pi/2
             else:
-                self.rotation = math.pi
+                self.rotation = math.pi/2
         else:
             self.rotation = math.atan(delta_y / delta_x)
             if delta_x < 0:

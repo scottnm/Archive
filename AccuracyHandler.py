@@ -55,18 +55,19 @@ class AccuracyHandler(object):
 
         rotation1 = self.player.rotation + self.growth
         rotation2 = self.player.rotation - self.growth
-        print str(rotation1)+'\t'+str(self.player.rotation)+'\t'+str(rotation2)
+
+        print 'R1: '+str(rotation1)+'\tS: '+str(self.player.rotation)+'\tR2: '+str(rotation2)
 
         self.draw(rotation1, game_constants.WHITE)
+        self.draw(self.player.rotation, game_constants.BLUE)
         self.draw(rotation2, game_constants.RED)
 
     def draw(self, rotation, color):
-        # draw two lines
-        x_pos = 0
-        if 0 <= rotation < math.pi/2 or (math.pi/2 + math.pi) <= rotation < (math.pi + math.pi):
-            x_pos = game_constants.WINDOW_WIDTH
-
-        x_diff = x_pos - (self.player.rect.x+game_constants.PLAYER_WIDTH/2)
-        y_pos = x_diff * math.tan(rotation)
         player_center = self.player.get_center()
-        pygame.draw.line(self.screen, color, (player_center[0], player_center[1]), (x_pos, y_pos), 1)
+
+        x_pos = game_constants.WINDOW_DIAGONAL*math.cos(rotation)
+        y_pos = game_constants.WINDOW_DIAGONAL*math.sin(rotation)
+
+        # print 'x_pos: '+str(x_pos)+'\ty_pos: '+str(y_pos)+'\trotation: '+str(rotation)
+
+        pygame.draw.line(self.screen, color, (player_center[0], player_center[1]), (player_center[0]+x_pos, player_center[1]+y_pos), 1)
