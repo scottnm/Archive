@@ -43,14 +43,13 @@ all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group, ammo_
 
 
 def game():
-
     for i in range(1, 10):
         pygame.time.delay(100)
         print i
 
     # used to regulate the number of enemies for the time being
     frame_counter = 0
-    enemy_counter = 0
+    # enemy_counter = 0
 
     while True:
 
@@ -109,7 +108,6 @@ def game():
                 enemy.revert_y()
             collision_group.add(enemy)
 
-
         # update bullets
         for bullet in bullet_group:
             bullet.update()
@@ -136,9 +134,6 @@ def game():
         clock.tick(CLOCK_FPS)
 
         frame_counter += CLOCK_FPS
-
-        # pygame.time.delay(10000)
-
 
 if __name__ == '__main__':
     game()

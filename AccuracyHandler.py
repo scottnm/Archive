@@ -17,7 +17,7 @@ class AccuracyHandler(object):
         self.screen = screen  # display to blit onto
         self.player = player
         self.theta_last = player.rotation
-        self.growth = math.pi / 24
+        self.growth = AccuracyHandler.RANGE
 
     def update(self):
         if math.fabs(self.theta_last - self.player.rotation) < AccuracyHandler.FREEDOM:
@@ -49,7 +49,5 @@ class AccuracyHandler(object):
 
         x_pos = game_constants.WINDOW_DIAGONAL*math.cos(rotation)
         y_pos = game_constants.WINDOW_DIAGONAL*math.sin(rotation)
-
-        # print 'x_pos: '+str(x_pos)+'\ty_pos: '+str(y_pos)+'\trotation: '+str(rotation)
 
         pygame.draw.line(self.screen, color, (player_center[0], player_center[1]), (player_center[0]+x_pos, player_center[1]+y_pos), 1)

@@ -33,10 +33,6 @@ class KeyboardInputProcessor(InputProcessor):
             pygame.quit()
             sys.exit()
 
-
-        # elif event.type == pygame.MOUSEMOTION:
-        #     self.player.calculate_rotation()
-
         elif event.type == pygame.KEYDOWN:
             # movement
             if event.key == pygame.K_w:

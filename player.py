@@ -40,10 +40,6 @@ class Player(pygame.sprite.Sprite):
 
         self.bullet_group = bullet_group
 
-        """
-        simple infrastructure for ammo reloading
-        perhaps in the future have random drops with random ammount of ammo in them?
-        """
         self.ammo_inventory = collections.defaultdict(int)
 
     # players will move in all directions at a CONSTANT velocity of ____
@@ -67,11 +63,6 @@ class Player(pygame.sprite.Sprite):
             self.weapon.reload()
             self.ammo_inventory[self.weapon.key] -= 1
 
-    '''
-    walk = True if walking, False if strafing
-    direction = > 0 if forward; < 0 if backwards; == 0 if still
-    '''
-
     def accelerate(self, direction):
         self.velocity = direction * game_constants.PLAYER_VELOCITY
 
@@ -80,8 +71,6 @@ class Player(pygame.sprite.Sprite):
         center = self.get_center()
         delta_y = (mouse_position[1] - center[1]) * 1.0
         delta_x = mouse_position[0] - center[0]
-        # delta_y = (mouse_position[1] - self.rect.y ) * 1.0
-        # delta_x = mouse_position[0] - self.rect.x
 
         # handles division by zero
         if delta_x == 0:
