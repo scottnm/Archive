@@ -32,17 +32,17 @@ class AccuracyHandler(object):
 
         self.theta_last = self.player.rotation
 
-
     def draw_lines(self):
 
         rotation1 = self.player.rotation + self.growth
         rotation2 = self.player.rotation - self.growth
 
-        print 'R1: '+str(rotation1)+'\tS: '+str(self.player.rotation)+'\tR2: '+str(rotation2)
+        # print 'R1: '+str(rotation1)+'\tS: '+str(self.player.rotation)+'\tR2: '+str(rotation2)
 
         self.draw(rotation1, game_constants.WHITE)
-        self.draw(self.player.rotation, game_constants.BLUE)
         self.draw(rotation2, game_constants.RED)
+        self.draw(self.player.rotation, game_constants.BLUE)
+
 
     def draw(self, rotation, color):
         player_center = self.player.get_center()

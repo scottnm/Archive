@@ -32,11 +32,11 @@ ammo_group = pygame.sprite.Group()
 obstacle_group = pygame.sprite.Group()
 ObstacleGenerator.generate_obstacle_group(obstacle_group)
 playerOne = Player(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, game_constants.PISTOL_KEY,
-                   bullet_group, None)
+                   bullet_group, None, MAIN_DISPLAY)
 playerInputProcessor = InputProcessor.KeyboardInputProcessor(playerOne)
 player_group = pygame.sprite.Group(playerOne)
 
-accuracy_handler = AccuracyHandler.AccuracyHandler(MAIN_DISPLAY, playerOne)
+# accuracy_handler = AccuracyHandler.AccuracyHandler(MAIN_DISPLAY, playerOne)
 
 collision_group = pygame.sprite.Group(obstacle_group, player_group, enemy_group)
 all_sprites = pygame.sprite.Group(enemy_group, bullet_group, player_group, ammo_group)
@@ -92,6 +92,8 @@ def game():
             while pygame.sprite.spritecollideany(player, collision_group) is not None:
                 player.revert_y()
 
+            player.revert_from_mouse()
+
             collision_group.add(player)
 
         # update enemies
@@ -127,13 +129,15 @@ def game():
         all_sprites.draw(MAIN_DISPLAY)
 
         # draw accuracy lines
-        accuracy_handler.update()
-        accuracy_handler.draw_lines()
+        playerOne.accuracy_handler.update()
+        playerOne.accuracy_handler.draw_lines()
 
         pygame.display.update()
         clock.tick(CLOCK_FPS)
 
         frame_counter += CLOCK_FPS
+
+        # pygame.time.delay(500)
 
 if __name__ == '__main__':
     game()

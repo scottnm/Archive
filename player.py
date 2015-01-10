@@ -10,10 +10,11 @@ import Weapon
 import math
 import game_constants
 import collections
+import AccuracyHandler
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, weapon, bullet_group, sprite):
+    def __init__(self, x, y, width, height, weapon, bullet_group, sprite, screen):
         pygame.sprite.Sprite.__init__(self)
 
         # rotation in radians
@@ -28,6 +29,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((width, height))
         self.image.fill(game_constants.RED)
         self.rect = self.image.get_rect()
+
+        # define a bounding circle for mouse tracking
+        # center is center of player sprite
+        self.circle_radius = game_constants.PLAYER_BUFFER_RADIUS
         
         # define position
         self.rect.x = x
@@ -41,6 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.bullet_group = bullet_group
 
         self.ammo_inventory = collections.defaultdict(int)
+
+        self.accuracy_handler = AccuracyHandler.AccuracyHandler(screen, self)
 
     # players will move in all directions at a CONSTANT velocity of ____
 
@@ -108,5 +115,36 @@ class Player(pygame.sprite.Sprite):
     def get_center(self):
         center_coordinates = (self.rect.x + game_constants.PLAYER_WIDTH/2, self.rect.y + game_constants.PLAYER_HEIGHT/2)
         return center_coordinates
+
+    """
+    def revert_from_mouse(self):
+        mouse_position = pygame.mouse.get_pos()
+
+        if self.rect.x < mouse_position[0] < self.rect.x + game_constants.PLAYER_WIDTH and self.rect.y < mouse_position[1] < self.rect.y + game_constants.PLAYER_HEIGHT:
+
+            while self.rect.x < mouse_position[0] < self.rect.x + game_constants.PLAYER_WIDTH:
+                self.revert_x()
+
+            while self.rect.y < mouse_position[1] < self.rect.y + game_constants.PLAYER_HEIGHT:
+                self.revert_y()
+    """
+    def revert_from_mouse(self):
+        mouse_position = pygame.mouse.get_pos()
+        center = self.get_center()
+        x_diff = mouse_position[0] - center[0]
+        distance = x_diff / math.cos(self.rotation)
+        if distance < 1:
+            distance = math.fabs(mouse_position[1] - center[1])
+
+        print distance
+
+        if distance < self.circle_radius:
+            print 'CLICK'
+            x_diff = self.circle_radius * math.cos(self.rotation)
+            y_diff = self.circle_radius * math.sin(self.rotation)
+            new_center = (mouse_position[0] - x_diff, mouse_position[1] - y_diff)
+            self.rect.x = new_center[0] - game_constants.PLAYER_WIDTH/2
+            self.rect.y = new_center[1] - game_constants.PLAYER_HEIGHT/2
+
 
 

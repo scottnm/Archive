@@ -2,20 +2,21 @@
 
 """game_constants.py: contains all of the game_constants that need to be used globally"""
 
-__author__      = "Scott Munro"
-__copyright__   = "Copyright 2015"
+__author__ = "Scott Munro"
+__copyright__ = "Copyright 2015"
 
 """
-SIZES
+DIMENSIONS
 """
 # ENVIRONMENT
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-WINDOW_DIAGONAL = ((WINDOW_WIDTH ** 2) + (WINDOW_HEIGHT ** 2)) ** (0.5)
+WINDOW_DIAGONAL = ((WINDOW_WIDTH ** 2) + (WINDOW_HEIGHT ** 2)) ** 0.5
 
 # PLAYER
 PLAYER_WIDTH = 20
 PLAYER_HEIGHT = 20
+PLAYER_BUFFER_RADIUS = ( ( 0.5 * PLAYER_WIDTH ) ** 2 + ( 0.5 * PLAYER_HEIGHT ) ** 2 ) ** 0.5
 
 # BASIC ENEMY CONSTANTS
 BASIC_ENEMY_WIDTH = 20
@@ -28,7 +29,7 @@ PISTOL_BULLET_HEIGHT = 10
 # OBSTACLE CONSTANTS
 BOUNDING_WALL_THICKNESS = 20
 
-#ITEM CONSTANTS
+# ITEM CONSTANTS
 PISTOL_AMMO_WIDTH = 10
 PISTOL_AMMO_HEIGHT = 10
 
