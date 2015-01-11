@@ -4,9 +4,9 @@ AMMO IDEA
 ENVIRONMENT IDEA
 	destructible environments
 AIMING IDEA
-	-shaky/random aiming. the longer you hold still the better your aim gets
-	-constantly turning results in low accuracy
-	-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
+	DONE-shaky/random aiming. the longer you hold still the better your aim gets
+	DONE-constantly turning results in low accuracy
+	DONE-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
 
 	-implement 'aim down sights' effectively hold a key to prevent rotation so accuracy increases
 WEAPON IDEA

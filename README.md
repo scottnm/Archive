@@ -18,6 +18,8 @@ Basic ammo drops
 
 Files:
 
+  AccuracyHandler.py: Contains the behavior for how to handle a player's aiming accuracy. Accuracy is determined so that the less the player turns the better their accuracy is.
+
   bullet.py: Contains all bullet subclasses. Each subclass contains updating each bullet for the environment to call
 
   enemies.py: an enemy class that currently stores a skeleton class and a basic enemy class
