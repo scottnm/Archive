@@ -50,6 +50,10 @@ class Player(pygame.sprite.Sprite):
 
         self.accuracy_handler = AccuracyHandler.AccuracyHandler(screen, self)
 
+        # player attributes
+        self.health = 100
+        self.invincibility_frames = 0
+
     # players will move in all directions at a CONSTANT velocity of ____
 
     def equip_none(self):
@@ -96,6 +100,11 @@ class Player(pygame.sprite.Sprite):
         self.x_vel = self.velocity * math.cos(self.rotation)
         self.y_vel = self.velocity * math.sin(self.rotation)
 
+        if self.invincibility_frames > 0:
+            self.invincibility_frames -= 1
+            if self.invincibility_frames == 0:
+                self.image.fill(game_constants.RED)
+
     def move_x(self):
         self.rect.x += self.x_vel
 
@@ -118,18 +127,6 @@ class Player(pygame.sprite.Sprite):
         center_coordinates = (self.rect.x + game_constants.PLAYER_WIDTH/2, self.rect.y + game_constants.PLAYER_HEIGHT/2)
         return center_coordinates
 
-    """
-    def revert_from_mouse(self):
-        mouse_position = pygame.mouse.get_pos()
-
-        if self.rect.x < mouse_position[0] < self.rect.x + game_constants.PLAYER_WIDTH and self.rect.y < mouse_position[1] < self.rect.y + game_constants.PLAYER_HEIGHT:
-
-            while self.rect.x < mouse_position[0] < self.rect.x + game_constants.PLAYER_WIDTH:
-                self.revert_x()
-
-            while self.rect.y < mouse_position[1] < self.rect.y + game_constants.PLAYER_HEIGHT:
-                self.revert_y()
-    """
     def revert_from_mouse(self):
         mouse_position = pygame.mouse.get_pos()
         center = self.get_center()
@@ -147,6 +144,12 @@ class Player(pygame.sprite.Sprite):
             new_center = (mouse_position[0] - x_diff, mouse_position[1] - y_diff)
             self.rect.x = new_center[0] - game_constants.PLAYER_WIDTH/2
             self.rect.y = new_center[1] - game_constants.PLAYER_HEIGHT/2
+
+    def take_damage(self, DAMAGE_CODE):
+        if DAMAGE_CODE == game_constants.B_E_COLLISION:
+            self.health -= 10
+            self.invincibility_frames = 45
+            self.image.fill(game_constants.YELLOW)
 
 
 
