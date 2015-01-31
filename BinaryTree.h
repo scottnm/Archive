@@ -16,6 +16,7 @@ struct node{
 };
 
 typedef struct node node;
+
 /**
 Purpose: 
 Add the value to the current tree defined by it's node root

@@ -1,5 +1,6 @@
 #include "BinaryTree.h"
 
+
 node* add(node* curr_node, int value){
 	/*
 	base case: current node is null
