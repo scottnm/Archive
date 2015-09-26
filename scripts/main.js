@@ -1,6 +1,9 @@
 $('#submit-btn').click(function(){
 	var inputText = $('#text-input').val();
-	generate_sound(inputText);
+	if(inputText != "") {
+		generate_sound(inputText);
+	}
+	$('#text-input').val("");
 	//alert(inputText);
 });
 
