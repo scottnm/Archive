@@ -6,3 +6,6 @@
 	width: 100%;
 }
 
+#content-pane #header-text {
+	margin-top: 40px;
+}
