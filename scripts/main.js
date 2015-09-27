@@ -215,7 +215,7 @@ function get_duration_30(text) {
 }
 
 function generate_sound(input, reverb) {
-	var gen = T("OscGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}, reverb).play();
+	var gen = T("PluckGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}, reverb).play();
 	T("mml", {mml:input}, gen).on("ended", function() {
 		gen.pause();
 		this.stop();
