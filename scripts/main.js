@@ -90,9 +90,6 @@ function Modifiers(text) {
 }
 
 function get_rest(text) {
-	return ' ';
-	
-	
 	if (text.indexOf('.') != -1 || text.indexOf('!') != -1 || text.indexOf('?') != -1) {
 		return 'l2 r ';
 	} else if (text.indexOf(':') != -1) {
