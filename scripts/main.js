@@ -7,7 +7,8 @@ $('#submit-btn').click(function(){
 	var textSplit = inputText.toLowerCase().split(' ');
 	var mmlSplit = text_to_mml(textSplit);
 	var mmlCmd = generate_mml_command(mmlSplit);
-	generate_sound(mmlCmd);
+	var reverb = T('reverb', {room: 1 - Math.pow(Math.E, -1 * inputText.length / 1000), damp: mmlSplit.length/inputText.length, mix:0.2});
+	generate_sound(mmlCmd, reverb);
 	
 	$('#text-input').val('');
 	console.log(mmlCmd);
@@ -128,9 +129,9 @@ function get_duration(text) {
 	}
 }
 
-function generate_sound(input) {
+function generate_sound(input, reverb) {
 	var gen = T("OscGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}).play();
-	T("mml", {mml:input}, gen).on("ended", function() {
+	T("mml", {mml:input}, reverb, gen).on("ended", function() {
 		gen.pause();
 		this.stop();
 	}).start();
