@@ -7,7 +7,7 @@ $('#submit-btn').click(function(){
 	var textSplit = inputText.toLowerCase().split(' ');
 	var mmlSplit = text_to_mml(textSplit);
 	var mmlCmd = generate_mml_command(mmlSplit);
-	generate_sound('t1500 ' + mmlCmd);
+	generate_sound(mmlCmd);
 	
 	$('#text-input').val('');
 	console.log(mmlCmd);
@@ -51,7 +51,7 @@ function MmlAttribute(initText) {
 }
 
 function filterText(text) {
-	var regex = /[1234567890()!\/&.'",:;jkqxz]/g;
+	var regex = /[1234567890()!?={}\/&.'",:;jkqxz]/g;
 	return text.replace(regex, '');
 }
 
@@ -75,7 +75,7 @@ function get_note(text) {
 	var char = text[0];
 	var index = notes.indexOf(char);
 	var scaleNote = scaleNotes[index % 7];
-	var octave = Math.floor(index / 7) + 3;
+	var octave = Math.floor(index / 7) + 2 + text.length % 3;
 	var note = "o" + octave + " " + scaleNote;
 	return note;
 }
@@ -90,6 +90,9 @@ function Modifiers(text) {
 }
 
 function get_rest(text) {
+	return ' ';
+	
+	
 	if (text.indexOf('.') != -1 || text.indexOf('!') != -1 || text.indexOf('?') != -1) {
 		return 'l2 r ';
 	} else if (text.indexOf(':') != -1) {
@@ -129,7 +132,10 @@ function get_duration(text) {
 }
 
 function generate_sound(input) {
-	var gen = T('OscGen', {env:{type:'perc', r:500, lv:0.4}}).play();
-	T('mml', {mml:input}, gen).start();
+	var gen = T("OscGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}).play();
+	T("mml", {mml:input}, gen).on("ended", function() {
+		gen.pause();
+		this.stop();
+	}).start();
 }
 
