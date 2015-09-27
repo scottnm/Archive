@@ -4,10 +4,10 @@ $('#submit-btn').click(function(){
 		return;
 	}
 
-	var textSplit = inputText.split(' ');
+	var textSplit = inputText.toLowerCase().split(' ');
 	var mmlSplit = text_to_mml(textSplit);
 	var mmlCmd = generate_mml_command(mmlSplit);
-	generate_sound(mmlCmd);
+	generate_sound('t1500 ' + mmlCmd);
 	
 	$('#text-input').val('');
 	console.log(mmlCmd);
@@ -16,7 +16,7 @@ $('#submit-btn').click(function(){
 function generate_mml_command(mmlSplit) {
 	var mmlCmd = '';
 	mmlSplit.forEach(function(note) {
-		var text = note.length + ' ' + note.octave + ' ' + note.note;
+		var text = note.length + ' ' + note.note;
 		if (note.modifiers.flat) {
 			text += '-';
 		} else if (note.modifiers.sharp) {
@@ -37,7 +37,7 @@ function generate_mml_command(mmlSplit) {
 			text += ' ';
 		}
 		
-		mmlCmd += text;
+		mmlCmd += text + note.modifiers.rest;
 	});
 	return mmlCmd;
 }
@@ -45,9 +45,14 @@ function generate_mml_command(mmlSplit) {
 function MmlAttribute(initText) {
 	this.initText = initText;
 	this.length = get_duration(initText);
-	this.note = get_note(initText);
-	this.octave = get_octave(initText);
 	this.modifiers = new Modifiers(initText);
+	initText = filterText(initText);
+	this.note = get_note(initText);
+}
+
+function filterText(text) {
+	var regex = /[1234567890()!\/&.'",:;jkqxz]/g;
+	return text.replace(regex, '');
 }
 
 
@@ -61,11 +66,18 @@ function text_to_mml(textArr) {
 }
  
 function get_note(text) {
-	return 'a';
-}
-
-function get_octave(text) {
-	return 'o4';
+	if (text === '') {
+		return '';
+	}
+	
+	var notes = 'abcdefghilmnoprstuvwy';
+	var scaleNotes = 'cdefgab';
+	var char = text[0];
+	var index = notes.indexOf(char);
+	var scaleNote = scaleNotes[index % 7];
+	var octave = Math.floor(index / 7) + 3;
+	var note = "o" + octave + " " + scaleNote;
+	return note;
 }
 
 function Modifiers(text) {
@@ -74,6 +86,21 @@ function Modifiers(text) {
 	this.dot =        text.indexOf('k') != -1;
 	this.repetition = text.indexOf('q') != -1;
 	this.pitchbend =  text.indexOf('z') != -1;
+	this.rest =       get_rest(text);
+}
+
+function get_rest(text) {
+	if (text.indexOf('.') != -1 || text.indexOf('!') != -1 || text.indexOf('?') != -1) {
+		return 'l2 r ';
+	} else if (text.indexOf(':') != -1) {
+		return 'l4 r ';
+	} else if (text.indexOf(';') != -1) {
+		return 'l8 r ';
+	} else if (text.indexOf(',') != -1) {
+		return 'l16 r ';
+	} else {
+		return ' ';
+	}
 }
 
 function get_duration(text) {
@@ -102,7 +129,7 @@ function get_duration(text) {
 }
 
 function generate_sound(input) {
-	var gen = T('PluckGen', {env:{type:'perc', r:500, lv:0.4}}).play();
+	var gen = T('OscGen', {env:{type:'perc', r:500, lv:0.4}}).play();
 	T('mml', {mml:input}, gen).start();
 }
 
