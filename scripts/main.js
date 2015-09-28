@@ -20,8 +20,7 @@ $('#submit-btn').click(function(){
 	avg_word_size = findAverageWordSize(split_text);
 	var mml_commands = textToMml(split_text);
 	var mml = generateMmlCommand(mml_commands);
-	var reverb = T('reverb', {room: 1 - Math.pow(Math.E, -1 * text_area.length / 1000), damp: mml_commands.length/text_area.length, mix:0.75});
-	generateSound(mml, reverb);
+	generateSound(mml, 1 - Math.pow(Math.E, -1 * text_area.length / 1000), mml_commands.length/text_area.length, 0.75);
 	
 	$('#text-input').val('');
 	console.log(mml);//console.log("wordsize: %d\nrooms: %f\ndamp: %f\n", avg_word_size, 1 - Math.pow(Math.E, -1 * inputText.length / 1000), mmlSplit.length/inputText.length);
@@ -260,7 +259,13 @@ function getDuration(mml_word) {
  * @param input The input mml strings
  * @param reverb a TObject that specifies what reverb the mml string should be played with
  */
-function generateSound(input, reverb) {
+function generateSound(input, reverb_room_size, reverb_damp, reverb_mix) {
+	var reverb = T('reverb', {
+		room: reverb_room_size,
+		damp: reverb_damp,
+		mix: reverb_damp}
+	);
+
 	var gen = T('PluckGen', {
 			wave: 'saw',
 			env: {
