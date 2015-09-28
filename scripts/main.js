@@ -1,71 +1,70 @@
 var avg_word_size = 5;
 
 $('#submit-btn').click(function(){
-	var inputText = $('#text-input').val();
-	if(inputText == '') {
+	var text_area = $('#text-input').val();
+	if(text_area == '') {
 		return;
 	}
 
-	var textSplit = inputText.toLowerCase().split(' ');
-	avg_word_size = find_average_word_size(textSplit);
-	var mmlSplit = text_to_mml(textSplit);
-	var mmlCmd = generate_mml_command(mmlSplit);
-	var reverb = T('reverb', {room: 1 - Math.pow(Math.E, -1 * inputText.length / 1000), damp: mmlSplit.length/inputText.length, mix:0.75});
-	generate_sound(mmlCmd, reverb);
+	var split_text = text_area.toLowerCase().split(' ');
+	avg_word_size = findAverageWordSize(split_text);
+	var mml_commands = text_to_mml(split_text);
+	var mml = generateMmlCommand(mml_commands);
+	var reverb = T('reverb', {room: 1 - Math.pow(Math.E, -1 * text_area.length / 1000), damp: mml_commands.length/text_area.length, mix:0.75});
+	generate_sound(mml, reverb);
 	
 	$('#text-input').val('');
-	console.log(mmlCmd);//console.log("wordsize: %d\nrooms: %f\ndamp: %f\n", avg_word_size, 1 - Math.pow(Math.E, -1 * inputText.length / 1000), mmlSplit.length/inputText.length);
+	console.log(mml);//console.log("wordsize: %d\nrooms: %f\ndamp: %f\n", avg_word_size, 1 - Math.pow(Math.E, -1 * inputText.length / 1000), mmlSplit.length/inputText.length);
 });
 
-function find_average_word_size(textArr) {
+function findAverageWordSize(text_arr) {
 	var sum = 0;
-	textArr.forEach(function(text) {
+	text_arr.forEach(function(text) {
 		sum += text.length;
 	});
-	return sum / textArr.length;
+	return sum / text_arr.length;
 }
 
-function generate_mml_command(mmlSplit) {
-	var mmlCmd = '';
-	mmlSplit.forEach(function(note) {
-		var text = note.length + ' ' + note.note;
+function generateMmlCommand(mml_arr) {
+	var mml_cmd = '';
+	mml_arr.forEach(function(note) {
+		var mml_text = note.length + ' ' + note.note;
 		if (note.modifiers.flat) {
-			text += '-';
+			mml_text += '-';
 		} else if (note.modifiers.sharp) {
-			text += '+';
+			mml_text += '+';
 		}
 		
 		if (note.modifiers.dot) {
-			text += '.';
+			mml_text += '.';
 		}
 		
 		if (note.modifiers.pitchbend && !note.modifiers.repetition) {
-			text += '*';
+			mml_text += '*';
 		} else if (note.modifiers.repetition) {
-			text = '[ ' + text + ' ]';
+			mml_text = '[ ' + mml_text + ' ]';
 		}
 		
 		if (!note.modifiers.pitchbend) {
-			text += ' ';
+			mml_text += ' ';
 		}
-		mmlCmd += text + note.modifiers.rest;
+		mml_cmd += mml_text + note.modifiers.rest;
 	});
-	return mmlCmd;
+	return mml_cmd;
 }
 
-function MmlAttribute(initText) {
-	this.initText = initText;
+function MmlAttribute(init_text) {
+	this.init_text = init_text;
 	if (avg_word_size > 30) {
-		this.length = get_duration_30(initText);
+		this.length = get_duration_30(init_text);
 	} else if (avg_word_size > 10) {
-		this.length = get_duration_10(initText);
+		this.length = get_duration_10(init_text);
 	} else {
-		this.length = get_duration(initText);
+		this.length = get_duration(init_text);
 	}
-	this.length = avg_word_size > 10 ? get_duration_10(initText) : get_duration(initText);
-	this.modifiers = new Modifiers(initText);
-	initText = filterText(initText);
-	this.note = get_note(initText);
+	this.modifiers = new Modifiers(init_text);
+	init_text = filterText(init_text);
+	this.note = get_note(init_text);
 }
 
 function filterText(text) {
@@ -75,16 +74,13 @@ function filterText(text) {
 }
 
 
-function text_to_mml(textArr) {
-	var mmlArr = [];
-	textArr.forEach(function(text){
-		var mmlCmd = new MmlAttribute(text);
-		if (mmlCmd.length != 'undefined') {
-			mmlArr.push(mmlCmd);
-		}
+function text_to_mml(text_arr) {
+	var mml_arr = [];
+	text_arr.forEach(function(text){
+		mml_arr.push(new MmlAttribute(text));
 	});
 	
-	return mmlArr;
+	return mml_arr;
 }
  
 function get_note(text) {
@@ -92,14 +88,13 @@ function get_note(text) {
 		return '';
 	}
 	
-	var notes = 'abcdefghilmnoprstuvwy';
-	var scaleNotes = 'cdefgab';
-	var char = text[0];
-	var index = notes.indexOf(char);
-	var scaleNote = scaleNotes[index % 7];
+	var note_map = 'abcdefghilmnoprstuvwy';
+	var scale = 'cdefgab';
+	var index = note_map.indexOf(text[0]);
+	var scale_note = scale[index % 7];
 	var octave = Math.floor(index / 7) + 2 + text.length % 3;
-	var note = "o" + octave + " " + scaleNote;
-	return note;
+	var full_note = "o" + octave + " " + scale_note;
+	return full_note;
 }
 
 function Modifiers(text) {
@@ -129,7 +124,6 @@ function get_duration(text) {
 	switch(text.length) {
 		case 0:
 			return '';
-			break;
 		case 1:
 			return 'l16'
 		case 2:
@@ -155,7 +149,6 @@ function get_duration_10(text) {
 	switch(text.length) {
 		case 0:
 			return '';
-			break;
 		case 1:
 		case 2:
 			return 'l64'
@@ -187,7 +180,6 @@ function get_duration_30(text) {
 	switch(Math.floor(text.length/50)) {
 		case 0:
 			return '';
-			break;
 		case 1:
 		case 2:
 			return 'l64'
