@@ -83,7 +83,7 @@ function MmlAttribute(init_text) {
 	this.init_text = init_text;
 	this.length = getDuration(init_text);
 	this.modifiers = new Modifiers(init_text);
-	init_text = filterText(init_text);
+	init_text = filterWord(init_text);
 	this.note = getNote(init_text);
 }
 
@@ -93,10 +93,10 @@ function MmlAttribute(init_text) {
  * characters from a string
  * @param text The text to filter
  */
-function filterText(text) {
+function filterWord(mml_word) {
 	var alphanum_regex = /[1234567890jkqxz]/g;
 	var special_regex = /[\W+]/g
-	return text.replace(alphanum_regex, '').replace(special_regex, '');
+	return mml_word.replace(alphanum_regex, '').replace(special_regex, '');
 }
 
 
@@ -118,18 +118,18 @@ function textToMml(text_arr) {
   * Given a word/string, figure out what note should be played
   * e.g. 'apple' returns fourth octave's C
   */
-function getNote(text) {
-	if (text === '') {
+function getNote(mml_word) {
+	if (mml_word === '') {
 		return '';
 	}
 	
 	var note_map = 'abcdefghilmnoprstuvwy';
 	var scale = 'cdefgab';
-	var index = note_map.indexOf(text[0]);
+
+	var index = note_map.indexOf(mml_word[0]);
 	var scale_note = scale[index % 7];
-	var octave = Math.floor(index / 7) + 2 + text.length % 3;
-	var full_note = 'o' + octave + ' ' + scale_note;
-	return full_note;
+	var octave = Math.floor(index / 7) + 2 + mml_word.length % 3;
+	return 'o' + octave + ' ' + scale_note;
 }
 
 
@@ -137,30 +137,30 @@ function getNote(text) {
  * @constr
  * @struct
  * contains special modifiers on a note
- * @param text The text which contains the special modifying characters
+ * @param mml_word The text which contains the special modifying characters
  * 		       that need to be translated into mml
  */
-function Modifiers(text) {
-	this.flat =       text.indexOf('x') != -1 && text.indexOf('j') == -1;
-	this.sharp =      text.indexOf('j') != -1 && text.indexOf('x') == -1;
-	this.dot =        text.indexOf('k') != -1;
-	this.repetition = text.indexOf('q') != -1;
-	this.pitchbend =  text.indexOf('z') != -1;
-	this.rest =       getRest(text);
+function Modifiers(mml_word) {
+	this.flat =       mml_word.indexOf('x') != -1 && mml_word.indexOf('j') == -1;
+	this.sharp =      mml_word.indexOf('j') != -1 && mml_word.indexOf('x') == -1;
+	this.dot =        mml_word.indexOf('k') != -1;
+	this.repetition = mml_word.indexOf('q') != -1;
+	this.pitchbend =  mml_word.indexOf('z') != -1;
+	this.rest =       getRest(mml_word);
 }
 
 /**
  * get the rest mml string from an input text
  * @param text the string to process
  */
-function getRest(text) {
-	if (text.indexOf('.') != -1 || text.indexOf('!') != -1 || text.indexOf('?') != -1) {
+function getRest(mml_word) {
+	if (mml_word.indexOf('.') != -1 || mml_word.indexOf('!') != -1 || mml_word.indexOf('?') != -1) {
 		return 'l2 r ';
-	} else if (text.indexOf(':') != -1) {
+	} else if (mml_word.indexOf(':') != -1) {
 		return 'l4 r ';
-	} else if (text.indexOf(';') != -1) {
+	} else if (mml_word.indexOf(';') != -1) {
 		return 'l8 r ';
-	} else if (text.indexOf(',') != -1) {
+	} else if (mml_word.indexOf(',') != -1) {
 		return 'l16 r ';
 	} else {
 		return ' ';
@@ -170,11 +170,11 @@ function getRest(text) {
 
 /**
  * find the duration that this text's mml note should be played
- * @param text The word to process
+ * @param mml_word The word to process
  */
-function getDuration(text) {
-	if (text.length > 30) {
-		switch(Math.floor(text.length/50)) {
+function getDuration(mml_word) {
+	if (mml_word.length > 30) {
+		switch(Math.floor(mml_word.length/50)) {
 			case 0:
 				return '';
 			case 1:
@@ -201,8 +201,8 @@ function getDuration(text) {
 			default:
 				return 'l2';
 		}
-	} else if (text.length > 10) {
-		switch(text.length) {
+	} else if (mml_word.length > 10) {
+		switch(mml_word.length) {
 			case 0:
 				return '';
 			case 1:
@@ -230,7 +230,7 @@ function getDuration(text) {
 				return 'l2';
 		}
 	} else {
-		switch(text.length) {
+		switch(mml_word.length) {
 			case 0:
 				return '';
 			case 1:
@@ -269,7 +269,7 @@ function generateSound(input, reverb) {
 			}, 
 			mul:0.25
 		}, reverb).play();
-	
+
 	T('mml', {mml: input}, gen).on('ended', function() {
 		gen.pause();
 		this.stop();
