@@ -100,13 +100,23 @@ function filterWord(mml_word) {
 
 
 /**
+ * Returns true if a word contains valid characters to form an mml word
+ */
+function isValidWord(mml_word) {
+	return filterWord(mml_word) != '';
+}
+
+
+/**
  * Generate an array of Mml objects from an array of words
  * @param text_arr the array of strings/words
  */
 function textToMml(text_arr) {
 	var mml_arr = [];
-	text_arr.forEach(function(text){
-		mml_arr.push(new MmlAttribute(text));
+	text_arr.forEach(function(word){
+		if (isValidWord(word)) {
+			mml_arr.push(new MmlAttribute(word));
+		}	
 	});
 	
 	return mml_arr;
@@ -119,7 +129,7 @@ function textToMml(text_arr) {
   */
 function getNote(mml_word) {
 	if (mml_word === '') {
-		return '';
+		throw 'Empty strings are not valid mml words';
 	}
 	
 	var note_map = 'abcdefghilmnoprstuvwy';
@@ -172,10 +182,12 @@ function getRest(mml_word) {
  * @param mml_word The word to process
  */
 function getDuration(mml_word) {
+	if (mml_word.length === 0) {
+		throw 'Empty strings are not valid mml words';
+	}
+
 	if (mml_word.length > 30) {
 		switch(Math.floor(mml_word.length/50)) {
-			case 0:
-				return '';
 			case 1:
 			case 2:
 				return 'l64'
@@ -202,8 +214,6 @@ function getDuration(mml_word) {
 		}
 	} else if (mml_word.length > 10) {
 		switch(mml_word.length) {
-			case 0:
-				return '';
 			case 1:
 			case 2:
 				return 'l64'
@@ -230,8 +240,6 @@ function getDuration(mml_word) {
 		}
 	} else {
 		switch(mml_word.length) {
-			case 0:
-				return '';
 			case 1:
 				return 'l16'
 			case 2:
