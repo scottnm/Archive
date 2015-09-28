@@ -8,10 +8,10 @@ $('#submit-btn').click(function(){
 
 	var split_text = text_area.toLowerCase().split(' ');
 	avg_word_size = findAverageWordSize(split_text);
-	var mml_commands = text_to_mml(split_text);
+	var mml_commands = textToMml(split_text);
 	var mml = generateMmlCommand(mml_commands);
 	var reverb = T('reverb', {room: 1 - Math.pow(Math.E, -1 * text_area.length / 1000), damp: mml_commands.length/text_area.length, mix:0.75});
-	generate_sound(mml, reverb);
+	generateSound(mml, reverb);
 	
 	$('#text-input').val('');
 	console.log(mml);//console.log("wordsize: %d\nrooms: %f\ndamp: %f\n", avg_word_size, 1 - Math.pow(Math.E, -1 * inputText.length / 1000), mmlSplit.length/inputText.length);
@@ -56,15 +56,15 @@ function generateMmlCommand(mml_arr) {
 function MmlAttribute(init_text) {
 	this.init_text = init_text;
 	if (avg_word_size > 30) {
-		this.length = get_duration_30(init_text);
+		this.length = getDuration30(init_text);
 	} else if (avg_word_size > 10) {
-		this.length = get_duration_10(init_text);
+		this.length = getDuration10(init_text);
 	} else {
-		this.length = get_duration(init_text);
+		this.length = getDuration(init_text);
 	}
 	this.modifiers = new Modifiers(init_text);
 	init_text = filterText(init_text);
-	this.note = get_note(init_text);
+	this.note = getNote(init_text);
 }
 
 function filterText(text) {
@@ -74,7 +74,7 @@ function filterText(text) {
 }
 
 
-function text_to_mml(text_arr) {
+function textToMml(text_arr) {
 	var mml_arr = [];
 	text_arr.forEach(function(text){
 		mml_arr.push(new MmlAttribute(text));
@@ -83,7 +83,7 @@ function text_to_mml(text_arr) {
 	return mml_arr;
 }
  
-function get_note(text) {
+function getNote(text) {
 	if (text === '') {
 		return '';
 	}
@@ -103,10 +103,10 @@ function Modifiers(text) {
 	this.dot =        text.indexOf('k') != -1;
 	this.repetition = text.indexOf('q') != -1;
 	this.pitchbend =  text.indexOf('z') != -1;
-	this.rest =       get_rest(text);
+	this.rest =       getRest(text);
 }
 
-function get_rest(text) {
+function getRest(text) {
 	if (text.indexOf('.') != -1 || text.indexOf('!') != -1 || text.indexOf('?') != -1) {
 		return 'l2 r ';
 	} else if (text.indexOf(':') != -1) {
@@ -120,7 +120,7 @@ function get_rest(text) {
 	}
 }
 
-function get_duration(text) {
+function getDuration(text) {
 	switch(text.length) {
 		case 0:
 			return '';
@@ -145,7 +145,7 @@ function get_duration(text) {
 	}
 }
 
-function get_duration_10(text) {
+function getDuration10(text) {
 	switch(text.length) {
 		case 0:
 			return '';
@@ -175,7 +175,7 @@ function get_duration_10(text) {
 	}
 }
 
-function get_duration_30(text) {
+function getDuration30(text) {
 	if (Math.floor(text.length/10) > 13) debugger;
 	switch(Math.floor(text.length/50)) {
 		case 0:
@@ -206,7 +206,7 @@ function get_duration_30(text) {
 	}
 }
 
-function generate_sound(input, reverb) {
+function generateSound(input, reverb) {
 	var gen = T("PluckGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}, reverb).play();
 	T("mml", {mml:input}, gen).on("ended", function() {
 		gen.pause();
