@@ -48,27 +48,7 @@ function findAverageWordSize(text_arr) {
 function generateMmlCommand(mml_arr) {
 	var mml_cmd = '';
 	mml_arr.forEach(function(note) {
-		var mml_text = note.length + ' ' + note.note;
-		if (note.modifiers.flat) {
-			mml_text += '-';
-		} else if (note.modifiers.sharp) {
-			mml_text += '+';
-		}
-		
-		if (note.modifiers.dot) {
-			mml_text += '.';
-		}
-		
-		if (note.modifiers.pitchbend && !note.modifiers.repetition) {
-			mml_text += '*';
-		} else if (note.modifiers.repetition) {
-			mml_text = '[ ' + mml_text + ' ]';
-		}
-		
-		if (!note.modifiers.pitchbend) {
-			mml_text += ' ';
-		}
-		mml_cmd += mml_text + note.modifiers.rest;
+		mml_cmd += note.getCommandString();
 	});
 	return mml_cmd;
 }
@@ -84,6 +64,30 @@ function MmlAttribute(init_text) {
 	this.modifiers = new Modifiers(init_text);
 	init_text = filterWord(init_text);
 	this.note = getNote(init_text);
+}
+
+MmlAttribute.prototype.getCommandString = function() {
+	var mml_text = this.length + ' ' + this.note;
+	if (this.modifiers.flat) {
+		mml_text += '-';
+	} else if (this.modifiers.sharp) {
+		mml_text += '+';
+	}
+	
+	if (this.modifiers.dot) {
+		mml_text += '.';
+	}
+	
+	if (this.modifiers.pitchbend && !this.modifiers.repetition) {
+		mml_text += '*';
+	} else if (this.modifiers.repetition) {
+		mml_text = '[ ' + mml_text + ' ]';
+	}
+	
+	if (!this.modifiers.pitchbend) {
+		mml_text += ' ';
+	}
+	return mml_text + this.modifiers.rest;
 }
 
 
