@@ -261,8 +261,16 @@ function getDuration(text) {
  * @param reverb a TObject that specifies what reverb the mml string should be played with
  */
 function generateSound(input, reverb) {
-	var gen = T("PluckGen", {wave:"saw", env:{type:"adsr", r:500}, mul:0.25}, reverb).play();
-	T("mml", {mml:input}, gen).on("ended", function() {
+	var gen = T('PluckGen', {
+			wave: 'saw',
+			env: {
+				type: 'adsr',
+				r:500
+			}, 
+			mul:0.25
+		}, reverb).play();
+	
+	T('mml', {mml: input}, gen).on('ended', function() {
 		gen.pause();
 		this.stop();
 	}).start();
