@@ -70,7 +70,27 @@ linked_list* build_list_from_file(FILE* file, bool reverse) {
     linked_list* new_list = new_linked_list();
     int ch;
     bool still_reading = true;
+    bool first_val_read = false;
     int number = 0;
+    while (!first_val_read && still_reading && (ch = getc(file)) != EOF) {
+        switch(ch) {
+            case SPACE:
+                break; // ignore spaces
+            case RETURN:
+            case NEWLINE:
+                still_reading = false;
+                break;
+            case COMMA:
+                ll_init_add(new_list, number);
+                number = 0;
+                first_val_read = true;
+                break;
+
+            // NUMBER ENCOUNTERED
+            default: 
+                number = number*10 + char_to_num(ch); 
+        }
+    }
     while (still_reading && (ch = getc(file)) != EOF) {
         switch(ch) {
             case SPACE:
@@ -81,10 +101,10 @@ linked_list* build_list_from_file(FILE* file, bool reverse) {
                 break;
             case COMMA:
                 if (reverse) {
-                    new_list->add_to_head(new_list, number);
+                    ll_add_to_head(new_list, number);
                 }
                 else {
-                    new_list->add_to_tail(new_list, number);
+                    ll_add_to_tail(new_list, number);
                 }
                 number = 0;
                 break;
@@ -95,10 +115,10 @@ linked_list* build_list_from_file(FILE* file, bool reverse) {
         }
     }
     if (reverse) {
-        new_list->add_to_head(new_list, number);
+        ll_add_to_head(new_list, number);
     }
     else {
-        new_list->add_to_tail(new_list, number);
+        ll_add_to_tail(new_list, number);
     }
     return new_list;
 }

@@ -8,8 +8,6 @@ struct ll_node {
 typedef struct ll_node ll_node;
 
 struct linked_list {
-    void (*add_to_head) (struct linked_list*, int);
-    void (*add_to_tail) (struct linked_list*, int);
     ll_node* head;
     ll_node* tail;
     int size;

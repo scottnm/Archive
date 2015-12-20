@@ -6,8 +6,6 @@
 
 linked_list* new_linked_list(void) {
     linked_list* new_list = (linked_list*)(malloc(sizeof(linked_list)));
-    new_list->add_to_head = &ll_init_add;
-    new_list->add_to_tail = &ll_init_add;
     new_list->head = NULL;
     new_list->tail = NULL;
     new_list->size = 0;
@@ -22,8 +20,6 @@ void ll_init_add(linked_list* list, int val) {
     list->head = new_node;
     list->tail = new_node;
     list->size = 1;
-    list->add_to_head = &ll_add_to_head;
-    list->add_to_tail = &ll_add_to_tail;
 }
 
 void ll_add_to_head(linked_list* list, int val) {
