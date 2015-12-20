@@ -1,2 +1,6 @@
 *.o
+*.swp
+*.swo
 *.dSYM
+a.out
+BinaryTreeBuilder
