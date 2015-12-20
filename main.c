@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "binarytree.h"
 #include "linkedlist.h"
 
 #define INPUT_ARG 1
@@ -42,12 +43,17 @@ int main(int argc, char** argv) {
     ll_print(in_order_list);
     printf("postorder: ");
     ll_print(post_order_list);
+
+    binary_tree* btree = new_binary_tree(in_order_list, post_order_list);
+    bt_print(btree);
     
     fclose(file);
     ll_delete(in_order_list);
     free(in_order_list);
     ll_delete(post_order_list);
     free(post_order_list);
+    bt_delete(btree);
+    free(btree);
     return EXIT_SUCCESS;
 }
 

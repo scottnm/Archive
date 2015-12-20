@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "linkedlist.h"
 
-#define CREATENODE (ll_node*)(malloc(sizeof(ll_node)))
+#define CREATE_LL_NODE (ll_node*)(malloc(sizeof(ll_node)))
 
 linked_list* new_linked_list(void) {
     linked_list* new_list = (linked_list*)(malloc(sizeof(linked_list)));
@@ -15,7 +15,7 @@ linked_list* new_linked_list(void) {
 }
 
 void ll_init_add(linked_list* list, int val) {
-    ll_node* new_node = CREATENODE;
+    ll_node* new_node = CREATE_LL_NODE;
     new_node->val = val;
     new_node->next = NULL;
 
@@ -27,7 +27,7 @@ void ll_init_add(linked_list* list, int val) {
 }
 
 void ll_add_to_head(linked_list* list, int val) {
-    ll_node* new_node = CREATENODE;
+    ll_node* new_node = CREATE_LL_NODE;
     new_node->val = val;
     new_node->next = list->head;
     list->head = new_node;
@@ -35,7 +35,7 @@ void ll_add_to_head(linked_list* list, int val) {
 }
 
 void ll_add_to_tail(linked_list* list, int val) {
-    ll_node* new_node = CREATENODE;
+    ll_node* new_node = CREATE_LL_NODE;
     new_node->val = val;
     list->tail->next = new_node;
     list->tail = new_node;

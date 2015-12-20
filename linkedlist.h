@@ -1,9 +1,5 @@
-#ifndef __LINKED_LIST__
-#define __LINKED_LIST__
-
-#ifndef NULL
-#define NULL ((void*) 0)
-#endif
+#ifndef __LINKED_LIST_H__
+#define __LINKED_LIST_H__
 
 struct ll_node {
     int val;
@@ -26,4 +22,4 @@ void ll_add_to_head(linked_list* list, int val);
 void ll_add_to_tail(linked_list* list, int val);
 void ll_print(linked_list* list);
 void ll_delete(linked_list* list);
-#endif
+#endif  // __LINKED_LIST_H__
