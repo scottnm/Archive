@@ -1,13 +1,11 @@
+import argparse
+import gtreegraph
 import os.path
 import pickle
-import gtreegraph
 import sys
-import argparse
-
-#def init():
-    # gtree = pickle.load(".gtree") if os.path.exists(".gtree") else gtreegraph()
 
 def init(*args):
+    # gtree = pickle.load(".gtree") if os.path.exists(".gtree") else gtreegraph()
     print "init: ", args
 
 def add(*args):
