@@ -4,21 +4,21 @@ import os.path
 import pickle
 import sys
 
-def init(*args):
+def init(argv):
     # gtree = pickle.load(".gtree") if os.path.exists(".gtree") else gtreegraph()
-    print "init: ", args
+    print "init: ", argv
 
-def add(*args):
-    print "add: ", args
+def add(argv):
+    print "add: ", argv
 
-def rm(*args):
-    print "rm: ", args
+def rm(argv):
+    print "rm: ", argv
 
-def show(*args):
-    print "show: ", args
+def show(argv):
+    print "show: ", argv
 
-def path(*args):
-    print "path: ", args
+def path(argv):
+    print "path: ", argv
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -46,4 +46,4 @@ if __name__ == '__main__':
     path_parser.set_defaults(func=path)
 
     args = parser.parse_args()
-    args.func(args)
+    args.func(vars(args))
