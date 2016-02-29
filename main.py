@@ -15,6 +15,8 @@ def init(argv):
 
 def add(argv):
     print "add: ", argv
+    gtree = loadGtree()
+    print gtree
 
 def rm(argv):
     print "rm: ", argv
@@ -24,6 +26,13 @@ def show(argv):
 
 def path(argv):
     print "path: ", argv
+
+def loadGtree():
+    try:
+        with open(".gtree", "r") as gtfile:
+            return pickle.load(gtfile)
+    except IOError:
+        raise GTreeError.GTreeNotFoundError
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -55,3 +64,5 @@ if __name__ == '__main__':
         args.func(vars(args))
     except GTreeError.InitError:
         print "Cannot initialize a new GitTree. Another GitTree already exists. Use 'rm .gtree' to delete it."
+    except GTreeError.GTreeNotFoundError:
+        print "Operation failed: Gtree file did not exist. Ensure that a Gtree file exists by using 'init'"
