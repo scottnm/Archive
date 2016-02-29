@@ -1,12 +1,17 @@
 import argparse
-import gtreegraph
+import gtreeerrors as GTreeError
+import gtreegraph as GTreeGraph
 import os.path
 import pickle
 import sys
 
 def init(argv):
-    # gtree = pickle.load(".gtree") if os.path.exists(".gtree") else gtreegraph()
     print "init: ", argv
+    if os.path.exists(".gtree"):
+        raise GTreeError.InitError
+    with open(".gtree", "w") as gtfile:
+        gtree = GTreeGraph.GTreeGraph()
+        pickle.dump(gtree, gtfile)
 
 def add(argv):
     print "add: ", argv
@@ -45,5 +50,8 @@ if __name__ == '__main__':
     path_parser.add_argument('branch', nargs='?', default=None)
     path_parser.set_defaults(func=path)
 
-    args = parser.parse_args()
-    args.func(vars(args))
+    try:
+        args = parser.parse_args()
+        args.func(vars(args))
+    except GTreeError.InitError:
+        print "Cannot initialize a new GitTree. Another GitTree already exists. Use 'rm .gtree' to delete it."
