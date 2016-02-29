@@ -3,3 +3,6 @@ class GTreeError(Exception):
 
 class InitError(GTreeError):
     pass
+
+class GTreeNotFoundError(GTreeError):
+    pass
