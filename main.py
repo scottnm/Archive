@@ -19,6 +19,9 @@ def add(argv):
 
 def rm(argv):
     print "rm: ", argv
+    gtree = loadGtree()
+    gtree.removeBranch(argv["parent"], argv["child"])
+    writeGtree(gtree)
 
 def show(argv):
     print "show: ", argv
