@@ -20,7 +20,7 @@ def add(argv):
 def rm(argv):
     print "rm: ", argv
     gtree = loadGtree()
-    gtree.removeBranch(argv["parent"], argv["child"])
+    gtree.removeBranch(argv["child"])
     writeGtree(gtree)
 
 def show(argv):
@@ -55,7 +55,6 @@ if __name__ == '__main__':
     badd_parser.set_defaults(func=add)
 
     brm_parser = subparsers.add_parser('rm')
-    brm_parser.add_argument('parent')
     brm_parser.add_argument('child')
     brm_parser.set_defaults(func=rm)
 
