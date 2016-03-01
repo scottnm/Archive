@@ -9,20 +9,21 @@ def init(argv):
     print "init: ", argv
     if os.path.exists(".gtree"):
         raise GTreeError.InitError
-    with open(".gtree", "w") as gtfile:
-        gtree = GTreeGraph.GTreeGraph()
-        pickle.dump(gtree, gtfile)
+    writeGtree(GTreeGraph.GTreeGraph())
 
 def add(argv):
     print "add: ", argv
     gtree = loadGtree()
-    print gtree
+    gtree.addBranch(argv["parent"], argv["child"])
+    writeGtree(gtree)
 
 def rm(argv):
     print "rm: ", argv
 
 def show(argv):
     print "show: ", argv
+    gtree = loadGtree()
+    print gtree.node_map.keys()
 
 def path(argv):
     print "path: ", argv
@@ -33,6 +34,10 @@ def loadGtree():
             return pickle.load(gtfile)
     except IOError:
         raise GTreeError.GTreeNotFoundError
+
+def writeGtree(gtree):
+    with open(".gtree", "w") as gtfile:
+       pickle.dump(gtree, gtfile)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -52,11 +57,11 @@ if __name__ == '__main__':
     brm_parser.set_defaults(func=rm)
 
     show_parser = subparsers.add_parser('show')
-    show_parser.add_argument('subtree', default='master')
+    show_parser.add_argument('-subtree', default='master')
     show_parser.set_defaults(func=show)
 
     path_parser = subparsers.add_parser('path')
-    path_parser.add_argument('branch', nargs='?', default=None)
+    path_parser.add_argument('-branch', default=None)
     path_parser.set_defaults(func=path)
 
     try:
