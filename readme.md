@@ -11,10 +11,10 @@ gtree add [parent] [child]
 gtree rm [parent] [child]
 
 # show the subtree; defaults to showing whole tree
-gtree show [subtree=root]
+gtree show -subtree [subtree=root]
 
 # display a path from the branch to the root
-gtree path [branch=currentbranch]
+gtree path -branch [branch=currentbranch]
 ```
 
 
