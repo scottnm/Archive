@@ -30,6 +30,9 @@ def show(argv):
 
 def path(argv):
     print "path: ", argv
+    gtree = loadGtree()
+    gtree.path(argv["branch"])
+    
 
 def loadGtree():
     try:
