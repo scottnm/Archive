@@ -23,23 +23,15 @@ class GTreeGraph:
 
     def show(self, subtreeName):
         root = self.node_map[subtreeName]
-        defaultspaces = " "
-        for i in range(len(subtreeName)):
-            defaultspaces += " "
-        self._print(root, defaultspaces)
+        self._print(root, "")
 
     def current(self, current):
         pass
 
     def _print(self, root, spaces):
-        branchnamelen = 0
-        for branch in root.branches:
-            branchnamelen = max(branchnamelen, len(root.name))
-
         additionalspaces = " "
-        for i in range(branchnamelen):
+        for i in range(len(root.name)):
             additionalspaces += " "
-
         for branch in root.branches:
             self._print(branch, spaces + additionalspaces)
         print spaces + root.name
