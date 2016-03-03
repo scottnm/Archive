@@ -1,3 +1,4 @@
 *.swp
+.gtree
 *.swo
 *.pyc

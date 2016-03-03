@@ -21,8 +21,25 @@ class GTreeGraph:
         p.branches.remove(c)
         self.node_map.pop(childBranchName, None)
 
-    def show(self, subtree="master"):
-        pass
+    def show(self, subtreeName):
+        root = self.node_map[subtreeName]
+        defaultspaces = " "
+        for i in range(len(subtreeName)):
+            defaultspaces += " "
+        self._print(root, defaultspaces)
 
     def current(self, current):
         pass
+
+    def _print(self, root, spaces):
+        branchnamelen = 0
+        for branch in root.branches:
+            branchnamelen = max(branchnamelen, len(root.name))
+
+        additionalspaces = " "
+        for i in range(branchnamelen):
+            additionalspaces += " "
+
+        for branch in root.branches:
+            self._print(branch, spaces + additionalspaces)
+        print spaces + root.name

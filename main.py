@@ -26,7 +26,7 @@ def rm(argv):
 def show(argv):
     print "show: ", argv
     gtree = loadGtree()
-    print gtree.node_map.keys()
+    gtree.show(argv["subtree"])
 
 def path(argv):
     print "path: ", argv
