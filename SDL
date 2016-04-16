@@ -1,0 +1,4 @@
+* reminder
+./configure
+make
+sudo make install
