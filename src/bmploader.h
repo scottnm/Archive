@@ -2,7 +2,10 @@
 
 #include "iimgloader.h"
 
-class bmploader : public iimgloader
+namespace twodthreed
 {
-    vector<byte> load_image_as_pixel_array(const string& filename) override;
-};
+    class bmploader : public iimgloader
+    {
+        vector<byte> load_image_as_pixel_array(const string& filename) override;
+    };
+}
