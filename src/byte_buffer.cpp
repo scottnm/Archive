@@ -3,9 +3,9 @@
 using twodthreed::utility::byte_buffer;
 
 byte_buffer::byte_buffer(uint32 size) :
-    _buffer(static_cast<byte*>(malloc(size))),
-    _size(size)
+    _size(size),
 {
+    _buffer = size == 0 ? nullptr : static_cast<byte*>(malloc(size));
 }
 
 byte_buffer::~byte_buffer()

@@ -3,6 +3,8 @@
  * and the length of that array
  */
 
+#pragma once
+
 #include <cstdint>
 #include <cstdlib>
 
@@ -17,7 +19,7 @@ namespace twodthreed
         {
         public:
             // need to create the buffer
-            byte_buffer(uint32 size);
+            byte_buffer(uint32 size = 0);
             byte_buffer(const byte_buffer&) = default;
             byte_buffer(byte_buffer&&) = default;
             byte_buffer& operator=(const byte_buffer&) & = default;
@@ -38,8 +40,8 @@ namespace twodthreed
 
 
         private:
-            byte* _buffer;
             uint32 _size;
+            byte* _buffer;
         };
     }
 }
