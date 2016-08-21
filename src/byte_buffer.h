@@ -24,7 +24,8 @@ namespace twodthreed
             byte_buffer(byte_buffer&&) = default;
             byte_buffer& operator=(const byte_buffer&) & = default;
             byte_buffer& operator=(byte_buffer&&) & = default;
-            ~byte_buffer();
+
+            void destroy(void);
 
             byte& operator[](int i);
             byte operator[](int i) const;
@@ -36,8 +37,6 @@ namespace twodthreed
             const byte* cbegin(void) const;
             byte* end(void);
             const byte* cend(void) const;
-
-
 
         private:
             uint32 _size;

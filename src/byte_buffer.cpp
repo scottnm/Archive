@@ -8,7 +8,7 @@ byte_buffer::byte_buffer(uint32 size) :
     _buffer = size == 0 ? nullptr : static_cast<byte*>(malloc(size));
 }
 
-byte_buffer::~byte_buffer()
+void byte_buffer::destroy(void)
 {
     delete _buffer;
 }
@@ -48,3 +48,7 @@ const byte* byte_buffer::cend(void) const
     return _buffer + _size;
 }
 
+byte* byte_buffer::data(void)
+{
+		return _buffer;
+}

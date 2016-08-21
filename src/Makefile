@@ -7,9 +7,7 @@ OBJECTS=byte_buffer.o \
 EXECUTABLE=twodthreed
 
 GTEST_ROOT=~/dev/googletest/googletest
-TESTCPPFLAGS=-isystem $(GTEST_ROOT) -isystem $(GTEST_ROOT)/include
-#TESTLDFLAGS=-lgtest -lgtest_main -lpthread
-#TESTLDFLAGS=$(GTEST_ROOT)/make/gtest.a $(GTEST_ROOT)/make/gtest_main.a -lpthread
+TESTCPPFLAGS=-std=c++11 -Wall -Werror -Wpedantic -Wextra -Wfatal-errors -isystem $(GTEST_ROOT) -isystem $(GTEST_ROOT)/include
 TESTLDFLAGS=$(GTEST_ROOT)/make/gtest_main.a -lpthread
 
 $(EXECUTABLE) : $(OBJECTS)
@@ -17,8 +15,8 @@ $(EXECUTABLE) : $(OBJECTS)
 
 load_image.o : bmp_constants.h bitmap.h
 
-test: test.cpp testsrc.cpp testsrc.h
-	g++ $(TESTCPPFLAGS) test.cpp testsrc.cpp -o test $(TESTLDFLAGS)
+test: byte_buffer_test.cpp byte_buffer.cpp
+	g++ $(TESTCPPFLAGS) byte_buffer_test.cpp byte_buffer.cpp -o test $(TESTLDFLAGS)
 
 clean:
-	rm $(OBJECTS) $(EXECUTABLE) test
+	rm -f $(OBJECTS) $(EXECUTABLE) test
