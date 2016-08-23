@@ -30,7 +30,9 @@ namespace twodthreed
         char header_id[bmp_constants::header::size];
         bmp_file.read(header_id, bmp_constants::header::size); 
         assert(header_id[0] == bmp_constants::header::id[0] &&
-               header_id[1] == bmp_constants::header::id[1]);
+               header_id[1] == bmp_constants::header::id[1] &&
+               "File does not have Windows bitmap header");
+
 
         //
         // read the size of the file
@@ -41,6 +43,8 @@ namespace twodthreed
         // read the size of the dibs header
         //
         uint32_t size_of_dibs_header = read_uint32(bmp_file, 14);
+        assert(size_of_dibs_header == bmp_constants::dibs_info_header::size &&
+                "File does not have Windows bitmap dibs header");
         uint32_t img_width = read_uint32(bmp_file, 18);
         uint32_t img_height = read_uint32(bmp_file, 22);
 

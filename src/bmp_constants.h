@@ -12,8 +12,8 @@ namespace bmp_constants
         constexpr int data_ofs_ofs = 10;
     }
 
-    namespace dib_core_header
+    namespace dibs_info_header
     {
-        constexpr int size = 12;
+        constexpr int size = 40;
     }
 }
