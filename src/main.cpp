@@ -1,20 +1,12 @@
-#include "byte_buffer.h"
+#include "load_image.h"
 #include <iostream>
 
 using twodthreed::utility::byte_buffer;
+using twodthreed::load_bitmap_into_buffer;
 using std::cout;
 using std::endl;
 
 int main()
 {
-    byte_buffer buf(10);
-    for (int i = 0; i < 10; ++i)
-    {
-        buf[i] = i + 'a';
-    }
-
-    for (auto c : buf)
-    {
-        cout << c << endl;
-    }
+    load_bitmap_into_buffer("../assets/2d/skeletonghost.bmp");
 }
