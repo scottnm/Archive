@@ -16,7 +16,7 @@ $(EXECUTABLE) : $(OBJECTS)
 load_image.o : bmp_constants.h bitmap.h
 
 test: byte_buffer_test.cpp byte_buffer.cpp
-	g++ $(TESTCPPFLAGS) byte_buffer_test.cpp byte_buffer.cpp -o test $(TESTLDFLAGS)
+	$(CC) $(TESTCPPFLAGS) byte_buffer_test.cpp byte_buffer.cpp -o test $(TESTLDFLAGS)
 
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) test
