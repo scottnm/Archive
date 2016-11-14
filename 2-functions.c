@@ -22,6 +22,15 @@ void main(int argc, char** argv)
 
     printf("to_uppercase(%c) = %c\n", lowercase_s, uppercase_s);
     printf("to_lowercase(%c) = %c\n", uppercase_t, lowercase_t);
+
+    /*
+     * This was an example of functions, but where do methods fit
+     *      into the C language?
+     *
+     * Short answer: They don't
+     *
+     * Long answer: C does not have the notion of classes
+     */
 }
 
 // Implementation of the to_lowercase function
