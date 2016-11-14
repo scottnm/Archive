@@ -1,3 +1,9 @@
+/*** INTRODUCTION
+ *
+ * In this file things are going to feel pretty familiar still, but
+ * will diverge a tiny bit as we dive into functions
+ */
+
 #include "2-functions.h"
 #include <stdio.h>
 
@@ -42,3 +48,18 @@ char to_lowercase(char c)
     }
     return c;
 }
+
+/*** SUMMARY
+ *
+ * Functions are similar to methods.
+ * They encapsulate reusable behaviour/functionality
+ *
+ * Functions in C need to be prototyped/declared before they can
+ *      be called by other functions. This is usually done in a
+ *      header file (.h extension), but can also be done at the
+ *      top of C source file (.c extension) or at the same time
+ *      as you are implementing the function
+ *
+ * There are no methods in C because there are no classes.
+ *      It's all functions
+ */

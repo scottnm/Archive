@@ -1,3 +1,11 @@
+/*** INTRODUCTION
+ *
+ * In this first file, let's talk about what is the same and/or
+ * familiar coming from a Java background. Basically everything
+ * here should look approachable and remind you of introductory
+ * java/programming course
+ */
+
 // includes interface for standard input/output operations
 #include <stdio.h>
 
@@ -32,3 +40,16 @@ void main(int argc, char** argv)
         }
     }
 }
+
+/*** SUMMARY
+ *
+ * Familiar primitive types
+ *
+ * Familiar "main" function
+ *
+ * Familiar printf
+ *
+ * Familiar control flow
+ *
+ * Sorta-familiar "import" thing
+ */

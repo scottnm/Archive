@@ -1,3 +1,10 @@
+/*** INTRODUCTION
+ *
+ * C does not have classes, but it has a simpler construct known
+ *      as structs (short for structures). Here's a simple example
+ *      of using a struct
+ */
+
 #include "3-structs.h"
 #include <stdio.h>
 
@@ -38,3 +45,18 @@ void vec3_print(vector3f v)
 {
     printf("<%.2f, %.2f, %.2f>\n", v.x, v.y, v.z);
 }
+
+/*** SUMMARY
+ *
+ * Structs are similar to classes in that they can be thought of
+ *      as user defined types that can aggregate smaller pieces
+ *      of data (in this example it was 3 floats to form a vector)
+ *
+ * Structs must be declared with a name and set of fields before
+ *      they can be used and are often declared in header files
+ *
+ * Structs can be passed as parameters just like primitive types
+ *      can and are copied just like primitive types
+ *
+ * Use a period/dot to access the fields within a struct (ex: v.z)
+ */
