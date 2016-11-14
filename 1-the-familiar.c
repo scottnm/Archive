@@ -1,5 +1,5 @@
 // includes interface for standard input/output operations
-#include "stdio.h"
+#include <stdio.h>
 
 // similar entry point
 // Just like "public static void main(String[] args) in Java
