@@ -1,4 +1,6 @@
 /**
+ * Companion example for file 4-pointers.c
+ *
  * To compile: javac GarbageCollectorFailure.java
  * To run:     java -Xmx2m GarbageCollectorFailure
  * 
