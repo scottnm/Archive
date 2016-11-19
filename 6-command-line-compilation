@@ -1,0 +1,16 @@
+To compile a C program on a Unix like operating system (Mac or Linux)
+    use the following command in the terminal:
+
+gcc <your source c files> -o <name of your output file>
+
+e.g: gcc main.c helper.c -o my_program
+
+
+There is also a pretty great tool called "Make" to help with C compilation.
+The basic gist of it is that you write makefiles which give you shortcuts or targets 
+for how you want to compile a set of source files
+
+to use make...
+1. create a file called makefile
+2. write all of your compilation targets in this makefile
+3. use the make <target> command to run that target compilation
