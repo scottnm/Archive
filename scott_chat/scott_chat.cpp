@@ -2,11 +2,7 @@
 //
 
 #include "stdafx.h"
-
-#pragma comment(lib, "Ws2_32.lib")
-
-//#include "client.h"
-//
+#include "client.h"
 
 static void initialize_winsock()
 {
