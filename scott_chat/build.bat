@@ -1,2 +1,1 @@
-cl scott_chat.cpp
-.\scott_chat.exe
+cl scott_chat.cpp client.cpp
