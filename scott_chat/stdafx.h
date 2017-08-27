@@ -7,9 +7,9 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+#include <cstdio>
+#include <cstdlib>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
-
-
-// TODO: reference additional headers your program requires here
+#include "error_helpers.h"
