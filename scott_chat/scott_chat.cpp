@@ -1,18 +1,21 @@
-// scottchat.cpp : Defines the entry point for the console application.
-//
+// scott_chat.cpp : Defines the entry point for the console application.
 
-#include "stdafx.h"
 #include "client.h"
 
 static void initialize_winsock()
 {
     WSADATA wsa_data;
-    CHECK_ERR( WSAStartup(MAKEWORD(2, 2), &wsa_data), 0, "WSAStartup" );
+    int wsa_startup_res = WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    if (wsa_startup_res != 0)
+    {
+        printf("ERR: WSAStartup failed <%d>\n", wsa_startup_res);
+        exit(1);
+    }
 }
 
 int main()
 {
     initialize_winsock();
+    SOCKET client_socket = client::create_socket("localhost");
     return 0;
 }
-
