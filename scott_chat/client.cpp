@@ -6,6 +6,7 @@
  * Disconnect.
  */
 
+#include "stdafx.h"
 #include "client.h"
 #define CLEANUP_EXIT() do{WSACleanup(); exit(1);}while(0);
 

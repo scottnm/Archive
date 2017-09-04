@@ -7,6 +7,8 @@
  * Receive and send data.
  * Disconnect.
  */
+
+#include "stdafx.h"
 #include "server.h"
 
 #define DEFAULT_PORT "50000"
