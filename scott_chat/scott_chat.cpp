@@ -1,8 +1,13 @@
 // scott_chat.cpp : Defines the entry point for the console application.
 
+#include "stdafx.h"
 #include "client.h"
 #include "server.h"
-#include <string.h>
+#include <cstring>
+#include <cassert>
+
+#include <chrono>
+#include <thread>
 
 static void initialize_winsock();
 static bool is_server(int argc, char** argv);
@@ -10,14 +15,53 @@ static bool is_server(int argc, char** argv);
 int main(int argc, char** argv)
 {
     initialize_winsock();
-    bool _is_server = is_server(argc, argv);
-    auto socket = _is_server ? server::create_socket("localhost") : client::create_socket("localhost");
-    auto msg = _is_server ? "Hello from server!" : "Hello from client";
-    #define RECV_BUF_SIZE 30
-    char recv_buf[RECV_BUF_SIZE] = {0};
-    send(socket, msg, strlen(msg), 0);
-    recv(socket, recv_buf, RECV_BUF_SIZE, 0);
-    printf("> Message recieved!\n> %s\n", recv_buf);
+
+    SOCKET socket;
+    const auto msg_len = 14;
+    char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
+    int messages_to_send;
+
+    if (is_server(argc, argv))
+    {
+        socket = server::create_socket("localhost");
+        strncpy_s(msg_buf, msg_len, "from server  ", 13);
+        messages_to_send = 10;
+    }
+    else
+    {
+        socket = client::create_socket("localhost");
+        strncpy_s(msg_buf, msg_len, "from client  ", 13);
+        messages_to_send = 11;
+    }
+
+    char recv_buf[30] = {0};
+    for (int i = 0; i < messages_to_send; ++i)
+    {
+        msg_buf[12] = 'a' + i;
+        auto bytes_sent = send(socket, msg_buf, msg_len, 0);
+        if (bytes_sent <= 0)
+        {
+            printf("Failed to send\n");
+            exit(1);
+        }
+        auto bytes_recv = recv(socket, recv_buf, 30, 0);
+        if (bytes_recv <= 0)
+        {
+            if (bytes_recv == 0)
+            {
+                printf("Connection closed\n");
+                break;
+            }
+            assert(bytes_recv == SOCKET_ERROR);
+            printf("Failed to recv <%d>\n", WSAGetLastError());
+            exit(1);
+        }
+        printf("> %s\n", recv_buf);
+    }
+
+    shutdown(socket, SD_SEND);
+    std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    shutdown(socket, SD_RECEIVE);
     closesocket(socket);
     WSACleanup();
     return 0;
@@ -42,5 +86,6 @@ bool is_server(int argc, char** argv)
         exit(1);
     }
 
-    return stricmp(argv[1], "server") == 0;
+    return _stricmp(argv[1], "server") == 0;
 }
+
