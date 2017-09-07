@@ -41,51 +41,12 @@ int main(int argc, char** argv)
         messages_to_send = 11;
     }
 
-    std::thread send_thread(send_proc);
     std::thread recv_thread(recv_proc);
+    std::thread send_thread(send_proc);
 
-    send_thread.join();
     recv_thread.join();
+    send_thread.join();
 
-    /*
-    while (true)
-    {
-        std::string msg;
-        std::cin >> msg;
-
-        if (is_exit_msg(msg.c_str()))
-        {
-            break;
-        }
-
-        auto bytes_sent = send(socket, msg.data(), msg.size(), 0);
-        if (bytes_sent <= 0)
-        {
-            printf("Failed to send\n");
-            exit(1);
-        }
-
-        char recv_buf[250];
-        auto bytes_recv = recv(socket, recv_buf, 250, 0);
-        if (bytes_recv <= 0)
-        {
-            auto error = WSAGetLastError();
-            if (bytes_recv == 0 || error == CONNECTION_ABORTED)
-            {
-                printf("Connection closed\n");
-                break;
-            }
-
-            assert(bytes_recv == SOCKET_ERROR);
-            printf("Failed to recv <%d>\n", error);
-            exit(1);
-        }
-        recv_buf[bytes_recv] = '\0';
-        printf("> %s\n", recv_buf);
-    }
-    */
-
-    shutdown(chat_socket, SD_BOTH);
     closesocket(chat_socket);
     WSACleanup();
     return 0;
@@ -123,17 +84,53 @@ bool is_exit_msg(const char* msg)
            tolower(msg[4]) == '\0';
 }
 
+static bool chat_closed = false;
 
 void recv_proc(void)
 {
-    printf("recv start\n");
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    printf("recv end\n");
+    while (true)
+    {
+        char recv_buf[250];
+        auto bytes_recv = recv(chat_socket, recv_buf, 250, 0);
+        if (bytes_recv <= 0)
+        {
+            auto error = WSAGetLastError();
+            if (bytes_recv == 0 || error == CONNECTION_ABORTED)
+            {
+                printf("Connection closed\n");
+            }
+            else
+            {
+                assert(bytes_recv == SOCKET_ERROR);
+                printf("Failed to recv <%d>\n", error);
+            }
+            chat_closed = true;
+            break;
+        }
+        recv_buf[bytes_recv] = '\0';
+        printf("> %s\n", recv_buf);
+    }
+    shutdown(chat_socket, SD_BOTH);
 }
 
 void send_proc(void)
 {
-    printf("send start\n");
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    printf("send end\n");
+    while (true)
+    {
+        std::string msg;
+        std::cin >> msg;
+
+        if (chat_closed || is_exit_msg(msg.c_str()))
+        {
+            break;
+        }
+
+        auto bytes_sent = send(chat_socket, msg.data(), msg.size(), 0);
+        if (bytes_sent <= 0)
+        {
+            printf("Failed to send\n");
+            exit(1);
+        }
+    }
+    shutdown(chat_socket, SD_BOTH);
 }
