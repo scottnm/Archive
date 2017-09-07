@@ -5,12 +5,14 @@
 #include "server.h"
 #include <cstring>
 #include <cassert>
+#include <iostream>
+#include <string>
 
-#include <chrono>
-#include <thread>
+#define CONNECTION_ABORTED 10053
 
 static void initialize_winsock();
 static bool is_server(int argc, char** argv);
+static bool is_exit_msg(const char* msg);
 
 int main(int argc, char** argv)
 {
@@ -34,40 +36,49 @@ int main(int argc, char** argv)
         messages_to_send = 11;
     }
 
-    char recv_buf[30] = {0};
-    for (int i = 0; i < messages_to_send; ++i)
+    while (true)
     {
-        msg_buf[12] = 'a' + i;
-        auto bytes_sent = send(socket, msg_buf, msg_len, 0);
+        std::string msg;
+        std::cin >> msg;
+
+        if (is_exit_msg(msg.c_str()))
+        {
+            break;
+        }
+
+        auto bytes_sent = send(socket, msg.data(), msg.size(), 0);
         if (bytes_sent <= 0)
         {
             printf("Failed to send\n");
             exit(1);
         }
-        auto bytes_recv = recv(socket, recv_buf, 30, 0);
+
+        char recv_buf[250];
+        auto bytes_recv = recv(socket, recv_buf, 250, 0);
         if (bytes_recv <= 0)
         {
-            if (bytes_recv == 0)
+            auto error = WSAGetLastError();
+            if (bytes_recv == 0 || error == CONNECTION_ABORTED)
             {
                 printf("Connection closed\n");
                 break;
             }
+
             assert(bytes_recv == SOCKET_ERROR);
-            printf("Failed to recv <%d>\n", WSAGetLastError());
+            printf("Failed to recv <%d>\n", error);
             exit(1);
         }
+        recv_buf[bytes_recv] = '\0';
         printf("> %s\n", recv_buf);
     }
 
-    shutdown(socket, SD_SEND);
-    std::this_thread::sleep_for(std::chrono::milliseconds(16));
-    shutdown(socket, SD_RECEIVE);
+    shutdown(socket, SD_BOTH);
     closesocket(socket);
     WSACleanup();
     return 0;
 }
 
-static void initialize_winsock()
+void initialize_winsock()
 {
     WSADATA wsa_data;
     int wsa_startup_res = WSAStartup(MAKEWORD(2, 2), &wsa_data);
@@ -89,3 +100,12 @@ bool is_server(int argc, char** argv)
     return _stricmp(argv[1], "server") == 0;
 }
 
+bool is_exit_msg(const char* msg)
+{
+    return strlen(msg) >= 4 &&
+           tolower(msg[0]) == 'e' &&
+           tolower(msg[1]) == 'x' &&
+           tolower(msg[2]) == 'i' &&
+           tolower(msg[3]) == 't' &&
+           tolower(msg[4]) == '\0';
+}
