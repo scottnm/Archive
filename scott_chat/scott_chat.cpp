@@ -5,8 +5,10 @@
 #include "server.h"
 #include <cstring>
 #include <cassert>
+#include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #define CONNECTION_ABORTED 10053
 
@@ -14,28 +16,38 @@ static void initialize_winsock();
 static bool is_server(int argc, char** argv);
 static bool is_exit_msg(const char* msg);
 
+static SOCKET chat_socket;
+static void recv_proc(void);
+static void send_proc(void);
+
 int main(int argc, char** argv)
 {
     initialize_winsock();
 
-    SOCKET socket;
     const auto msg_len = 14;
     char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
     int messages_to_send;
 
     if (is_server(argc, argv))
     {
-        socket = server::create_socket("localhost");
+        chat_socket = server::create_socket("localhost");
         strncpy_s(msg_buf, msg_len, "from server  ", 13);
         messages_to_send = 10;
     }
     else
     {
-        socket = client::create_socket("localhost");
+        chat_socket = client::create_socket("localhost");
         strncpy_s(msg_buf, msg_len, "from client  ", 13);
         messages_to_send = 11;
     }
 
+    std::thread send_thread(send_proc);
+    std::thread recv_thread(recv_proc);
+
+    send_thread.join();
+    recv_thread.join();
+
+    /*
     while (true)
     {
         std::string msg;
@@ -71,9 +83,10 @@ int main(int argc, char** argv)
         recv_buf[bytes_recv] = '\0';
         printf("> %s\n", recv_buf);
     }
+    */
 
-    shutdown(socket, SD_BOTH);
-    closesocket(socket);
+    shutdown(chat_socket, SD_BOTH);
+    closesocket(chat_socket);
     WSACleanup();
     return 0;
 }
@@ -108,4 +121,19 @@ bool is_exit_msg(const char* msg)
            tolower(msg[2]) == 'i' &&
            tolower(msg[3]) == 't' &&
            tolower(msg[4]) == '\0';
+}
+
+
+void recv_proc(void)
+{
+    printf("recv start\n");
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    printf("recv end\n");
+}
+
+void send_proc(void)
+{
+    printf("send start\n");
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    printf("send end\n");
 }
