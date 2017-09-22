@@ -10,6 +10,8 @@
 #include <string>
 #include <thread>
 
+#include "input.h"
+
 #define CONNECTION_ABORTED 10053
 
 static void initialize_winsock();
@@ -88,7 +90,7 @@ static bool chat_closed = false;
 
 void recv_proc(void)
 {
-    while (true)
+    while (!chat_closed)
     {
         char recv_buf[250];
         auto bytes_recv = recv(chat_socket, recv_buf, 250, 0);
@@ -117,14 +119,17 @@ void send_proc(void)
 {
     while (!chat_closed)
     {
-        char msg_buf[1024];
-        if (input_buffer.read_string_blk(msg_buf))
+        bool input_ready = input::process_input(500);
+        if ( !input_ready )
         {
             continue;
         }
 
+        char msg_buf[250];
+        input::read(msg_buf, 250);
         if (is_exit_msg(msg_buf))
         {
+            chat_closed = true;
             break;
         }
 
