@@ -10,7 +10,7 @@
 #include "client.h"
 #define CLEANUP_EXIT() do{WSACleanup(); exit(1);}while(0);
 
-#define DEFAULT_PORT "50000" // DEFAULT CLIENT PORT
+#define DEFAULT_PORT "50008" // DEFAULT CLIENT PORT
 
 SOCKET client::create_socket(const char* hostname)
 {

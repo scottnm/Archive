@@ -115,17 +115,20 @@ void recv_proc(void)
 
 void send_proc(void)
 {
-    while (true)
+    while (!chat_closed)
     {
-        std::string msg;
-        std::cin >> msg;
+        char msg_buf[1024];
+        if (input_buffer.read_string_blk(msg_buf))
+        {
+            continue;
+        }
 
-        if (chat_closed || is_exit_msg(msg.c_str()))
+        if (is_exit_msg(msg_buf))
         {
             break;
         }
 
-        auto bytes_sent = send(chat_socket, msg.data(), msg.size(), 0);
+        auto bytes_sent = send(chat_socket, msg_buf, strlen(msg_buf), 0);
         if (bytes_sent <= 0)
         {
             printf("Failed to send\n");

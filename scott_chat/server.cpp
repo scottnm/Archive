@@ -11,7 +11,7 @@
 #include "stdafx.h"
 #include "server.h"
 
-#define DEFAULT_PORT "50000"
+#define DEFAULT_PORT "50008"
 #define CLEANUP_EXIT() do{WSACleanup(); exit(1);}while(0);
 
 SOCKET server::create_socket(const char* hostname)
