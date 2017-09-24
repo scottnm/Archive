@@ -11,11 +11,19 @@ namespace input
     static uint16_t size = 0;
     static uint16_t size_final = 0;
 
-    static void pbchar(char c)
+    static void pushchar(char c)
     {
         buffer[size++] = c;
-        printf("%c", c);
-        assert( size < BUFFER_SIZE );
+        assert( 0 < size && size < BUFFER_SIZE );
+    }
+
+    static void popchar()
+    {
+        if (size > 0)
+        {
+            --size;
+        }
+        assert(0 <= size && size < BUFFER_SIZE - 1);
     }
 
     static void finalize_string(void)
@@ -56,7 +64,6 @@ namespace input
         }
 
         char c = record.Event.KeyEvent.uChar.AsciiChar;
-        // TODO(scmunro): handle backspace
         if (c == '\n' || c == '\r')
         {
             finalize_string();
@@ -64,7 +71,15 @@ namespace input
         }
         else
         {
-            pbchar(c);
+            if (c == '\b')
+            {
+                popchar();
+            }
+            else
+            {
+                pushchar(c);
+            }
+            printf("%c", c);
             return false;
         }
     }
