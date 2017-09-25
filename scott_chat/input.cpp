@@ -1,7 +1,8 @@
 #include "stdafx.h"
+
 #include "input.h"
 
-#include <cassert>
+#include <assert.h>
 #include <string.h>
 
 #define BUFFER_SIZE 1024
@@ -53,7 +54,7 @@ namespace input
         if(record.EventType != KEY_EVENT)
         {
             // don't care about other console events
-            // TODO(scmunro): fix so that moving mouse/other key events don't reset timeout, perform a retry with less time
+            // TODO(scottnm): fix so that moving mouse/other key events don't reset timeout, perform a retry with less time
             return false;
         }
 

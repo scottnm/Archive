@@ -1,14 +1,5 @@
-/*
- * Initialize Winsock.
- * Create a socket.
- * Bind the socket.
- * Listen on the socket for a client.
- * Accept a connection from a client.
- * Receive and send data.
- * Disconnect.
- */
-
 #include "stdafx.h"
+
 #include "server.h"
 
 #define DEFAULT_PORT "50008"

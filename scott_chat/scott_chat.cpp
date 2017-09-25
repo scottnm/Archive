@@ -1,13 +1,10 @@
-// scott_chat.cpp : Defines the entry point for the console application.
-
 #include "stdafx.h"
+
 #include "client.h"
 #include "server.h"
-#include <cstring>
-#include <cassert>
-#include <chrono>
-#include <iostream>
-#include <string>
+#include "tui.h"
+#include <string.h>
+#include <assert.h>
 #include <thread>
 
 #include "input.h"
@@ -25,6 +22,7 @@ static void send_proc(void);
 int main(int argc, char** argv)
 {
     initialize_winsock();
+    tui::init();
 
     const auto msg_len = 14;
     char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
