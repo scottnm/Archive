@@ -32,11 +32,23 @@ int main()
     {
         for (SHORT col = screen_buffer_info.dwSize.X - 1; col >= 0; --col)
         {
-            SetConsoleCursorPosition(console_handle, COORD {col, row});
-            /* perform write */
+            BOOL success;
+            success = SetConsoleCursorPosition(
+                    console_handle,
+                    COORD {col, row}
+                    );
+            assert (success);
+            success = WriteFile(
+                    console_handle,
+                    &cycle_char,
+                    1,
+                    nullptr,
+                    nullptr
+                    );
+            assert (success);
             cycle_char = ((cycle_char - 'a' + 1) % 26) + 'a';
         }
     }
 
-    Sleep(1000);
+    Sleep(2000);
 }
