@@ -8,15 +8,6 @@
 
 int main()
 {
-    // auto console_handle = CreateFile(
-            // CONOUT$, /* lpFileName */
-            // GENERIC_WRITE, /* dwDesiredAccess */
-            // FILE_SHARE_WRITE, /* dwShareMode */
-            // nullptr, /* lpSecurityAttributes: opt and I wasn't doing anything but defaults */
-            // OPEN_EXISTING, /* dwCreationDisposition */
-            // FILE_ATTRIBUTE_HIDDEN, /* dwFlagsAndAttributes */
-            // nullptr /* hTemplateFile: ignored for existing files */
-            // );
     auto console_handle = CreateConsoleScreenBuffer(
             GENERIC_WRITE,
             FILE_SHARE_WRITE,
@@ -24,6 +15,28 @@ int main()
             CONSOLE_TEXTMODE_BUFFER,
             nullptr
             );
-
     assert (console_handle != INVALID_HANDLE_VALUE);
+
+    SetConsoleActiveScreenBuffer(
+            console_handle
+            );
+
+    CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
+    GetConsoleScreenBufferInfo(
+            console_handle,
+            &screen_buffer_info
+            );
+
+    char cycle_char = 'a';
+    for (SHORT row = screen_buffer_info.dwSize.Y - 1; row >= 0; --row)
+    {
+        for (SHORT col = screen_buffer_info.dwSize.X - 1; col >= 0; --col)
+        {
+            SetConsoleCursorPosition(console_handle, COORD {col, row});
+            /* perform write */
+            cycle_char = ((cycle_char - 'a' + 1) % 26) + 'a';
+        }
+    }
+
+    Sleep(1000);
 }
