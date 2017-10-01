@@ -17,3 +17,5 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 #pragma comment (lib, "kernel32.lib")
+
+#define WIN32_LEAN_AND_MEAN

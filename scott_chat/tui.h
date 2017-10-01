@@ -14,6 +14,11 @@ namespace tui
     void write_to_input_field(char c);
 
     /*
+     * Clear the input field
+     */
+    void clear_input_field(void);
+
+    /*
      * Write a msg to the conversation thread
      * msg: the null delimited string to write
      */

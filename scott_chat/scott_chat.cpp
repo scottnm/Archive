@@ -28,6 +28,7 @@ int main(int argc, char** argv)
     char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
     int messages_to_send;
 
+    /*
     if (is_server(argc, argv))
     {
         chat_socket = server::create_socket("localhost");
@@ -40,11 +41,12 @@ int main(int argc, char** argv)
         strncpy_s(msg_buf, msg_len, "from client  ", 13);
         messages_to_send = 11;
     }
+    */
 
-    std::thread recv_thread(recv_proc);
+    //std::thread recv_thread(recv_proc);
     std::thread send_thread(send_proc);
 
-    recv_thread.join();
+    //recv_thread.join();
     send_thread.join();
 
     closesocket(chat_socket);
@@ -131,12 +133,15 @@ void send_proc(void)
             break;
         }
 
+        /*
         auto bytes_sent = send(chat_socket, msg_buf, strlen(msg_buf), 0);
         if (bytes_sent <= 0)
         {
             printf("Failed to send\n");
             exit(1);
         }
+        */
+        tui::clear_input_field();
     }
     shutdown(chat_socket, SD_BOTH);
 }
