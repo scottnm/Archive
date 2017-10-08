@@ -6,13 +6,19 @@
 
 #define INPUT_FIELD_RATIO 0.2
 
+typedef struct
+{
+    int16_t yofs;
+    uint16_t line_cnt;
+} INPUT_FIELD_INFO;
+
 namespace tui
 {
     static void debug_scbuf_info(void);
 
     static HANDLE console_handle;
     static CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
-    static int16_t input_field_y_offset;
+    static INPUT_FIELD_INFO infield_info;
 
     void init()
     {
@@ -36,34 +42,8 @@ namespace tui
                 console_handle
                 );
 
-        input_field_y_offset = static_cast<int16_t>(screen_buffer_info.dwSize.Y * (1 - INPUT_FIELD_RATIO));
-
-        /*
-        char cycle_char = 'a';
-        for (SHORT row = screen_buffer_info.dwSize.Y - 1; row >= 0; --row)
-        {
-            for (SHORT col = screen_buffer_info.dwSize.X - 1; col >= 0; --col)
-            {
-                BOOL success;
-                success = SetConsoleCursorPosition(
-                        console_handle,
-                        COORD {col, row}
-                        );
-                assert (success);
-                success = WriteFile(
-                        console_handle,
-                        &cycle_char,
-                        1,
-                        nullptr,
-                        nullptr
-                        );
-                assert (success);
-                cycle_char = ((cycle_char - 'a' + 1) % 26) + 'a';
-            }
-        }
-
-        Sleep(2000);
-        */
+        infield_info.yofs = static_cast<int16_t>(screen_buffer_info.dwSize.Y * (1 - INPUT_FIELD_RATIO));
+        infield_info.line_cnt = (screen_buffer_info.dwSize.Y - infield_info.yofs) - 1;
     }
 
     void write_to_input_field(char c)
@@ -74,17 +54,14 @@ namespace tui
     void clear_input_field(void)
     {
         static char flip_char = 'a';
-        uint32_t input_field_size = screen_buffer_info.dwSize.X * (screen_buffer_info.dwSize.Y - input_field_y_offset);
-        printf("input_field_size = %d\ninput_field_y_offset = %d\n\n", input_field_size, input_field_y_offset);
-        SetConsoleCursorPosition(console_handle, COORD {0, input_field_y_offset});
+        SetConsoleCursorPosition(console_handle, COORD {0, infield_info.yofs});
         debug_scbuf_info();
-        for (uint32_t cursor = 0; cursor < input_field_size; ++cursor)
+        for (uint32_t cursor = 0; cursor < infield_info.line_cnt * screen_buffer_info.dwSize.X; ++cursor)
         {
             WriteFile(console_handle, &flip_char, 1, nullptr, nullptr);
         }
-        flip_char = flip_char == 'a' ? ' ' : 'a';
+        flip_char = 'a' + ((flip_char + 1 - 'a') % 26);
         SetConsoleWindowInfo(console_handle, TRUE, &screen_buffer_info.srWindow);
-        Beep(523,500);
     }
 
     void write_msg_to_conversation_thread(const char* msg)
@@ -99,6 +76,7 @@ namespace tui
 		auto wAttributes = screen_buffer_info.wAttributes;
 		auto srWindow = screen_buffer_info.srWindow;
 		auto dwMaximumWindowSize = screen_buffer_info.dwMaximumWindowSize;
+        /*
 		printf(
 			"---------DEBUG-----------\n"
 			"dwSize: %d, %d\n"
@@ -114,5 +92,6 @@ namespace tui
 			dwMaximumWindowSize.X, dwMaximumWindowSize.Y,
             input_field_y_offset
 		);
+        */
     }
 }
