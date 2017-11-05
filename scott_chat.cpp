@@ -46,16 +46,14 @@ int main(int argc, char** argv)
 {
     args = struct app_args(argc, argv);
     initialize_winsock();
+
+    chat_socket = args.run_as_server ? server::create_socket("localhost") : client::create_socket("localhost");
+
+    auto recv_thread = std::thread(recv_proc);
+    auto send_thread = std::thread(send_proc);
     auto tui_thread = tui::init();
 
-    /*
-    chat_socket = args.run_as_server ? server::create_socket("localhost") : client::create_socket("localhost");
-    */
-
-    //std::thread recv_thread(recv_proc);
-    std::thread send_thread(send_proc);
-
-    //recv_thread.join();
+    recv_thread.join();
     send_thread.join();
     tui_thread.join();
 
@@ -97,8 +95,7 @@ void recv_proc(void)
             break;
         }
         recv_buf[bytes_recv] = '\0';
-        // TODO: replace printf with place to convo thread
-        printf("> %s\n", recv_buf.data());
+        tui::write_msg_to_conversation_thread(recv_buf.data());
     }
     shutdown(chat_socket, SD_BOTH);
 }
@@ -121,14 +118,13 @@ void send_proc(void)
             break;
         }
 
-        /*
-        auto bytes_sent = send(chat_socket, msg_buf, strlen(msg_buf), 0);
+        auto bytes_sent = send(chat_socket, msg_buf.data(), strlen(msg_buf.data()), 0);
         if (bytes_sent <= 0)
         {
             printf("Failed to send\n");
             exit(1);
         }
-        */
+
         tui::write_msg_to_conversation_thread(msg_buf.data());
         tui::clear_input();
     }

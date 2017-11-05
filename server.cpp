@@ -4,8 +4,6 @@
 
 #define CLEANUP_EXIT() do{WSACleanup(); exit(1);}while(0);
 
-constexpr const char* c_default_port  = "50008";
-
 SOCKET server::create_socket(const char* hostname)
 {
     struct addrinfo hints = {0};
