@@ -6,19 +6,19 @@
 
 #define INPUT_FIELD_RATIO 0.2
 
-typedef struct
-{
-    int16_t yofs;
-    uint16_t line_cnt;
-} INPUT_FIELD_INFO;
-
 namespace tui
 {
-    static void debug_scbuf_info(void);
-
     static HANDLE console_handle;
     static CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
-    static INPUT_FIELD_INFO infield_info;
+
+    static std::vector<char> conversation_buffer;
+    static uint32_t conversation_offset;
+
+    static std::vector<char> input_buffer;
+    static uint32_t input_offset;
+
+    static uint16_t conversation_window_height;
+    static uint16_t window_line_count;
 
     void init()
     {
@@ -38,12 +38,10 @@ namespace tui
 
         assert (got_buffer_info);
 
-        SetConsoleActiveScreenBuffer(
-                console_handle
-                );
+        SetConsoleActiveScreenBuffer(console_handle);
 
-        infield_info.yofs = static_cast<int16_t>(screen_buffer_info.dwSize.Y * (1 - INPUT_FIELD_RATIO));
-        infield_info.line_cnt = (screen_buffer_info.dwSize.Y - infield_info.yofs) - 1;
+        conversation_window_height = static_cast<uint16_t>(screen_buffer_info.dwSize.Y * (1 - INPUT_FIELD_RATIO));
+        window_line_count = (screen_buffer_info.dwSize.Y - conversation_window_height) - 1;
     }
 
     void write_to_input_field(char c)
@@ -54,9 +52,8 @@ namespace tui
     void clear_input_field(void)
     {
         static char flip_char = 'a';
-        SetConsoleCursorPosition(console_handle, COORD {0, infield_info.yofs});
-        debug_scbuf_info();
-        for (uint32_t cursor = 0; cursor < infield_info.line_cnt * screen_buffer_info.dwSize.X; ++cursor)
+        SetConsoleCursorPosition(console_handle, COORD {0, static_cast<int16_t>(conversation_window_height)});
+        for (uint32_t cursor = 0; cursor < window_line_count * screen_buffer_info.dwSize.X; ++cursor)
         {
             WriteFile(console_handle, &flip_char, 1, nullptr, nullptr);
         }
@@ -67,31 +64,5 @@ namespace tui
     void write_msg_to_conversation_thread(const char* msg)
     {
         (void)msg;
-    }
-
-    void debug_scbuf_info(void)
-    {
-		auto dwSize = screen_buffer_info.dwSize;
-		auto dwCursorPosition = screen_buffer_info.dwCursorPosition;
-		auto wAttributes = screen_buffer_info.wAttributes;
-		auto srWindow = screen_buffer_info.srWindow;
-		auto dwMaximumWindowSize = screen_buffer_info.dwMaximumWindowSize;
-        /*
-		printf(
-			"---------DEBUG-----------\n"
-			"dwSize: %d, %d\n"
-			"dwCursorPosition: %d, %d\n"
-			"wAttributes: %d\n"
-			"srWindow: L_%d, T_%d, R_%d, B_%d\n"
-			"dwMaximumWindowSize: %d, %d\n"
-			"input_field_y_offset: %d\n",
-			dwSize.X, dwSize.Y,
-			dwCursorPosition.X, dwCursorPosition.Y,
-			wAttributes,
-			srWindow.Left, srWindow.Top, srWindow.Right, srWindow.Bottom,
-			dwMaximumWindowSize.X, dwMaximumWindowSize.Y,
-            input_field_y_offset
-		);
-        */
     }
 }
