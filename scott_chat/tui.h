@@ -1,13 +1,15 @@
 #pragma once
 
 #include <vector>
+#include <thread>
 
 namespace tui
 {
     /*
      * initialize the tui module
+     * Returns the thread associated used for drawing.
      */
-    void init();
+    std::thread init();
 
     /*
      * Write a character to the input field

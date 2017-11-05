@@ -11,6 +11,8 @@
 
 #define CONNECTION_ABORTED 10053
 
+bool globals::application_running = true;
+
 static void initialize_winsock();
 static bool is_server(int argc, char** argv);
 static bool is_exit_msg(const char* msg);
@@ -22,7 +24,7 @@ static void send_proc(void);
 int main(int argc, char** argv)
 {
     initialize_winsock();
-    tui::init();
+    auto tui_thread = tui::init();
 
     const auto msg_len = 14;
     char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
@@ -48,6 +50,7 @@ int main(int argc, char** argv)
 
     //recv_thread.join();
     send_thread.join();
+    tui_thread.join();
 
     closesocket(chat_socket);
     WSACleanup();
@@ -76,21 +79,9 @@ bool is_server(int argc, char** argv)
     return _stricmp(argv[1], "server") == 0;
 }
 
-bool is_exit_msg(const char* msg)
-{
-    return strlen(msg) >= 4 &&
-           tolower(msg[0]) == 'e' &&
-           tolower(msg[1]) == 'x' &&
-           tolower(msg[2]) == 'i' &&
-           tolower(msg[3]) == 't' &&
-           tolower(msg[4]) == '\0';
-}
-
-static bool chat_closed = false;
-
 void recv_proc(void)
 {
-    while (!chat_closed)
+    while (globals::application_running)
     {
         char recv_buf[250];
         auto bytes_recv = recv(chat_socket, recv_buf, 250, 0);
@@ -106,7 +97,7 @@ void recv_proc(void)
                 assert(bytes_recv == SOCKET_ERROR);
                 printf("Failed to recv <%d>\n", error);
             }
-            chat_closed = true;
+            globals::application_running = false;
             break;
         }
         recv_buf[bytes_recv] = '\0';
@@ -117,7 +108,7 @@ void recv_proc(void)
 
 void send_proc(void)
 {
-    while (!chat_closed)
+    while (globals::application_running)
     {
         bool input_ready = input::process_input(500);
         if ( !input_ready )
@@ -127,9 +118,9 @@ void send_proc(void)
 
         char msg_buf[250];
         input::read(msg_buf, 250);
-        if (is_exit_msg(msg_buf))
+        if (strncmp("exit", msg_buf, 4) == 0)
         {
-            chat_closed = true;
+            globals::application_running = false;
             break;
         }
 
