@@ -41,9 +41,9 @@ namespace tui
         SetConsoleActiveScreenBuffer(display_console);
 
         auto screen_height = screen_buffer_info.dwSize.Y;
-        // 1 line for the scroll buffer, 1 line for the divider, 1 line for the input field
-        conversation_window_height = static_cast<uint16_t>(screen_height - 3);
-        input_window_height = 1;
+        // 1 line for the scroll buffer, 1 line for the divider, 2 line for the input field
+        input_window_height = 2;
+        conversation_window_height = screen_height - 2 - input_window_height;
 
         reserve_buffers();
 

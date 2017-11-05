@@ -5,12 +5,13 @@
 
 #include <string.h>
 
-constexpr uint16_t c_buffer_size = 1024;
+constexpr uint8_t c_buffer_size = c_network_msg_cch;
+
 namespace input
 {
     static std::array<char, c_buffer_size> buffer;
-    static uint16_t size = 0;
-    static uint16_t size_final = 0;
+    static uint8_t size = 0;
+    static uint8_t size_final = 0;
 
     static void pushchar(char c)
     {
@@ -77,7 +78,7 @@ namespace input
                 popchar();
                 tui::pop_from_input_field();
             }
-            else
+            else if (size < c_buffer_size - 1)
             {
                 pushchar(c);
                 tui::push_to_input_field(c);
@@ -86,7 +87,7 @@ namespace input
         }
     }
 
-    void read(char* output_buffer, uint16_t output_buffer_cch)
+    void read(char* output_buffer, uint8_t output_buffer_cch)
     {
         assert(output_buffer_cch >= size_final);
         strncpy_s(output_buffer, output_buffer_cch, buffer.data(), size_final);

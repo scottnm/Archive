@@ -9,7 +9,6 @@
 #include <thread>
 
 constexpr uint16_t c_connection_aborted = 10053;
-constexpr uint8_t c_network_msg_cch = 250;
 
 bool globals::application_running = true;
 
@@ -27,10 +26,12 @@ struct app_args
 
         run_as_server = _stricmp(argv[1], "server") == 0;
         user_name = argv[2];
+        user_name_len = strlen(user_name);
     }
 
     bool run_as_server;
     const char* user_name;
+    uint8_t user_name_len;
 };
 static struct app_args args;
 
@@ -104,6 +105,7 @@ void recv_proc(void)
 
 void send_proc(void)
 {
+    auto msg_buf = std::array<char, c_network_msg_cch>();
     while (globals::application_running)
     {
         auto input_not_ready = !input::process_input(500);
@@ -112,7 +114,6 @@ void send_proc(void)
             continue;
         }
 
-        auto msg_buf = std::array<char, c_network_msg_cch>();
         input::read(msg_buf.data(), msg_buf.max_size());
         if (strncmp("exit", msg_buf.data(), 4) == 0)
         {

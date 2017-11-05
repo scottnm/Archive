@@ -11,5 +11,5 @@ namespace input
     /*
      * copy at most bufsize chars of the string to read into the buf
      */
-    void read(char* output_buffer, uint16_t output_buffer_cch);
+    void read(char* output_buffer, uint8_t output_buffer_cch);
 }
