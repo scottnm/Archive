@@ -1,20 +1,40 @@
 #include "stdafx.h"
 
 #include "client.h"
+#include "input.h"
 #include "server.h"
 #include "tui.h"
+
 #include <string.h>
-#include <assert.h>
 #include <thread>
 
-#include "input.h"
-
-#define CONNECTION_ABORTED 10053
+constexpr uint16_t c_connection_aborted = 10053;
+constexpr uint8_t c_network_msg_cch = 250;
 
 bool globals::application_running = true;
 
+struct app_args
+{
+    app_args() : run_as_server(false), user_name(nullptr) {}
+
+    app_args(int argc, char** argv)
+    {
+        if (argc < 3)
+        {
+            printf("Usage: ./scott_chat [server | client] [user_name]\n");
+            exit(1);
+        }
+
+        run_as_server = _stricmp(argv[1], "server") == 0;
+        user_name = argv[2];
+    }
+
+    bool run_as_server;
+    const char* user_name;
+};
+static struct app_args args;
+
 static void initialize_winsock();
-static bool is_server(int argc, char** argv);
 static bool is_exit_msg(const char* msg);
 
 static SOCKET chat_socket;
@@ -23,26 +43,12 @@ static void send_proc(void);
 
 int main(int argc, char** argv)
 {
+    args = struct app_args(argc, argv);
     initialize_winsock();
     auto tui_thread = tui::init();
 
-    const auto msg_len = 14;
-    char msg_buf[msg_len] = {0}; // +3 = for a space, extra char, and the null delim
-    int messages_to_send;
-
     /*
-    if (is_server(argc, argv))
-    {
-        chat_socket = server::create_socket("localhost");
-        strncpy_s(msg_buf, msg_len, "from server  ", 13);
-        messages_to_send = 10;
-    }
-    else
-    {
-        chat_socket = client::create_socket("localhost");
-        strncpy_s(msg_buf, msg_len, "from client  ", 13);
-        messages_to_send = 11;
-    }
+    chat_socket = args.run_as_server ? server::create_socket("localhost") : client::create_socket("localhost");
     */
 
     //std::thread recv_thread(recv_proc);
@@ -68,27 +74,16 @@ void initialize_winsock()
     }
 }
 
-bool is_server(int argc, char** argv)
-{
-    if (argc < 2)
-    {
-        printf("Usage: ./scott_chat [server | client]\n");
-        exit(1);
-    }
-
-    return _stricmp(argv[1], "server") == 0;
-}
-
 void recv_proc(void)
 {
     while (globals::application_running)
     {
-        char recv_buf[250];
-        auto bytes_recv = recv(chat_socket, recv_buf, 250, 0);
+        auto recv_buf = std::array<char, c_network_msg_cch>();
+        auto bytes_recv = recv(chat_socket, recv_buf.data(), recv_buf.max_size(), 0);
         if (bytes_recv <= 0)
         {
             auto error = WSAGetLastError();
-            if (bytes_recv == 0 || error == CONNECTION_ABORTED)
+            if (bytes_recv == 0 || error == c_connection_aborted)
             {
                 printf("Connection closed\n");
             }
@@ -101,7 +96,8 @@ void recv_proc(void)
             break;
         }
         recv_buf[bytes_recv] = '\0';
-        printf("> %s\n", recv_buf);
+        // TODO: replace printf with place to convo thread
+        printf("> %s\n", recv_buf.data());
     }
     shutdown(chat_socket, SD_BOTH);
 }
@@ -110,15 +106,15 @@ void send_proc(void)
 {
     while (globals::application_running)
     {
-        bool input_ready = input::process_input(500);
-        if ( !input_ready )
+        auto input_not_ready = !input::process_input(500);
+        if (input_not_ready)
         {
             continue;
         }
 
-        char msg_buf[250];
-        input::read(msg_buf, 250);
-        if (strncmp("exit", msg_buf, 4) == 0)
+        auto msg_buf = std::array<char, c_network_msg_cch>();
+        input::read(msg_buf.data(), msg_buf.max_size());
+        if (strncmp("exit", msg_buf.data(), 4) == 0)
         {
             globals::application_running = false;
             break;
@@ -132,7 +128,7 @@ void send_proc(void)
             exit(1);
         }
         */
-        tui::write_msg_to_conversation_thread(msg_buf);
+        tui::write_msg_to_conversation_thread(msg_buf.data());
         tui::clear_input();
     }
     shutdown(chat_socket, SD_BOTH);

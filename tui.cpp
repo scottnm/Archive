@@ -1,8 +1,7 @@
 #include "stdafx.h"
 
 #include "tui.h"
-#include <cassert>
-#include <cstdint>
+
 #include <chrono>
 #include <mutex>
 #include <thread>
@@ -109,7 +108,6 @@ namespace tui
 
     void draw_proc()
     {
-        uint64_t i = 0;
         std::unique_lock<std::mutex> screen_buffer_guard(screen_buffer_mutex, std::defer_lock);
         while (globals::application_running)
         {
@@ -152,12 +150,16 @@ namespace tui
     void update_divider(uint32_t line_width)
     {
         // +1 to account for null term
-        auto divider_buffer = static_cast<char*>(malloc((line_width + 1) * sizeof(*divider)));
+        auto divider_buffer = new char[line_width + 1];
         for(int i = line_width - 1; i >= 0; --i)
         {
             divider_buffer[i] = '-';
         }
         divider_buffer[line_width] = '\0';
+        if (divider)
+        {
+            delete[] divider;
+        }
         divider = divider_buffer;
     }
 

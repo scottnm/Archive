@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdint.h>
-
 namespace input
 {
     /*
@@ -13,5 +11,5 @@ namespace input
     /*
      * copy at most bufsize chars of the string to read into the buf
      */
-    void read(char* outbuf, uint16_t outbuf_capacity);
+    void read(char* output_buffer, uint16_t output_buffer_cch);
 }

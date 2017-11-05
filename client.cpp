@@ -3,7 +3,7 @@
 #include "client.h"
 #define CLEANUP_EXIT() do{WSACleanup(); exit(1);}while(0);
 
-#define DEFAULT_PORT "50008" // DEFAULT CLIENT PORT
+constexpr const char* c_default_port = "50008";
 
 SOCKET client::create_socket(const char* hostname)
 {
@@ -14,7 +14,7 @@ SOCKET client::create_socket(const char* hostname)
 
     // get server info
     struct addrinfo* serv_addr;
-    auto addr_res = getaddrinfo(hostname, DEFAULT_PORT, &hints, &serv_addr);
+    auto addr_res = getaddrinfo(hostname, c_default_port, &hints, &serv_addr);
     if (addr_res != 0)
     {
         printf("ERR: Getting server address failed <%d>\n", addr_res);

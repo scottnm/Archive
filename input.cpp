@@ -3,20 +3,19 @@
 #include "input.h"
 #include "tui.h"
 
-#include <assert.h>
 #include <string.h>
 
-#define BUFFER_SIZE 1024
+constexpr uint16_t c_buffer_size = 1024;
 namespace input
 {
-    static char buffer[BUFFER_SIZE];
+    static std::array<char, c_buffer_size> buffer;
     static uint16_t size = 0;
     static uint16_t size_final = 0;
 
     static void pushchar(char c)
     {
         buffer[size++] = c;
-        assert( 0 < size && size < BUFFER_SIZE );
+        assert( 0 < size && size < c_buffer_size );
     }
 
     static void popchar()
@@ -25,7 +24,7 @@ namespace input
         {
             --size;
         }
-        assert(0 <= size && size < BUFFER_SIZE - 1);
+        assert(0 <= size && size < c_buffer_size - 1);
     }
 
     static void finalize_string(void)
@@ -34,7 +33,7 @@ namespace input
         size_final = size;
         size = 0;
         buffer[size_final++] = '\0';
-        assert(size_final <= BUFFER_SIZE);
+        assert(size_final <= c_buffer_size);
     }
 
     bool process_input(uint32_t timeout_ms)
@@ -87,12 +86,12 @@ namespace input
         }
     }
 
-    void read(char* outbuf, uint16_t outbuf_capacity)
+    void read(char* output_buffer, uint16_t output_buffer_cch)
     {
-        assert( outbuf_capacity >= size_final );
-        strncpy_s(outbuf, outbuf_capacity, buffer, size_final);
+        assert(output_buffer_cch >= size_final);
+        strncpy_s(output_buffer, output_buffer_cch, buffer.data(), size_final);
         size_final = 0;
         // ensure that the string is null-terminated since strncpy_s does not if the capacity is reached
-        outbuf[outbuf_capacity - 1] = '\0';
+        output_buffer[output_buffer_cch - 1] = '\0';
     }
 }
