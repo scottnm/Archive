@@ -69,7 +69,7 @@ namespace input
         if (c == '\n' || c == '\r')
         {
             finalize_string();
-            return true;
+            return size_final > 1; // only return true if we have a non empty buffer
         }
         else
         {
