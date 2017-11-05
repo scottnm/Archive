@@ -12,16 +12,6 @@ constexpr std::chrono::milliseconds c_sleep_time_between_draw_calls = std::chron
 
 namespace tui
 {
-    /*
-    static int push_cnt = 0;
-    static int pop_cnt = 0;
-    static int clear_cnt = 0;
-    static int write_cnt = 0;
-    */
-
-
-
-
     static void draw_proc();
     static void reserve_buffers();
     static void update_divider(uint32_t line_width);
@@ -75,28 +65,24 @@ namespace tui
     void push_to_input_field(char c)
     {
         std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
-        //++push_cnt;
         input_buffer.push_back(c);
     }
 
     void pop_from_input_field()
     {
         std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
-        //++pop_cnt;
         input_buffer.pop_back();
     }
 
     void clear_input()
     {
         std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
-        //++clear_cnt;
         input_buffer.clear();
     }
 
     void write_msg_to_conversation_thread(const char* msg)
     {
         std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
-        //++write_cnt;
         while (*msg)
         {
             conversation_buffer.push_back(*msg++);
@@ -142,18 +128,6 @@ namespace tui
             SetConsoleWindowInfo(console_handle, TRUE, &screen_buffer_info.srWindow);
             std::this_thread::sleep_for(c_sleep_time_between_draw_calls);
         }
-        /*
-        printf("push: %u\tpop: %u\tclear: %u\twrite: %u\n",
-                push_cnt, pop_cnt, clear_cnt, write_cnt);
-        for (char c : conversation_buffer)
-        {
-            printf("c: %c\n", c);
-        }
-        for (char i : input_buffer)
-        {
-            printf("i: %c\n", i);
-        }
-        */
     }
 
     void update_divider(uint32_t line_width)
