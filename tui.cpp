@@ -15,11 +15,13 @@ namespace tui
     static void draw_proc();
     static void reserve_buffers();
     static void update_divider(uint32_t line_width);
+    static void update_screen_buffers();
     static void clear_screen();
 
     static std::mutex screen_buffer_mutex;
 
-    static HANDLE console_handle;
+    static HANDLE display_console;
+    static HANDLE write_buffer_console;
     static CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
 
     static std::vector<char> conversation_buffer;
@@ -35,22 +37,9 @@ namespace tui
 
     std::thread init()
     {
-        console_handle = CreateConsoleScreenBuffer(
-                GENERIC_WRITE | GENERIC_READ,
-                FILE_SHARE_WRITE | FILE_SHARE_READ,
-                nullptr,
-                CONSOLE_TEXTMODE_BUFFER,
-                nullptr
-                );
-        assert (console_handle != INVALID_HANDLE_VALUE);
-        SetConsoleActiveScreenBuffer(console_handle);
-
-        auto got_buffer_info = GetConsoleScreenBufferInfo(
-                console_handle,
-                &screen_buffer_info
-                );
-        assert (got_buffer_info);
+        update_screen_buffers();
         update_divider(screen_buffer_info.dwSize.X);
+        SetConsoleActiveScreenBuffer(display_console);
 
         auto screen_height = screen_buffer_info.dwSize.Y;
         // 1 line for the scroll buffer, 1 line for the divider, 1 line for the input field
@@ -60,6 +49,34 @@ namespace tui
         reserve_buffers();
 
         return std::thread(draw_proc);
+    }
+
+    void update_screen_buffers()
+    {
+        // TODO: support resizing by freeing old screen buffers
+        display_console = CreateConsoleScreenBuffer(
+                GENERIC_WRITE | GENERIC_READ,
+                FILE_SHARE_WRITE | FILE_SHARE_READ,
+                nullptr,
+                CONSOLE_TEXTMODE_BUFFER,
+                nullptr);
+        assert (display_console != INVALID_HANDLE_VALUE);
+
+        auto got_buffer_info = GetConsoleScreenBufferInfo(
+                display_console,
+                &screen_buffer_info);
+        assert (got_buffer_info);
+
+        write_buffer_console = CreateConsoleScreenBuffer(
+                GENERIC_WRITE | GENERIC_READ,
+                FILE_SHARE_WRITE | FILE_SHARE_READ,
+                nullptr,
+                CONSOLE_TEXTMODE_BUFFER,
+                nullptr);
+        assert (write_buffer_console != INVALID_HANDLE_VALUE);
+
+        auto set_console_info = SetConsoleWindowInfo(write_buffer_console, true, &screen_buffer_info.srWindow);
+        assert(set_console_info);
     }
 
     void push_to_input_field(char c)
@@ -97,35 +114,37 @@ namespace tui
         while (globals::application_running)
         {
             screen_buffer_guard.lock();
-            clear_screen();
 
             auto cursor_pos = c_console_origin;
             auto screen_width = screen_buffer_info.dwSize.X;
             uint32_t conversation_chars_left = conversation_window_height * screen_width;
             char* msg_ptr = conversation_buffer.data();
             char* msgs_end = msg_ptr + conversation_buffer.size();
-            while (msg_ptr < msgs_end && conversation_chars_left > 0 )
+            while (msg_ptr < msgs_end && conversation_chars_left > 0)
             {
-                SetConsoleCursorPosition(console_handle, cursor_pos);
+                SetConsoleCursorPosition(write_buffer_console, cursor_pos);
 
                 uint32_t next_string_size = strlen(msg_ptr);
                 uint32_t chars_to_write = next_string_size < conversation_chars_left ? next_string_size : conversation_chars_left;
                 uint32_t lines_to_write = (chars_to_write / screen_width) + 1;
 
-                WriteFile(console_handle, msg_ptr, chars_to_write, nullptr, nullptr);
+                WriteFile(write_buffer_console, msg_ptr, chars_to_write, nullptr, nullptr);
 
                 conversation_chars_left -= chars_to_write;
                 msg_ptr += next_string_size + 1;
                 cursor_pos.Y += lines_to_write;
             }
             cursor_pos.Y = conversation_window_height;
-            SetConsoleCursorPosition(console_handle, cursor_pos);
-            WriteFile(console_handle, divider, screen_buffer_info.dwSize.X, nullptr, nullptr);
-            WriteFile(console_handle, input_buffer.data(), input_buffer.size(), nullptr, nullptr);
+            SetConsoleCursorPosition(write_buffer_console, cursor_pos);
+            WriteFile(write_buffer_console, divider, screen_buffer_info.dwSize.X, nullptr, nullptr);
+            WriteFile(write_buffer_console, input_buffer.data(), input_buffer.size(), nullptr, nullptr);
 
             screen_buffer_guard.unlock();
 
-            SetConsoleWindowInfo(console_handle, TRUE, &screen_buffer_info.srWindow);
+            std::swap(display_console, write_buffer_console);
+            SetConsoleActiveScreenBuffer(display_console);
+            clear_screen();
+
             std::this_thread::sleep_for(c_sleep_time_between_draw_calls);
         }
     }
@@ -151,8 +170,8 @@ namespace tui
 
 	void clear_screen()
 	{
-	   auto screen_size = screen_buffer_info.dwSize.X * screen_buffer_info.dwSize.Y;
-       DWORD chars_read;
-	   FillConsoleOutputCharacter(console_handle, ' ', screen_size, c_console_origin, &chars_read);
+        auto screen_size = screen_buffer_info.dwSize.X * screen_buffer_info.dwSize.Y;
+        DWORD chars_read;
+        FillConsoleOutputCharacter(write_buffer_console, ' ', screen_size, c_console_origin, &chars_read);
 	}
 }
