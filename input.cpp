@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "input.h"
+#include "tui.h"
 
 #include <assert.h>
 #include <string.h>
@@ -75,12 +76,13 @@ namespace input
             if (c == '\b')
             {
                 popchar();
+                tui::pop_from_input_field();
             }
             else
             {
                 pushchar(c);
+                tui::push_to_input_field(c);
             }
-            printf("%c", c);
             return false;
         }
     }
@@ -90,5 +92,7 @@ namespace input
         assert( outbuf_capacity >= size_final );
         strncpy_s(outbuf, outbuf_capacity, buffer, size_final);
         size_final = 0;
+        // ensure that the string is null-terminated since strncpy_s does not if the capacity is reached
+        outbuf[outbuf_capacity - 1] = '\0';
     }
 }

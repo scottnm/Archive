@@ -15,16 +15,22 @@ namespace tui
      * Write a character to the input field
      * c: the character to write
      */
-    void write_to_input_field(char c);
+    void push_to_input_field(char c);
 
     /*
-     * Clear the input field
+     * Write a character to the input field
+     * c: the character to write
      */
-    void clear_input_field(void);
+    void pop_from_input_field();
 
     /*
      * Write a msg to the conversation thread
      * msg: the null delimited string to write
      */
     void write_msg_to_conversation_thread(const char* msg);
+
+    /*
+     * Clear the input buffer
+     */
+    void clear_input();
 }

@@ -132,7 +132,8 @@ void send_proc(void)
             exit(1);
         }
         */
-        tui::clear_input_field();
+        tui::write_msg_to_conversation_thread(msg_buf);
+        tui::clear_input();
     }
     shutdown(chat_socket, SD_BOTH);
 }

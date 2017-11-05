@@ -4,26 +4,34 @@
 #include <cassert>
 #include <cstdint>
 #include <chrono>
+#include <mutex>
 #include <thread>
 
-constexpr float c_proportional_size_of_conversation_window = 0.8f;
-constexpr std::chrono::milliseconds c_sleep_time_between_draw_calls = std::chrono::milliseconds(1000/60);
+constexpr COORD c_console_origin {0, 0};
+constexpr std::chrono::milliseconds c_sleep_time_between_draw_calls = std::chrono::milliseconds(1000/30);
 
 namespace tui
 {
     static void draw_proc();
+    static void reserve_buffers();
+    static void update_divider(uint32_t line_width);
+    static void clear_screen();
+
+    static std::mutex screen_buffer_mutex;
 
     static HANDLE console_handle;
     static CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info;
 
     static std::vector<char> conversation_buffer;
-    static uint32_t conversation_offset;
+    static uint32_t conversation_offset = 0;
 
     static std::vector<char> input_buffer;
-    static uint32_t input_offset;
+    static uint32_t input_offset = 0;
 
     static uint16_t conversation_window_height;
-    static uint16_t max_input_lines;
+    static uint16_t input_window_height;
+
+    static const char* divider = nullptr;
 
     std::thread init()
     {
@@ -42,42 +50,109 @@ namespace tui
                 &screen_buffer_info
                 );
         assert (got_buffer_info);
+        update_divider(screen_buffer_info.dwSize.X);
 
         auto screen_height = screen_buffer_info.dwSize.Y;
-        conversation_window_height = static_cast<uint16_t>(screen_height * c_proportional_size_of_conversation_window);
-        max_input_lines = (screen_height - conversation_window_height) - 1;
+        // 1 line for the scroll buffer, 1 line for the divider, 1 line for the input field
+        conversation_window_height = static_cast<uint16_t>(screen_height - 3);
+        input_window_height = 1;
+
+        reserve_buffers();
 
         return std::thread(draw_proc);
     }
 
-    void write_to_input_field(char c)
+    void push_to_input_field(char c)
     {
-        (void)c;
+        //std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
+        input_buffer.push_back(c);
     }
 
-    void clear_input_field(void)
+    void pop_from_input_field()
     {
-        static char flip_char = 'a';
-        SetConsoleCursorPosition(console_handle, COORD {0, static_cast<int16_t>(conversation_window_height)});
-        for (uint32_t cursor = 0; cursor < max_input_lines * screen_buffer_info.dwSize.X; ++cursor)
-        {
-            WriteFile(console_handle, &flip_char, 1, nullptr, nullptr);
-        }
-        flip_char = 'a' + ((flip_char + 1 - 'a') % 26);
-        SetConsoleWindowInfo(console_handle, TRUE, &screen_buffer_info.srWindow);
+        //std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
+        input_buffer.pop_back();
+    }
+
+    void clear_input()
+    {
+        //std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
+        input_buffer.clear();
     }
 
     void write_msg_to_conversation_thread(const char* msg)
     {
-        (void)msg;
+        //std::lock_guard<std::mutex> screen_buffer_guard(screen_buffer_mutex);
+        while (*msg)
+        {
+            conversation_buffer.push_back(*msg++);
+        }
+        conversation_buffer.push_back('\0');
     }
 
     void draw_proc()
     {
+        uint64_t i = 0;
+        //std::unique_lock<std::mutex> screen_buffer_guard(screen_buffer_mutex, std::defer_lock);
         while (globals::application_running)
         {
-            printf("draw call\n");
+         //   screen_buffer_guard.lock();
+            clear_screen();
+
+            auto cursor_pos = c_console_origin;
+            auto screen_width = screen_buffer_info.dwSize.X;
+            uint32_t conversation_chars_left = conversation_window_height * screen_width;
+            char* msg_ptr = conversation_buffer.data();
+            char* msgs_end = msg_ptr + conversation_buffer.size();
+            while (msg_ptr < msgs_end && conversation_chars_left > 0 )
+            {
+                SetConsoleCursorPosition(console_handle, cursor_pos);
+
+                uint32_t next_string_size = strlen(msg_ptr);
+                uint32_t chars_to_write = next_string_size < conversation_chars_left ? next_string_size : conversation_chars_left;
+                uint32_t lines_to_write = (chars_to_write / screen_width) + 1;
+
+                WriteFile(console_handle, msg_ptr, chars_to_write, nullptr, nullptr);
+
+                conversation_chars_left -= chars_to_write;
+                msg_ptr += next_string_size + 1;
+                cursor_pos.Y += lines_to_write;
+            }
+            cursor_pos.Y = conversation_window_height;
+            SetConsoleCursorPosition(console_handle, cursor_pos);
+            WriteFile(console_handle, divider, screen_buffer_info.dwSize.X, nullptr, nullptr);
+            WriteFile(console_handle, input_buffer.data(), input_buffer.size(), nullptr, nullptr);
+
+          //  screen_buffer_guard.unlock();
+
+            SetConsoleWindowInfo(console_handle, TRUE, &screen_buffer_info.srWindow);
             std::this_thread::sleep_for(c_sleep_time_between_draw_calls);
         }
     }
+
+    void update_divider(uint32_t line_width)
+    {
+        // +1 to account for null term
+        auto divider_buffer = static_cast<char*>(malloc((line_width + 1) * sizeof(*divider)));
+        for(int i = line_width - 1; i >= 0; --i)
+        {
+            divider_buffer[i] = '-';
+        }
+        divider_buffer[line_width] = '\0';
+        divider = divider_buffer;
+    }
+
+    void reserve_buffers()
+    {
+        auto screen_width = screen_buffer_info.dwSize.X;
+        conversation_buffer.reserve(conversation_window_height * screen_width);
+        input_buffer.reserve(input_window_height * screen_width);
+    }
+
+	void clear_screen()
+	{
+	   auto screen_size = screen_buffer_info.dwSize.X * screen_buffer_info.dwSize.Y;
+       DWORD chars_read;
+	   FillConsoleOutputCharacter(console_handle, ' ', screen_size, c_console_origin, &chars_read);
+	}
 }
