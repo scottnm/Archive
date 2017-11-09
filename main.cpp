@@ -105,10 +105,10 @@ main()
 
     // take contents of tmp file and write it to master log file
     auto contents = get_tmp_file_contents(get_tmp_filepath());
-    clear_tmp_file_contents(get_tmp_filepath());
     append_data_to_log(contents);
 
     // free resources
+    clear_tmp_file_contents(get_tmp_filepath());
     CloseHandle(proc_info.hProcess);
     CloseHandle(proc_info.hThread);
     delete[] cmd;
