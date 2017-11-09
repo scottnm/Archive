@@ -1,10 +1,32 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <streambuf>
 #include <windows.h>
 #pragma comment (lib, "kernel32.lib")
 
 static const std::string editor_path = "C:\\Program Files (x86)\\Vim\\vim80\\vim.exe";
+
+static
+void
+append_data_to_log(std::string data)
+{
+    static const std::string home_dir = getenv("HOME");
+    static const std::string log_filename = "\\Documents\\time_pest_log.txt";
+
+    auto log_filepath_length = home_dir.size() + log_filename.size() + 1;
+    char* log_file = new char[log_filepath_length];
+    strncat(log_file, home_dir.c_str(), home_dir.size());
+    strncat(log_file, log_filename.c_str(), log_filename.size());
+
+    std::ofstream outfile;
+    outfile.open(log_file, std::ios_base::app);
+    outfile << data.c_str();
+
+    delete[] log_file;
+}
 
 static
 char*
@@ -35,6 +57,27 @@ get_editor_cmd()
     return cmd;
 }
 
+static
+std::string
+get_tmp_file_contents(std::string tmp_file)
+{
+    std::ifstream t(tmp_file.c_str());
+    std::string contents((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    return contents;
+}
+
+static
+void
+clear_tmp_file_contents(std::string tmp_file)
+{
+    static const std::string clear_cmd = "type nul > ";
+    char* cmd = new char[clear_cmd.size() + tmp_file.size() + 1];
+    strncat(cmd, clear_cmd.c_str(), clear_cmd.size());
+    strncat(cmd, tmp_file.c_str(), tmp_file.size());
+    std::system(cmd);
+    delete[] cmd;
+}
+
 int
 main()
 {
@@ -61,6 +104,9 @@ main()
     (void)ret;
 
     // take contents of tmp file and write it to master log file
+    auto contents = get_tmp_file_contents(get_tmp_filepath());
+    clear_tmp_file_contents(get_tmp_filepath());
+    append_data_to_log(contents);
 
     // free resources
     CloseHandle(proc_info.hProcess);
