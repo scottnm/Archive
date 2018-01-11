@@ -47,5 +47,5 @@ filter that feed
 ### Web UI Ideas
 
 ![Image of landing page](https://github.com/scottnm/rsserver/blob/master/design/images/home_sketch.png)
-![Image of old page](https://github.com/scottnm/rsserver/blob/master/design/images/unread_sketch.png)
+![Image of unread page](https://github.com/scottnm/rsserver/blob/master/design/images/unread_sketch.png)
 ![Image of archive page](https://github.com/scottnm/rsserver/blob/master/design/images/archive_sketch.png)
