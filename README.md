@@ -31,6 +31,7 @@ filter that feed
 * Be able to view the "read"-archive in a separate view.
 * Unread posts from a SourceFeed when a new set of InformationItems from that SourceFeed arrive are sent to an "unread"-archive
 * Be able to view the "unread"-archive in a separate view.
+* From UI, be able to mark InformationItems as "unread" to refresh them back to the homepage
 
 # V0
 
@@ -40,3 +41,11 @@ filter that feed
     * must contain a hyperlink (twitter native pictures and videos do not count)
 * save items to instapaper
 * save items to personal database (with tags for read vs unread and archive vs unarchived)
+
+# VFinal
+
+### Web UI Ideas
+
+![Image of landing page](https://github.com/scottnm/rsserver/design/images/home_sketch.png)
+![Image of old page](https://github.com/scottnm/rsserver/design/images/unread_sketch.png)
+![Image of archive page](https://github.com/scottnm/rsserver/design/images/archive_sketch.png)
