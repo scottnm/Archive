@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-    fmt.Print("Hello, world!")
-    fmt.Print(twitter.GetFeed())
+    feed := twitter.NewTwitterFeeder("scottnmunro")
+    fmt.Println(feed.GetFeed())
 }
