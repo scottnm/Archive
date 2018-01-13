@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-    feed := twitter.NewTwitterFeeder("scottnmunro")
+    feed := twitter.NewTwitterFeeder("tasks/twitter/config.json")
     fmt.Println(feed.GetFeed())
 }
