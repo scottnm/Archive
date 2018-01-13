@@ -1,5 +1,5 @@
 package twitter
 
-func GetFeed () string {
-    return "test"
+func GetFeed () []string {
+    return []string{"test1", "test2"}
 }
