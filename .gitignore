@@ -18,4 +18,4 @@
 *.*.swo
 
 # for config files
-*.secret
+*.secret.*
