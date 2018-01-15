@@ -1,19 +1,20 @@
 package twitter
 
 import (
+    "bytes"
     "encoding/json"
     "fmt"
     "github.com/kurrik/oauth1a"
     "github.com/kurrik/twittergo"
     "io/ioutil"
     "net/http"
+    "net/url"
     "strconv"
 )
 
 type TwitterFeeder struct {
     ScreenName string
-    Id uint64
-    Name string
+    client *twittergo.Client
 }
 
 func GetStringJsonFromFile(fileName string) map[string]string {
@@ -44,32 +45,42 @@ func NewTwitterFeeder(feedCredentials, feedConfig string) *TwitterFeeder {
 
     credentials := GetStringJsonFromFile(feedCredentials)
     twitterClient := GetClient(credentials["ConsumerKey"], credentials["ConsumerSecret"], credentials["AccessToken"], credentials["AccessTokenSecret"])
-
-    req, err := http.NewRequest("GET", "/1.1/account/verify_credentials.json", nil)
-    if err != nil {
-        panic(fmt.Sprintf("Could not parse request: %v\n", err))
-    }
-
-    resp, err := twitterClient.SendRequest(req)
-    if err != nil {
-        panic(fmt.Sprintf("Could not send request: %v\n", err))
-    }
-
-    user := &twittergo.User{}
-    err = resp.Parse(user)
-    if err != nil {
-        panic(fmt.Sprintf("Could not parse response: %v\n", err))
-    }
-
-    fmt.Printf("ID:\t%v\n", user.Id())
-    fmt.Printf("Name:\t%v\n", user.Name())
-
-    tf.Id = user.Id()
-    tf.Name = user.Name()
+    tf.client = twitterClient
 
     return tf
 }
 
-func (tf *TwitterFeeder) GetFeed () []string {
-    return []string{tf.ScreenName, strconv.FormatUint(tf.Id, 10), tf.Name}
+func (tf *TwitterFeeder) GetFeed (count uint8) []string {
+    query := url.Values{}
+    query.Set("count", strconv.FormatUint(uint64(count), 10))
+    query.Set("screen_name", tf.ScreenName)
+
+    endpoint := fmt.Sprintf("/1.1/statuses/user_timeline.json?%v", query.Encode())
+    req, err := http.NewRequest("GET", endpoint, nil)
+    if err != nil {
+        panic(fmt.Sprintf("Could not parse request: %v\n", err))
+    }
+    resp, err := tf.client.SendRequest(req)
+    if err != nil {
+        panic(fmt.Sprintf("Could not send request: %v\n", err))
+    }
+    timeline := &twittergo.Timeline{}
+    err = resp.Parse(timeline)
+    if err != nil {
+        panic(fmt.Sprintf("Could not parse response: %v\n", err))
+    }
+
+    numTweetsRetrieved := len(*timeline)
+    tweets := make([]string, numTweetsRetrieved)
+    for i, tweet := range *timeline {
+        tweetJsonBytes, err := json.Marshal(tweet)
+        if err != nil {
+            panic(fmt.Sprintf("Could not encode tweet %v\n", err))
+        }
+        var indentedJsonBytes bytes.Buffer
+        json.Indent(&indentedJsonBytes, tweetJsonBytes, "", "    ")
+        tweets[i] = indentedJsonBytes.String()
+    }
+
+    return tweets
 }

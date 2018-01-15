@@ -19,3 +19,5 @@
 
 # for config files
 *.secret.*
+
+*.tmp
