@@ -3,7 +3,7 @@ package twitter
 import (
     "encoding/json"
     "fmt"
-    //"github.com/kurrik/oauth1a"
+    "github.com/kurrik/oauth1a"
     "github.com/kurrik/twittergo"
     "io/ioutil"
 )
@@ -12,12 +12,12 @@ type TwitterFeeder struct {
     ScreenName string
 }
 
-func GetJsonFromFile(fileName string) map[string]interface{} {
+func GetStringJsonFromFile(fileName string) map[string]string {
     jsonBytes, err := ioutil.ReadFile(fileName)
     if err != nil {
         panic(fmt.Sprintf("Couldn't read file [%s] :: %s", fileName, err.Error()))
     }
-    var jsonObj map[string]interface{}
+    var jsonObj map[string]string
     err = json.Unmarshal(jsonBytes, &jsonObj)
     if err != nil {
         panic(fmt.Sprintf("Couldnt interpret bytes as json [%s] :: %s", jsonBytes, err.Error()))
@@ -25,24 +25,26 @@ func GetJsonFromFile(fileName string) map[string]interface{} {
     return jsonObj
 }
 
-func LoadCredentials(credentialsFile string) *twittergo.Client {
-    if credentialsFile == "dummy" {
-        return nil
-    } else {
-        return nil
-    }
+func GetClient(consumerKey, consumerSecret, accessToken, accessTokenSecret string) *twittergo.Client {
+    clientConfig := &oauth1a.ClientConfig{ConsumerKey: consumerKey, ConsumerSecret: consumerSecret}
+    user := oauth1a.NewAuthorizedConfig(accessToken, accessTokenSecret)
+    client := twittergo.NewClient(clientConfig, user)
+    return client
 }
 
 func NewTwitterFeeder(feedCredentials, feedConfig string) *TwitterFeeder {
     tf := new(TwitterFeeder)
 
-    configAsJson := GetJsonFromFile(feedConfig)
-    tf.ScreenName = configAsJson["ScreenName"].(string)
+    configAsJson := GetStringJsonFromFile(feedConfig)
+    tf.ScreenName = configAsJson["ScreenName"]
 
-    credentialsJson := GetJsonFromFile(feedCredentials)
-    credentials := LoadCredentials(feedCredentials)
-    fmt.Printf("Credentials... \nkey: %s, secret: %s\ncredentials obj: %s\n....End Credentials\n", credentialsJson["Key"].(string), credentialsJson["Secret"].(string), credentials)
+    credentials := GetStringJsonFromFile(feedCredentials)
+    twitterClient := GetClient(credentials["ConsumerKey"], credentials["ConsumerSecret"], credentials["AccessToken"], credentials["AccessTokenSecret"])
 
+    fmt.Printf("Credentials...\n")
+    fmt.Printf("\tCredentialsObj: %s\n", credentials)
+    fmt.Printf("\tTwitterClient: %s\n", twitterClient)
+    fmt.Printf("...End Credentials\n")
     return tf
 }
 
