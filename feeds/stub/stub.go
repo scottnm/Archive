@@ -5,10 +5,14 @@ import (
 )
 
 type StubFeedReader struct {
+    a uint8
+    b uint8
 }
 
-func NewStubFeedReader() *StubFeedReader {
+func NewStubFeedReader(a, b uint8) *StubFeedReader {
     sf := new(StubFeedReader)
+    sf.a = a
+    sf.b = b
     return sf
 }
 
