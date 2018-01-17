@@ -1,27 +1,54 @@
 package stub
 
 import (
+    "fmt"
     "rsserver/feeds"
+    "time"
 )
 
-type StubFeedReader struct {
-    a uint8
-    b uint8
+type StubFeedItem struct {
+    title string
+    link string
+    dataAsHtml string
 }
 
-func NewStubFeedReader(a, b uint8) *StubFeedReader {
+func (sfi StubFeedItem) Title() string {
+    return sfi.title
+}
+
+func (sfi StubFeedItem) Link() string {
+    return sfi.link
+}
+
+func (sfi StubFeedItem) DataAsHtml() string {
+    return sfi.dataAsHtml
+}
+
+type StubFeedReader struct {
+    id uint8
+    sleepTime uint8
+}
+
+func NewStubFeedReader(id, sleepTime uint8) *StubFeedReader {
     sf := new(StubFeedReader)
-    sf.a = a
-    sf.b = b
+    sf.id = id
+    sf.sleepTime = sleepTime
     return sf
 }
 
 func (sf *StubFeedReader) SleepUntilScheduled() {
+    currentTime := time.After(time.Second * time.Duration(sf.sleepTime))
+    fmt.Printf("Time: %v\n", <-currentTime)
 }
 
-func (sf *StubFeedReader) ReadFeed(maxFeedItems uint8) []*feeds.FeedItemAccessor {
-    if maxFeedItems == 0 {
-        return make([]*feeds.FeedItemAccessor, 0)
+func (sf *StubFeedReader) ReadFeed(maxFeedItems uint8) []feeds.FeedItemAccessor {
+    items := make([]feeds.FeedItemAccessor, maxFeedItems)
+    for i := uint8(0); i < maxFeedItems; maxFeedItems++ {
+        newItem := new(StubFeedItem)
+        newItem.title = fmt.Sprintf("T%d", sf.id)
+        newItem.link = fmt.Sprintf("http://link.com/%d", sf.id)
+        newItem.dataAsHtml = fmt.Sprintf("<div>%d</div>", sf.id)
+        items[i] = newItem
     }
-    return make([]*feeds.FeedItemAccessor, 0)
+    return items
 }

@@ -14,8 +14,8 @@ import (
 )
 
 type TwitterFeedReader struct {
-    ScreenName string
-    Client *twittergo.Client
+    screenName string
+    client *twittergo.Client
 }
 
 func GetStringJsonFromFile(fileName string) map[string]string {
@@ -42,11 +42,11 @@ func NewTwitterFeedReader(feedCredentials, feedConfig string) *TwitterFeedReader
     tfr := new(TwitterFeedReader)
 
     configAsJson := GetStringJsonFromFile(feedConfig)
-    tfr.ScreenName = configAsJson["ScreenName"]
+    tfr.screenName = configAsJson["ScreenName"]
 
     credentials := GetStringJsonFromFile(feedCredentials)
     twitterClient := GetClient(credentials["ConsumerKey"], credentials["ConsumerSecret"], credentials["AccessToken"], credentials["AccessTokenSecret"])
-    tfr.Client = twitterClient
+    tfr.client = twitterClient
 
     return tfr
 }
