@@ -41,9 +41,9 @@ func (sf *StubFeedReader) SleepUntilScheduled() {
     fmt.Printf("Time: %v\n", <-currentTime)
 }
 
-func (sf *StubFeedReader) ReadFeed(maxFeedItems uint8) []feeds.FeedItemAccessor {
-    items := make([]feeds.FeedItemAccessor, maxFeedItems)
-    for i := uint8(0); i < maxFeedItems; maxFeedItems++ {
+func (sf *StubFeedReader) ReadFeed() []feeds.FeedItemAccessor {
+    items := make([]feeds.FeedItemAccessor, 1)
+    for i := uint8(0); i < 1; i++ {
         newItem := new(StubFeedItem)
         newItem.title = fmt.Sprintf("T%d", sf.id)
         newItem.link = fmt.Sprintf("http://link.com/%d", sf.id)

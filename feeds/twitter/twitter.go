@@ -51,9 +51,9 @@ func NewTwitterFeedReader(feedCredentials, feedConfig string) *TwitterFeedReader
     return tfr
 }
 
-func (tfr *TwitterFeedReader) ReadFeed(maxFeedItems uint8) []*feed.FeedItemAccessor {
+func (tfr *TwitterFeedReader) ReadFeed() []*feed.FeedItemAccessor {
     query := url.Values{}
-    query.Set("count", strconv.FormatUint(uint64(maxFeedItems), 10))
+    query.Set("count", strconv.FormatUint(uint64(1), 10))
     query.Set("screen_name", tfr.ScreenName)
 
     endpoint := fmt.Sprintf("/1.1/statuses/user_timeline.json?%v", query.Encode())

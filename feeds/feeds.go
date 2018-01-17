@@ -8,5 +8,5 @@ type FeedItemAccessor interface {
 
 type FeedReader interface {
     SleepUntilScheduled()
-    ReadFeed(maxFeedItems uint8) []FeedItemAccessor
+    ReadFeed() []FeedItemAccessor
 }

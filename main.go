@@ -13,7 +13,7 @@ func StartFeedReader(wg *sync.WaitGroup, feedReader feeds.FeedReader, c uint8) {
     go func(wg *sync.WaitGroup, feedReader feeds.FeedReader) {
         for i := uint8(0); i < c; i++ {
             feedReader.SleepUntilScheduled()
-            feedItems := feedReader.ReadFeed(1)
+            feedItems := feedReader.ReadFeed()
             for _, item := range feedItems {
                 fmt.Printf("%d> Title: %v\tLink: %v\tDataAsHtml: %v\n", c, item.Title(), item.Link(), item.DataAsHtml())
             }
