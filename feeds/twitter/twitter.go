@@ -9,12 +9,13 @@ import (
     "io/ioutil"
     "net/http"
     "net/url"
+    "rssserver/feeds"
     "strconv"
 )
 
-type TwitterFeeder struct {
+type TwitterFeedReader struct {
     ScreenName string
-    client *twittergo.Client
+    Client *twittergo.Client
 }
 
 func GetStringJsonFromFile(fileName string) map[string]string {
@@ -37,30 +38,30 @@ func GetClient(consumerKey, consumerSecret, accessToken, accessTokenSecret strin
     return client
 }
 
-func NewTwitterFeeder(feedCredentials, feedConfig string) *TwitterFeeder {
-    tf := new(TwitterFeeder)
+func NewTwitterFeedReader(feedCredentials, feedConfig string) *TwitterFeedReader {
+    tfr := new(TwitterFeedReader)
 
     configAsJson := GetStringJsonFromFile(feedConfig)
-    tf.ScreenName = configAsJson["ScreenName"]
+    tfr.ScreenName = configAsJson["ScreenName"]
 
     credentials := GetStringJsonFromFile(feedCredentials)
     twitterClient := GetClient(credentials["ConsumerKey"], credentials["ConsumerSecret"], credentials["AccessToken"], credentials["AccessTokenSecret"])
-    tf.client = twitterClient
+    tfr.Client = twitterClient
 
-    return tf
+    return tfr
 }
 
-func (tf *TwitterFeeder) GetFeed (count uint8) []string {
+func (tfr *TwitterFeedReader) ReadFeed(maxFeedItems uint8) []*feed.FeedItemAccessor {
     query := url.Values{}
-    query.Set("count", strconv.FormatUint(uint64(count), 10))
-    query.Set("screen_name", tf.ScreenName)
+    query.Set("count", strconv.FormatUint(uint64(maxFeedItems), 10))
+    query.Set("screen_name", tfr.ScreenName)
 
     endpoint := fmt.Sprintf("/1.1/statuses/user_timeline.json?%v", query.Encode())
     req, err := http.NewRequest("GET", endpoint, nil)
     if err != nil {
         panic(fmt.Sprintf("Could not parse request: %v\n", err))
     }
-    resp, err := tf.client.SendRequest(req)
+    resp, err := tfr.Client.SendRequest(req)
     if err != nil {
         panic(fmt.Sprintf("Could not send request: %v\n", err))
     }
