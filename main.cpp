@@ -1,11 +1,11 @@
-#include <cstdio>
+#include "pch.h"
+
+#include "email.h"
+
 #include <cstdlib>
-#include <string>
 #include <iostream>
 #include <fstream>
 #include <streambuf>
-#include <windows.h>
-#pragma comment (lib, "kernel32.lib")
 
 static const std::string editor_path = "C:\\Program Files (x86)\\Vim\\vim80\\vim.exe";
 
@@ -81,6 +81,9 @@ clear_tmp_file_contents(std::string tmp_file)
 int
 main()
 {
+    auto email_socket = email::init();
+
+    /*
     // open up notepad.exe with a tmp file name
     STARTUPINFO startup_info = {0};
     PROCESS_INFORMATION proc_info = {0};
@@ -100,7 +103,7 @@ main()
     (void)proc_ret;
 
     // wait for notepad.exe to quit
-    auto ret = WaitForSingleObject(proc_info.hProcess, INFINITE /* swap out for timeout? */);
+    auto ret = WaitForSingleObject(proc_info.hProcess, INFINITE);
     (void)ret;
 
     // take contents of tmp file and write it to master log file
@@ -112,6 +115,10 @@ main()
     CloseHandle(proc_info.hProcess);
     CloseHandle(proc_info.hThread);
     delete[] cmd;
+    */
+
+    email::send_mail(email_socket, "scottnmunro@gmail.com", "scottnmunro@gmail.com", "subject", "body");
+    email::cleanup(email_socket);
 
     // quit
     return 0;
