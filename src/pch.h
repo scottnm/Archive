@@ -7,3 +7,5 @@
 #include <cstdio>
 #include <windows.h>
 #pragma comment (lib, "kernel32.lib")
+
+#include "typedefs.h"

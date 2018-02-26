@@ -1,2 +1,2 @@
 @echo off
-".\main.exe"
+start %exepath%
