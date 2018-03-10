@@ -1,2 +1,2 @@
 @echo off
-start %exepath%
+"%~dp0\..\bin\time_pest.exe"

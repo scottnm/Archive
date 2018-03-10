@@ -1,47 +1,54 @@
 #include "pch.h"
-#include "email.h"
 
-#include <cstdlib>
+// C++ includes
 #include <iostream>
 #include <fstream>
 #include <streambuf>
 
-static const std::string s_editorPath = "C:\\Program Files (x86)\\Vim\\vim80\\vim.exe";
 static const std::string s_tmpFilepath = std::string(getenv("TEMP")) + std::string("\\time_pest_temp.txt");
 
 static
-char*
-GenerateEditorCmd()
+PROCESS_INFORMATION
+CreateEditorProcess(
+    _In_ const std::string& fileToEdit
+    )
 {
-    static const std::string s_editorCmdString = s_tmpFilepath + std::string(" ") + s_editorPath;
-    static const uint32_t s_editorCmdBufferSize = s_editorCmdString.size() + 1;
-    char* editorCmd = new char[s_editorCmdBufferSize];
-    ZeroMemory(editorCmd, sizeof(*editorCmd) * s_editorCmdBufferSize);
-    CopyMemory(editorCmd, s_editorCmdString.data(), s_editorCmdString.size());
+    // Need a non-const version of the editor string because CreateProcess takes a non-const char*
+    static const std::string s_editorCmdString = std::string("C:\\Program Files (x86)\\Vim\\vim80\\vim.exe ") + fileToEdit;
+    char* editorCmd = new char[s_editorCmdString.size() + 1];
+    strcpy(editorCmd, s_editorCmdString.c_str());
 
-    return editorCmd;
+    STARTUPINFO startupInfo = {0};
+    PROCESS_INFORMATION processInfo = {0};
+    auto createProcessResult = CreateProcess(
+        nullptr,
+        editorCmd,
+		nullptr,
+		nullptr,
+		static_cast<BOOL>(false),
+		0,
+		nullptr,
+        nullptr,
+        &startupInfo,
+        &processInfo);
+    assert(createProcessResult != 0);
+
+    delete[] editorCmd;
+
+    return processInfo;
 }
-
-static char* s_editorCmd = GenerateEditorCmd();
-
 
 static
 void
 AppendDataToLog(std::string data)
 {
-    static const std::string home_dir = getenv("HOME");
-    static const std::string log_filename = "\\Documents\\time_pest_log.txt";
+    static const std::string homeDir = getenv("HOME");
+    static const std::string logFilename = "\\Documents\\time_pest_log.txt";
+    static const std::string logFilepath = homeDir + logFilename;
 
-    auto log_filepath_length = home_dir.size() + log_filename.size() + 1;
-    char* log_file = new char[log_filepath_length];
-    strncat(log_file, home_dir.c_str(), home_dir.size());
-    strncat(log_file, log_filename.c_str(), log_filename.size());
-
-    std::ofstream outfile;
-    outfile.open(log_file, std::ios_base::app);
-    outfile << data.c_str();
-
-    delete[] log_file;
+    std::ofstream outFile;
+    outFile.open(logFilepath.c_str(), std::ios_base::app);
+    outFile << data.c_str();
 }
 
 
@@ -67,27 +74,12 @@ ClearTmpFileContents(std::string tmpFile)
 int
 main()
 {
-    email::init();
-
     // open up text editor with a tmp file name
-    startup_info_t startupInfo{0};
-    process_information_t processInfo{0};
-    auto createProcessResult = CreateProcess(
-        nullptr,
-        s_editorCmd,
-		nullptr,
-		nullptr,
-		static_cast<BOOL>(false),
-		0,
-		nullptr,
-        nullptr,
-        &startupInfo,
-        &processInfo);
-    (void)createProcessResult;
+    auto processInfo = CreateEditorProcess(s_tmpFilepath);
 
     // wait for text editor to quit
     auto waitResult = WaitForSingleObject(processInfo.hProcess, INFINITE);
-    (void)waitResult;
+    assert(waitResult == WAIT_OBJECT_0);
 
     // take contents of tmp file and write it to master log file
     auto contents = GetTmpFileContents(s_tmpFilepath);
@@ -97,9 +89,6 @@ main()
     ClearTmpFileContents(s_tmpFilepath);
     CloseHandle(processInfo.hProcess);
     CloseHandle(processInfo.hThread);
-
-    email::send_mail();
-    email::cleanup();
 
     // quit
     return 0;

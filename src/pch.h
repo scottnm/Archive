@@ -1,11 +1,11 @@
 #pragma once
 
-#include <winsock2.h>
-#pragma comment(lib, "ws2_32.lib")
-
-#include <string>
-#include <cstdio>
+// C includes
+#include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
 #include <windows.h>
 #pragma comment (lib, "kernel32.lib")
 
-#include "typedefs.h"
+// C++ includes
+#include <string>
