@@ -51,7 +51,7 @@ func NewTwitterFeedReader(feedCredentials, feedConfig string) *TwitterFeedReader
     return tfr
 }
 
-func (tfr *TwitterFeedReader) ReadFeed() []*feed.FeedItemAccessor {
+func (tfr *TwitterFeedReader) ReadFeed() []*feed.FeedItem {
     query := url.Values{}
     query.Set("count", strconv.FormatUint(uint64(1), 10))
     query.Set("screen_name", tfr.ScreenName)

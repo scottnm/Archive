@@ -1,6 +1,6 @@
 package feeds
 
-type FeedItemAccessor interface {
+type FeedItem interface {
     Title() string
     Link() string
     DataAsHtml() string
@@ -8,5 +8,5 @@ type FeedItemAccessor interface {
 
 type FeedReader interface {
     SleepUntilScheduled()
-    ReadFeed() []FeedItemAccessor
+    ReadFeed() []FeedItem
 }

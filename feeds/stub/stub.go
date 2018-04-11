@@ -41,8 +41,8 @@ func (sf *StubFeedReader) SleepUntilScheduled() {
     fmt.Printf("Time: %v\n", <-currentTime)
 }
 
-func (sf *StubFeedReader) ReadFeed() []feeds.FeedItemAccessor {
-    items := make([]feeds.FeedItemAccessor, 1)
+func (sf *StubFeedReader) ReadFeed() []feeds.FeedItem {
+    items := make([]feeds.FeedItem, 1)
     for i := uint8(0); i < 1; i++ {
         newItem := new(StubFeedItem)
         newItem.title = fmt.Sprintf("T%d", sf.id)
