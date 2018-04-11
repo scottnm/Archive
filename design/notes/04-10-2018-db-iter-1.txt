@@ -1,0 +1,18 @@
+How should this database idea work?
+
+* each feed stores the serialized version of new feedreaderitems
+* each feedreader updates special feed specific metadata
+
+
+full spec overview reminder:
+
+1. simple database that supports pagination
+* "to read" page shows latest 5 feed items from every feed (special button to filter which feeds you see possibly)
+* "saved" page for feed items that I think are worthy of storing for later
+* "read" page for feed items that I'm done reading. The read part of the database is pruned every so often to prevent backup
+
+Steps toward making this work...
+
+1. Write a feed item serializing interface and stub impl (work on twitter impl later)
+2. Serialize feed items and store them in a file
+3. On load read the feed items and display previously read feed items
