@@ -8,21 +8,21 @@ import (
 )
 
 type StubFeedItem struct {
-    title string
-    link string
-    dataAsHtml string
+    STitle string
+    SLink string
+    SDataAsHtml string
 }
 
 func (sfi StubFeedItem) Title() string {
-    return sfi.title
+    return sfi.STitle
 }
 
 func (sfi StubFeedItem) Link() string {
-    return sfi.link
+    return sfi.SLink
 }
 
 func (sfi StubFeedItem) DataAsHtml() string {
-    return sfi.dataAsHtml
+    return sfi.SDataAsHtml
 }
 
 type StubFeedReader struct {
@@ -51,9 +51,9 @@ func (sf *StubFeedReader) ReadFeed() []feeds.FeedItem {
     items := make([]feeds.FeedItem, 1)
     for i := uint8(0); i < 1; i++ {
         newItem := new(StubFeedItem)
-        newItem.title = fmt.Sprintf("T%d-%d", sf.id, sf.randVal)
-        newItem.link = fmt.Sprintf("http://link.com/%d", sf.id)
-        newItem.dataAsHtml = fmt.Sprintf("<div>%d</div>", sf.id)
+        newItem.STitle = fmt.Sprintf("T%d-%d", sf.id, sf.randVal)
+        newItem.SLink = fmt.Sprintf("http://link.com/%d", sf.id)
+        newItem.SDataAsHtml = fmt.Sprintf("<div>%d</div>", sf.id)
         items[i] = newItem
     }
     return items

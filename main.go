@@ -30,6 +30,7 @@ func LoadPreviousFeed() []feeds.FeedItem {
         fmt.Println("Failed to find previous feed!")
         return make([]feeds.FeedItem, 0)
     }
+    defer file.Close()
 
     decoder := gob.NewDecoder(file)
     if e := decoder.Decode(&feedItems); e != nil {
@@ -37,6 +38,20 @@ func LoadPreviousFeed() []feeds.FeedItem {
     }
 
     return feedItems
+}
+
+func SaveFeed(feed []feeds.FeedItem) {
+    file, err := os.OpenFile("saved.feed", os.O_WRONLY | os.O_CREATE, 0644)
+    if err != nil {
+        panic("Failed to open feed save file!")
+    }
+    defer file.Close()
+
+    encoder := gob.NewEncoder(file)
+    if e := encoder.Encode(feed); e != nil {
+        fmt.Println("%v", e);
+        panic("Failed to save feed!")
+    }
 }
 
 func PrintFeed(previousFeedItems []feeds.FeedItem){
@@ -47,11 +62,12 @@ func PrintFeed(previousFeedItems []feeds.FeedItem){
 
 func main() {
     //feed := twitter.NewTwitterFeeder("tasks/twitter/credentials.secret.json", "tasks/twitter/config.json")
+    gob.Register(stub.StubFeedItem{})
 
     // Load previous items
-    previousFeedItems := LoadPreviousFeed()
+    allFeedItems := LoadPreviousFeed()
     fmt.Println("Printing previous feed items...")
-    PrintFeed(previousFeedItems)
+    PrintFeed(allFeedItems)
 
     // Read new items from the feed
     fmt.Println("Loading new feed items...")
@@ -70,7 +86,10 @@ func main() {
     // Print the result from the feed channel
     for feedItemResponse := range feedItemSink {
         PrintFeed(feedItemResponse)
+        allFeedItems = append(allFeedItems, feedItemResponse...)
     }
+
+    SaveFeed(allFeedItems)
 
     fmt.Println("Done.")
 }
