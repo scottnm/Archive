@@ -23,11 +23,13 @@ func GetStringJsonFromFile(fileName string) map[string]string {
     if err != nil {
         panic(fmt.Sprintf("Couldn't read file [%s] :: %s", fileName, err.Error()))
     }
+
     var jsonObj map[string]string
     err = json.Unmarshal(jsonBytes, &jsonObj)
     if err != nil {
         panic(fmt.Sprintf("Couldnt interpret bytes as json [%s] :: %s", jsonBytes, err.Error()))
     }
+
     return jsonObj
 }
 
@@ -61,10 +63,12 @@ func (tfr *TwitterFeedReader) ReadFeed() []*feed.FeedItem {
     if err != nil {
         panic(fmt.Sprintf("Could not parse request: %v\n", err))
     }
+
     resp, err := tfr.Client.SendRequest(req)
     if err != nil {
         panic(fmt.Sprintf("Could not send request: %v\n", err))
     }
+
     timeline := &twittergo.Timeline{}
     err = resp.Parse(timeline)
     if err != nil {
@@ -78,6 +82,7 @@ func (tfr *TwitterFeedReader) ReadFeed() []*feed.FeedItem {
         if err != nil {
             panic(fmt.Sprintf("Could not encode tweet %v\n", err))
         }
+
         var indentedJsonBytes bytes.Buffer
         json.Indent(&indentedJsonBytes, tweetJsonBytes, "", "    ")
         tweets[i] = indentedJsonBytes.String()
