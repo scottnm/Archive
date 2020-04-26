@@ -1,17 +1,20 @@
-# Goals
+# TimeJournal
+A program that pesters me with a text editor periodically to track how I'm spending my time throughout the day. This is inspired by Mike Acton's 12 tips for making better use of your time. https://sites.google.com/site/macton/home/gamedev12tipsformakingthebestuseofyourtime
+
+## Goals
 
 - allow configuring "work hours"
 - Once an hour, prompt the user to record what they'd done in the last hour
 - if prompting at the end or after work hours, also prompt user to be done with the day.
 - once user is done at the end of the day, email user with log for the day
 
-# Ideas
+## Ideas
 
 - store config bits in a file (think .gitconfig but a json file)
 - use threadpool to put process to sleep on timers
 - for testing configure timer to open on shorter timespan, automate a write, verify that N files are written
 
-# Breakdown of work
+## Breakdown of work
 
 - [] compile hello world
 - [] get program to run without window
