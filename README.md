@@ -12,8 +12,8 @@ A program that pesters me with a text editor periodically to track how I'm spend
 
 ## Breakdown of work
 
-- [ ] compile hello world
-- [ ] get program to run without window
+- [x] compile hello world
+- [x] get program to run without window
 - [ ] use threadpools to run some procedure once every period
 - [ ] figure out how to open text editor programatically with a name that identifies what the log represents (e.g. the 4pm log or the 4th log of the day or whatever)
 - [ ] write tests as part of major pieces
