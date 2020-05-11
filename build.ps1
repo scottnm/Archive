@@ -1,6 +1,9 @@
 Param(
     [ValidateSet("Debug", "Release")]
-    [string]$Configuration="Debug"
+    [string]$Configuration="Debug",
+
+    [switch]$Clean
     )
 
-MSBuild journal.sln -verbosity:m -p:Configuration=$Configuration
+$targetArg = if ($Clean) { "-t:Clean" } else { "" }
+MSBuild journal.sln -verbosity:normal -p:Configuration=$Configuration $targetArg
