@@ -1,0 +1,3 @@
+# don't check in my virtualenv
+venv/
+__pycache__/
