@@ -1,0 +1,29 @@
+AMMO IDEA
+	survival horror-esque semi-full clips
+	PARTIAL RELOAD OR NO PARTIAL RELOAD?!?! something to think about
+ENVIRONMENT IDEA
+	destructible environments
+AIMING IDEA
+	DONE-shaky/random aiming. the longer you hold still the better your aim gets
+	DONE-constantly turning results in low accuracy
+	DONE-pick random position inside of some MAX angle and fire at that rotation instead of character's actual rotation
+
+	-implement 'aim down sights' effectively hold a key to prevent rotation so accuracy increases
+WEAPON IDEA
+	bow and arrow with retrievable ammo (arrow used to kill zombie can be picked up occassionally and sometimes they break)
+
+ENEMY IDEA
+	implement zombie wobble
+	implement hit stun when player collides with zombo
+
+PLAYER IDEA
+	implement stamina
+
+WRITE A GAME DESIGN DOCUMENT
+
+
+QUICK NOTES
+DONE - generate more than 5 enemies
+- limit / control ammo generation in some way
+
+- the greater the bullet's velocity is, the smaller the loss in precision is therefore the bullet flies straighter. Perhaps increase bullet's velocity and implement someway of detecting collisions between bullets and enemies when bullets could skip over enemies with a large velocity
