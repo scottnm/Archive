@@ -1,7 +1,20 @@
 # C Lang Tutorial
 
 ### Author: Scott Munro
-### Contact: scottnmunro@gmail.com
+
+> **[Update 05/15/2022] **
+> This page is now archived.
+>
+> I wrote this many years ago to help freshman CS students prepare for their first Computer Architecture course.
+> These students typically only had familiarity with higher-level languages like Java, and it's not uncommon for
+> students to struggle with C programming when they first start.
+>
+> Everything here is very strongly catered to the background that I knew the students had. It's potentially not a very
+> good general-purpose introduction. I was also a junior in college when I wrote this. I'm a professional software
+> engineer with 5 years experience writing C and C++ code. I may not agree with how I explained everything in this
+> language primer now. That being said, I'm certainly not going back to edit it for an empty audience. :)
+
+---
 
 Welcome!
 
