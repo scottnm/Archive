@@ -1,0 +1,24 @@
+Assignment:
+
+You are going to write a simple linked list in C.
+
+All of the boilerplate test code has been written and can be found in main.c
+
+All of the functions you should implement are in linked_list.h
+
+You should write a linked_list.c file and place all of your implementation in there
+
+You will know you've passed this simple test and completed the assignment and get
+    the success message.
+
+You can compile and run the assignment by using "make linked_list" in the terminal
+    and then running "./linked_list"
+
+Issues:
+
+If you get a segfault that means you are probably trying to dereference a null pointer somewhere.
+To fix this here are some debugging strategies:
+    Double check your code for obvious mistakes (forgetting to initalize data for instance)...
+    Inspect your linked list using printf...
+    run "make linked_list_debug" and then use GDB (the C debugger) to step through your code
+    
