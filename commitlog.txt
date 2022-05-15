@@ -1,0 +1,135 @@
+commit 67325769509636f0fa500c927e559849b6cf7a52
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Thu Mar 12 21:54:27 2015 -0500
+
+    updated zip and added readme
+
+commit ec0f860d68040e90026efb59dda6c947de6b88fc
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 22:50:07 2015 -0500
+
+    added zip file for turning in whenever
+
+commit a2179f41eb6ec8185e432d4f4ec6d8f936ae217e
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 22:49:03 2015 -0500
+
+    removing more extraneous mumbo jumbo
+
+commit 800e0f2c805f619f7c94c19f764f2060f5fe8b98
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 22:45:29 2015 -0500
+
+    updated the makefile to remove extraneous mumbo jumbo
+
+commit d982d300a67012c64b7f54b97cd96775a5ddd030
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 22:43:38 2015 -0500
+
+    added end screens
+
+commit 3276ba12934026bf9963609164abb25c5b99312a
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 21:47:39 2015 -0500
+
+    updated main for correct starting placement
+
+commit d1eaec27dbd310a455fcf6f36e7ade02c7c58d6f
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 17:24:17 2015 -0500
+
+    fixed starting position of player
+
+commit 6141d36a6907c40d7250e6d71ec456ad3bd6ae26
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 17:11:21 2015 -0500
+
+    updated gitignore for SpaceRaiders
+
+commit e632a8450cc3d1924256199edf34e6cce1aa08db
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 17:10:27 2015 -0500
+
+    removed the exe from the commits
+
+commit 0f0adea04f98c4030dd3268dade8af81850d2033
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 17:08:57 2015 -0500
+
+    forget to endwin
+
+commit 641e624538258e03912c41f3e9820cd01c8194e5
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 17:07:03 2015 -0500
+
+    basic game = donesies
+    enemies fire SUUUUPPPPPPEERRRRR fast
+
+commit 79d3f4789e691b0be7dfc97d00fe9ba8f7e404d9
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 14:58:30 2015 -0500
+
+    added enemies
+    little buggy
+
+commit 24e1dd1cfca1f9c0ce2a0c3508f7f469cf5f5a96
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 14:42:08 2015 -0500
+
+    updated makefile
+    space raiders now compiles on linux boxes
+
+commit 181e34447d7fd5f9cfe9e8507ca9a694053e772d
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 12:45:40 2015 -0500
+
+    implemented bounds checking for movement and now bullets remeove themself if they go out of bounds
+
+commit 8642d0a09c16400c3eb4414634fe76df5484825b
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 02:17:39 2015 -0500
+
+    fixed early compilation problems
+
+commit 56e2ada229b55bdd17ca912da81e54c1fcc05593
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 01:14:23 2015 -0500
+
+    included header
+
+commit 96a3eeaac0438398b6633b5380c46f916b8b7653
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 01:10:10 2015 -0500
+
+    added display method for all gameobjects
+
+commit c1a49a63baabf481d5a56c24c1c6a93703bbd2f2
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 01:07:13 2015 -0500
+
+    Implemented Projectiles
+
+commit 6958af97fa6989e37c03ce09ccd2808bac9b363a
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Tue Mar 10 00:48:34 2015 -0500
+
+    added ship implementations
+
+commit 423d9d0a1e6835039fd659a6f5bfc1a337a46a74
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Mon Mar 9 23:06:34 2015 -0500
+
+    added functions to GameObject and simple implementations for some functions
+
+commit 87b2c090824e0aa75089a346d4f693ed690aeee1
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Fri Mar 6 02:20:21 2015 -0600
+
+    created beginnings of Makefile
+    pretty much done except that I don't know what files need to be in what order for compiling and linking purposes
+
+commit 8b4e3773a9ea1e8bdad188ab6b3dd59df4e98fa8
+Author: Scott Munro <scottmunro@utexas.edu>
+Date:   Fri Mar 6 02:11:14 2015 -0600
+
+    created A7 boilerplate
