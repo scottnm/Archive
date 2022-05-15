@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="PollApp">
+    <head>
+        <title>PollApp</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="interface.css" type="text/css" />
+        <meta charset=utf-8>
+    </head>
+    <body>
+        <div class="container">
+            
+            <h1 class="text-center">Poll App</h1>
+            
+            <div id="poll-preview-wrapper" ng-controller="PreviewController as PrevC">
+                <a ng-repeat="poll in PrevC.polls" href="#">
+                    <div class="poll-entry">
+                        <div class="poll-title">{{poll.name}}</div>
+                        <div class="answer-bar">
+                            <div ng-repeat="answer in poll.answers" ng-style="{'width': PrevC.votePercentage(poll, answer)+'%'}">{{answer.choice}}: {{PrevC.votePercentage(poll, answer)}}%</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="btn-group text-center">
+                <button class="btn btn-success">
+                    My Polls
+                </button>
+                <button class="btn btn-primary">
+                    Answered Polls
+                </button>
+            </div>
+            
+        </div>
+        
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="polls.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+    </body>
+</html>

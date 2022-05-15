@@ -1,0 +1,45 @@
+@import url(https://fonts.googleapis.com/css?family=Lobster|Cabin);
+
+h1 { font-family: "Lobster", cursive; margin-top: 0; }
+html, body { font-family: "Cabin", sans-serif; }
+
+.container {
+    border: 5px solid black; border-top: none;
+    padding: 15px;
+}
+.poll-entry {
+    width: 100%;
+    display: flex;
+    text-align: center;
+    padding: 2px 0;
+    border-bottom: 1px solid lightgrey;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+a:hover .poll-entry{
+    background-color: lightgrey;
+}
+
+.poll-title {
+    width: 25%;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.answer-bar {
+    width: 75%;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    color: white;
+    border-radius: 5px;
+}
+.answer-bar div:nth-child(4n){ background-color: #D08E42; }
+.answer-bar div:nth-child(4n + 1){ background-color: #2E6783; }
+.answer-bar div:nth-child(4n + 2){ background-color: #D06042; }
+.answer-bar div:nth-child(4n + 3){ background-color: #2F945B; }
