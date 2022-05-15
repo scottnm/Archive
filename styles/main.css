@@ -1,0 +1,185 @@
+#header {
+	padding: 30px 5% 10px 5%;
+	border-radius: 10px;
+	margin-top: 30px;
+}
+
+#attribution-lane {
+	text-align: center;
+	font-size: 12px;
+	font-style: italic;
+	margin-top: 20px;
+}
+
+#attribution-lane img {
+	height: 25px;
+}
+
+#content-lane {
+	margin: 0 15%;
+}
+
+#ui-panel {
+	display: flex;
+	justify-content: space-around;
+}
+
+#radio-seeds {
+	margin-top: 30px;
+}
+
+.radio-entry {
+	display: flex;
+}
+
+.radio-entry-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.radio-tile {
+	position: relative;
+	width: 128px;
+	height: 128px;
+	margin-bottom: 15px;
+}
+
+.radio-tile > div,
+.radio-tile > button {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.radio-tile .entry-overlay {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.radio-tile .entry-overlay .entry-title {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+	font-size: 24px;	
+}
+
+.radio-tile .entry-overlay .entry-subtitle {
+	margin-top: 0px;
+	padding-top: 0px;
+	font-size: 18px;
+}
+
+.radio-tile .entry-overlay .entry-title,
+.radio-tile .entry-overlay .entry-subtitle {
+	padding-left: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-weight: 500;
+}
+
+.radio-tile:hover .entry-overlay .entry-title,
+.radio-tile:hover .entry-overlay .entry-subtitle {
+	background-color: transparent;
+	color: transparent;
+}
+
+.radio-tile .entry-overlay .entry-title,
+.radio-tile .entry-overlay .entry-subtitle,
+.radio-tile .entry-overlay .slider {
+	position: relative;
+}
+
+.radio-tile .entry-image-container,
+.radio-tile .overlay-button {
+	width: 100%;
+	height: 100%;
+	display: block;
+	color: transparent;
+	background-color: transparent;
+	border-radius: 7px;
+	border: none;
+}
+
+.radio-tile .entry-image-container {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.radio-tile .overlay-button:hover {
+	color: white;
+	background-color: rgba(255, 0, 0, 0.6);
+}
+
+.strength-bar {
+	position: relative;
+    left: 3px;
+    top: 43px;
+}
+
+.strength-bar > .strength-level {
+    width: 20px;
+    height: 10px;
+    background-color: transparent;
+    border: solid 1px lightgray;
+}
+
+.strength-bar > .strength-bar-pad {
+	width: 20px;
+	height: 7px;
+	background-color: transparent;
+}
+
+
+.strength-bar.strength-5 .strength-level:nth-child(2n+2) {
+	background-color: limegreen;
+}
+.strength-bar.strength-4 .strength-level:nth-child(2n+4) {
+	background-color: greenyellow;
+}
+.strength-bar.strength-3 .strength-level:nth-child(2n+6) {
+	background-color: gold;
+}
+.strength-bar.strength-2 .strength-level:nth-child(2n+8) {
+	background-color: lightsalmon;
+}
+.strength-bar.strength-1 .strength-level:nth-child(10) {
+	background-color: pink;
+}
+
+#player-padding {
+	width: 100%;
+	height: 80px;
+}
+
+#player-container iframe {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	height: 80px;
+	width: 100%;
+}
+
+#loading-animation.load-container.load1 {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+#loading-animation h1 {
+	text-align: center;
+	color: white;
+	transform: translateY(20px);
+	text-shadow: 2px 2px rgb(10, 10, 10);
+}
+
+#error-toast {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="icon" type="img/png" href="favicon.png">
+		<title>Quick Radio</title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="styles/main.css?v=6.2">
+		<link rel="stylesheet" href="bower_components/css-loaders/css/load1.css">
+	</head>
+	<body>
+		<div id="content-lane">
+			<div id="header" class="jumbotron">
+				<h1>Quick Radio Generator</h1>
+				<h4>Generate radio-like playlists from albums without a lot of mess</h4>
+				<div id="attribution-lane">
+					Powerered by 
+					<a target="_blank" href="https://www.spotify.com/">
+						<img src="images/spotify_logo_icon_resize.png">
+					</a>
+					and
+					<a target="_blank" href="http://the.echonest.com/">
+						<img src="images/echonest_icon_resize.gif">
+					</a>
+				</div> 
+			</div>
+			
+			<div id="ui-panel">
+				<input placeholder="Artist" type="text" data-bind="value: artistInput"/>
+				<button class="btn btn-primary add-button" data-bind="click: addSeed">add radio seed</button>
+				<button class="btn btn-success generate-button" data-bind="click: generateRadio">generate radio</button>
+			</div>
+			
+			<div id="radio-seeds">
+				<div class="radio-entry-wrapper" data-bind="foreach: radioSeeds">
+					<div class="radio-entry">
+						<div class="radio-tile">
+							<div class="entry-image-container" data-bind="style: { backgroundImage: 'url(\'' + imgUrl() + '\')' }">
+							</div>
+							<div class="entry-overlay">
+								<div class="entry-title" data-bind="text: artist"></div>
+								<!--<input class="slider" type="range" min="0" max="100" step="5" />-->
+							</div>
+							<button class="overlay-button" data-bind="click: $root.removeSeed"><span class="glyphicon glyphicon-remove"></span></button>
+						</div>
+						<div class="strength-bar" data-bind="click: $root.updateStrength, css: strength">
+						  <div class="strength-bar-pad strength-5 "></div>
+						  <div class="strength-level strength-5"></div>
+						  <div class="strength-bar-pad strength-4 "></div>
+						  <div class="strength-level strength-4"></div>
+						  <div class="strength-bar-pad strength-3"></div>
+						  <div class="strength-level strength-3"></div>
+						  <div class="strength-bar-pad strength-2"></div>
+						  <div class="strength-level strength-2"></div>
+						  <div class="strength-bar-pad strength-1"></div>
+						  <div class="strength-level strength-1"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="player-padding"></div>
+		<div id="player-container"></div>
+		<div id="loading-animation" class="load-container load1 hidden"><h1>Generating...</h1><div class="loader">Loading...</div></div>
+		<div id="error-toast" class="alert alert-danger" style="display: none"></div>
+	</body>
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+	<script type="text/javascript" src="scripts/helper.js"></script>
+	<script type="text/javascript" src="scripts/RadioSeed.js"></script>
+	<script type="text/javascript" src="scripts/RadioListModel.js"></script>
+</html>
