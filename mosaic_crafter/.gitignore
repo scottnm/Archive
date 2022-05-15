@@ -1,0 +1,16 @@
+# VS
+Debug/
+Release/
+.vs/
+*.user
+
+# my builds
+obj/
+bin/
+*.obj
+*.exe
+*.nativecodeanalysis.xml
+
+#  data
+*.bmp
+!data\*.bmp
