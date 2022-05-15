@@ -1,0 +1,18 @@
+Restructure "db" idea so that each entry is it's own file. Then have a separate index file that's just a simple hashmap
+to load different files and whatnot.
+
+Or use bolt db
+
+or just encode a hashmap (since shit is flattened does that mean that I need a separate id->post hashtable and then an
+        json/hashmap deal to describe different properties and whatnot)
+
+
+update to the feed items
+
+need... 
+    "feed id" (readable)
+    "item state" (readwritable)
+
+Today:....
+    
+    Filtering and sorting given in data buffer
