@@ -1,0 +1,5 @@
+# do not commit any builds
+builds/
+
+*.*.swp
+*.sln
